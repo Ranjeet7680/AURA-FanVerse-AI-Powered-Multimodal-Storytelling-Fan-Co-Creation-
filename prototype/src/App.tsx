@@ -3,6 +3,7 @@ import { Navbar, type ActiveTabType } from './components/Navbar';
 import { MicroNarratives } from './components/MicroNarratives';
 import { TacticalCoPilot } from './components/TacticalCoPilot';
 import { MatchAnalytics } from './components/MatchAnalytics';
+import { CricketStadium3D } from './components/CricketStadium3D';
 import { AthletePassport } from './components/AthletePassport';
 import { RLSimulator } from './components/RLSimulator';
 import { CyberSecurityCenter } from './components/CyberSecurityCenter';
@@ -54,6 +55,7 @@ export function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'reels' && <MicroNarratives selectedLang={selectedLang} />}
         {activeTab === 'tactical' && <TacticalCoPilot />}
+        {activeTab === 'stadium3d' && <CricketStadium3D />}
         {activeTab === 'analytics' && <MatchAnalytics />}
         {activeTab === 'rl' && <RLSimulator />}
         {activeTab === 'cybersecurity' && <CyberSecurityCenter />}
@@ -67,7 +69,7 @@ export function App() {
             <strong>AURA FanVerse Enterprise</strong> — Designed for the ICC Global Hackathon 2026. Showcasing at Dubai AI Festival.
           </p>
           <div className="flex items-center space-x-4 text-slate-400">
-            <span>Powered by Multimodal Deep Learning, Q-Learning RL & Cyber Shield</span>
+            <span>Powered by Multimodal Deep Learning, 3D WebGL, Q-Learning RL & Cyber Shield</span>
             <span>•</span>
             <span className="text-pink-400 font-medium">Supporting Women in Sport</span>
           </div>

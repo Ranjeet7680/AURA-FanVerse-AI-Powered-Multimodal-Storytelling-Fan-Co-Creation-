@@ -1,7 +1,7 @@
 import React from 'react';
-import { Sparkles, Activity, Shield, Users, Radio, Globe2, Cpu, Lock } from 'lucide-react';
+import { Sparkles, Activity, Shield, Users, Radio, Globe2, Cpu, Lock, Box } from 'lucide-react';
 
-export type ActiveTabType = 'reels' | 'tactical' | 'analytics' | 'athletes' | 'rl' | 'cybersecurity';
+export type ActiveTabType = 'reels' | 'tactical' | 'analytics' | 'stadium3d' | 'rl' | 'cybersecurity' | 'athletes';
 
 interface NavbarProps {
   activeTab: ActiveTabType;
@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   Fullstack AI
                 </span>
               </div>
-              <p className="text-xs text-slate-400">Deep Learning • RL Agent • Cyber Shield</p>
+              <p className="text-xs text-slate-400">Deep Learning • 3D WebGL • RL • Cyber Shield</p>
             </div>
           </div>
 
@@ -70,6 +70,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Activity className="w-3.5 h-3.5" />
               <span>Tactical Co-Pilot</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('stadium3d')}
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+                activeTab === 'stadium3d'
+                  ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+            >
+              <Box className="w-3.5 h-3.5 text-cyan-400" />
+              <span>3D Animation</span>
             </button>
 
             <button

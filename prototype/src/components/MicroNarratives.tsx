@@ -9,11 +9,14 @@ import {
   MessageSquareQuote,
   TrendingUp,
   ExternalLink,
-  Film,
   Tv,
-  Layers
+  Layers,
+  Video,
+  Clock,
+  Eye,
+  Film
 } from 'lucide-react';
-import { MOCK_REELS, type MicroReel } from '../data/mockMatchData';
+import { MOCK_REELS, MOCK_LONG_VIDEOS, type MicroReel, type LongMatchVideo } from '../data/mockMatchData';
 import { soundFX } from '../services/soundFX';
 
 interface MicroNarrativesProps {
@@ -21,7 +24,9 @@ interface MicroNarrativesProps {
 }
 
 export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }) => {
+  const [mediaFormat, setMediaFormat] = useState<'shorts' | 'long'>('shorts');
   const [selectedReel, setSelectedReel] = useState<MicroReel>(MOCK_REELS[0]);
+  const [selectedLongVideo, setSelectedLongVideo] = useState<LongMatchVideo>(MOCK_LONG_VIDEOS[0]);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'interactive' | 'embed'>('embed');
@@ -89,76 +94,265 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
             <Zap className="w-3.5 h-3.5 text-yellow-400" />
             Edge Ingestion: 38s
           </span>
-          <span className="px-3 py-1.5 rounded-xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-medium flex items-center gap-1.5">
-            <Film className="w-3.5 h-3.5 text-cyan-400" />
-            11 Synced Shorts
-          </span>
+          {/* Format Switcher: 9:16 Shorts vs 16:9 Long Videos */}
+          <div className="flex items-center p-1 rounded-xl bg-[#120d22] border border-cyan-500/30">
+            <button
+              onClick={() => {
+                soundFX.playClick();
+                setMediaFormat('shorts');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                mediaFormat === 'shorts'
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Film className="w-3.5 h-3.5" />
+              <span>9:16 Shorts ({MOCK_REELS.length})</span>
+            </button>
+            <button
+              onClick={() => {
+                soundFX.playClick();
+                setMediaFormat('long');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                mediaFormat === 'long'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Video className="w-3.5 h-3.5" />
+              <span>16:9 Full Match ({MOCK_LONG_VIDEOS.length})</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Category Pills Strip */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none text-xs">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => {
-              soundFX.playClick();
-              setActiveCategory(cat);
-            }}
-            className={`px-3.5 py-1.5 rounded-full font-medium whitespace-nowrap transition-all ${
-              activeCategory === cat
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
-                : 'bg-[#1a142c] text-slate-400 hover:text-slate-200 border border-slate-800'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Main Reel Viewer & Feed Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left: Interactive 9:16 Vertical Reel Player (Supports Direct Embedded YouTube Shorts) */}
-        <div className="lg:col-span-5 flex flex-col items-center space-y-4">
-          {/* Mode Switcher */}
-          <div className="flex items-center justify-between w-full max-w-[340px] px-1 text-xs">
-            <div className="flex items-center gap-1 bg-[#161129] p-1 rounded-xl border border-slate-800">
-              <button
-                onClick={() => {
-                  soundFX.playClick();
-                  setViewMode('embed');
-                }}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${
-                  viewMode === 'embed' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <Tv className="w-3.5 h-3.5" />
-                <span>Live Video</span>
-              </button>
-              <button
-                onClick={() => {
-                  soundFX.playClick();
-                  setViewMode('interactive');
-                }}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${
-                  viewMode === 'interactive' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <Layers className="w-3.5 h-3.5" />
-                <span>Telemetry HUD</span>
-              </button>
+      {/* LONG MATCH VIDEO EXPERIENCE (When mediaFormat === 'long') */}
+      {mediaFormat === 'long' ? (
+        <div className="space-y-6">
+          {/* Full-width 16:9 Theater Player */}
+          <div className="rounded-3xl overflow-hidden bg-[#161129] border border-cyan-500/30 shadow-2xl">
+            <div className="aspect-video w-full bg-black relative">
+              <iframe
+                src={`https://www.youtube.com/embed/${selectedLongVideo.youtubeId}?autoplay=1&mute=0&rel=0&controls=1`}
+                title={selectedLongVideo.title}
+                className="w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
 
-            <a
-              href={`https://youtube.com/shorts/${selectedReel.youtubeId}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[11px] font-mono text-cyan-400 hover:underline flex items-center gap-1 font-semibold"
-            >
-              <span>Open on YouTube</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
+            {/* Video Meta Info Bar */}
+            <div className="p-6 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                      {selectedLongVideo.badge}
+                    </span>
+                    <span className="text-xs text-slate-400 font-mono">
+                      {selectedLongVideo.channel}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-extrabold text-white">
+                    {selectedLongVideo.title}
+                  </h3>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <a
+                    href={`https://youtu.be/${selectedLongVideo.youtubeId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-4 py-2 rounded-xl bg-[#211c33] hover:bg-[#2c273e] text-cyan-300 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition-all"
+                  >
+                    <span>Watch on YouTube</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                  <button
+                    onClick={() => soundFX.playClick()}
+                    className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-md active:scale-95"
+                  >
+                    <Share2 className="w-3.5 h-3.5" />
+                    <span>Share Broadcast</span>
+                  </button>
+                </div>
+              </div>
+
+              <p className="text-sm text-slate-300 leading-relaxed">
+                {selectedLongVideo.description}
+              </p>
+
+              {/* Tactical Breakdown Pill */}
+              <div className="p-4 rounded-2xl bg-[#100b21] border border-slate-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    AI Deep-Dive Match Architecture Note
+                  </span>
+                  <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
+                    Confidence: 99.1%
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {selectedLongVideo.tacticalAnalysis}
+                </p>
+              </div>
+
+              {/* Key Match Chapters / Moments */}
+              <div className="space-y-2 pt-2">
+                <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
+                  Indexed Tactical Chapters:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {selectedLongVideo.keyMoments.map((km, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-xl bg-[#1a142c] border border-slate-800 flex items-center justify-between text-xs"
+                    >
+                      <div>
+                        <span className="text-pink-400 font-mono font-bold block">{km.timestamp}</span>
+                        <span className="text-white font-medium">{km.title}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-mono bg-slate-800 px-2 py-0.5 rounded">
+                        {km.over}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
+
+          {/* Full Match Playlist Grid (All 4 Videos) */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                <Video className="w-5 h-5 text-cyan-400" />
+                <span>Extended Match Analyses & Documentaries ({MOCK_LONG_VIDEOS.length})</span>
+              </h4>
+              <span className="text-xs text-slate-400">16:9 Widescreen Stream Feeds</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {MOCK_LONG_VIDEOS.map((vid) => {
+                const isSelected = selectedLongVideo.id === vid.id;
+                return (
+                  <div
+                    key={vid.id}
+                    onClick={() => {
+                      soundFX.playClick();
+                      setSelectedLongVideo(vid);
+                    }}
+                    className={`cursor-pointer rounded-2xl overflow-hidden border transition-all duration-200 group flex flex-col justify-between ${
+                      isSelected
+                        ? 'bg-[#1e1738] border-cyan-400 shadow-xl shadow-cyan-900/20 ring-1 ring-cyan-400'
+                        : 'bg-[#161129] border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <div className="relative aspect-video w-full overflow-hidden bg-black">
+                      <img
+                        src={vid.thumbnail}
+                        alt={vid.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <span className="absolute bottom-2 right-2 text-xs bg-black/85 px-1.5 py-0.5 rounded text-white font-mono flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {vid.duration}
+                      </span>
+                      <span className="absolute top-2 left-2 text-[10px] bg-cyan-600/90 px-2 py-0.5 rounded text-white font-bold">
+                        {vid.category}
+                      </span>
+                    </div>
+
+                    <div className="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
+                      <h5 className="font-bold text-xs sm:text-sm text-white line-clamp-2 group-hover:text-cyan-300 transition-colors">
+                        {vid.title}
+                      </h5>
+
+                      <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                        <span className="flex items-center gap-1">
+                          <Eye className="w-3 h-3 text-cyan-400" />
+                          {vid.views}
+                        </span>
+                        <span className="text-purple-300 font-semibold truncate max-w-[100px]">
+                          {vid.channel}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* SHORTS 9:16 EXPERIENCE (When mediaFormat === 'shorts') */
+        <>
+          {/* Category Pills Strip */}
+          <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none text-xs">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => {
+                  soundFX.playClick();
+                  setActiveCategory(cat);
+                }}
+                className={`px-3.5 py-1.5 rounded-full font-medium whitespace-nowrap transition-all ${
+                  activeCategory === cat
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
+                    : 'bg-[#1a142c] text-slate-400 hover:text-slate-200 border border-slate-800'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Main Reel Viewer & Feed Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left: Interactive 9:16 Vertical Reel Player (Supports Direct Embedded YouTube Shorts) */}
+            <div className="lg:col-span-5 flex flex-col items-center space-y-4">
+              {/* Mode Switcher */}
+              <div className="flex items-center justify-between w-full max-w-[340px] px-1 text-xs">
+                <div className="flex items-center gap-1 bg-[#161129] p-1 rounded-xl border border-slate-800">
+                  <button
+                    onClick={() => {
+                      soundFX.playClick();
+                      setViewMode('embed');
+                    }}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${
+                      viewMode === 'embed' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Tv className="w-3.5 h-3.5" />
+                    <span>Live Video</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      soundFX.playClick();
+                      setViewMode('interactive');
+                    }}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${
+                      viewMode === 'interactive' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Telemetry HUD</span>
+                  </button>
+                </div>
+
+                <a
+                  href={`https://youtube.com/shorts/${selectedReel.youtubeId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[11px] font-mono text-cyan-400 hover:underline flex items-center gap-1 font-semibold"
+                >
+                  <span>Open on YouTube</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
 
           {/* 9:16 Aspect Video Enclosure */}
           <div className="relative w-full max-w-[340px] aspect-[9/16] rounded-3xl overflow-hidden shadow-2xl border-4 border-purple-500/30 bg-black flex flex-col justify-between">
@@ -388,6 +582,8 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 };

@@ -353,6 +353,101 @@ export const MOCK_REELS: MicroReel[] = [
   }
 ];
 
+export interface LongMatchVideo {
+  id: string;
+  youtubeId: string;
+  title: string;
+  duration: string;
+  channel: string;
+  category: string;
+  matchContext: string;
+  views: string;
+  badge: string;
+  thumbnail: string;
+  description: string;
+  tacticalAnalysis: string;
+  keyMoments: { timestamp: string; title: string; over: string }[];
+}
+
+export const MOCK_LONG_VIDEOS: LongMatchVideo[] = [
+  {
+    id: "long-1",
+    youtubeId: "-KPPUaUxlpo",
+    title: "Full Match Masterclass: IND-W vs AUS-W Extended Tactical Breakdown",
+    duration: "14:28",
+    channel: "AURA Multimodal Telemetry Lab",
+    category: "Full Analysis",
+    matchContext: "ICC Women's T20 World Cup Final • Dubai Arena",
+    views: "348K",
+    badge: "Featured Breakdown 🌟",
+    thumbnail: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=1200&q=80",
+    description: "Comprehensive 16:9 tactical analysis dissecting the field placement chess match between Harmanpreet Kaur and Alyssa Healy across both innings.",
+    tacticalAnalysis: "Pinpoints the exact inflection point in Over 14 when Australia's off-side squeeze failed against Mandhana's late-cut variations.",
+    keyMoments: [
+      { timestamp: "01:15", title: "Powerplay Field Ring Geometry", over: "Over 1-6" },
+      { timestamp: "05:40", title: "Middle Overs Spin Web Choke", over: "Over 7-14" },
+      { timestamp: "10:12", title: "Death Overs Yorker Defensive Trap", over: "Over 18-20" }
+    ]
+  },
+  {
+    id: "long-2",
+    youtubeId: "UhmSfJ5QfB0",
+    title: "The Multiverse Inning: Deep Q-Learning Replay & Alternative Outcomes",
+    duration: "18:45",
+    channel: "ICC Tech & Analytics Hub",
+    category: "Multiverse Sim",
+    matchContext: "World Cup Finals • Autonomous Physics Engine",
+    views: "219K",
+    badge: "AI Deep Dive 🧠",
+    thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80",
+    description: "What if Devine opened with spin? Deep reinforcement learning models simulate alternative trajectory branches with physics-based pitch responses.",
+    tacticalAnalysis: "RL agent Q-values reveal that retaining the sweeper cover yielded a +14.2% higher victory probability than an attacking slip cordon.",
+    keyMoments: [
+      { timestamp: "02:20", title: "Standard Reality Telemetry Feed", over: "Match Feed" },
+      { timestamp: "08:15", title: "RL Simulated Spin Alternate Arc", over: "Branch #14" },
+      { timestamp: "14:30", title: "Win Probability Inversion Model", over: "Predictive HUD" }
+    ]
+  },
+  {
+    id: "long-3",
+    youtubeId: "-2ovLs9xiNY",
+    title: "Grassroots Revolution: How Associate Nations Are Changing Women's Cricket",
+    duration: "12:15",
+    channel: "AURA Future Stars Documentaries",
+    category: "Documentary",
+    matchContext: "Nepal, Thailand, Scotland & UAE Emergence",
+    views: "182K",
+    badge: "Grassroots Impact 💖",
+    thumbnail: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+    description: "Inspiring long-form story tracing grassroots stars from Kathmandu to Lord's, powered by fan micro-patronage and digital passports.",
+    tacticalAnalysis: "Examines training biomechanics and ball release angles of associate nation fast bowlers developing international-caliber swing.",
+    keyMoments: [
+      { timestamp: "00:45", title: "Nepal U-19 World Stage Qualifier", over: "Kathmandu" },
+      { timestamp: "04:30", title: "Biomechanics & High-Speed Seam Tracking", over: "Lab Telemetry" },
+      { timestamp: "09:10", title: "Direct Fan Token Micro-Grants", over: "Passport Fund" }
+    ]
+  },
+  {
+    id: "long-4",
+    youtubeId: "zQfg-e3QORc",
+    title: "Broadcast Evolution: Behind the AI Multimodal Highlight Pipeline",
+    duration: "16:04",
+    channel: "Google DeepMind & ICC Innovation",
+    category: "Tech Behind The Scenes",
+    matchContext: "Dubai AI Festival Flagship Architecture",
+    views: "295K",
+    badge: "Architecture ⚡",
+    thumbnail: "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80",
+    description: "Technical engineering documentary walking through sub-45s vertical reel generation, Three.js WebGL rendering, and zero-trust WAF shielding.",
+    tacticalAnalysis: "Demonstrates edge video slicing algorithms and low-latency ElevenLabs neural multilingual voice synthesis pipelines.",
+    keyMoments: [
+      { timestamp: "01:50", title: "Edge Video Ingestion & Reframing", over: "Slicing Model" },
+      { timestamp: "07:20", title: "Multi-Language Voice Synthesis in 280ms", over: "12 Dialects" },
+      { timestamp: "12:40", title: "Zero-Trust Guard & Cyber Shield Defense", over: "HMAC Security" }
+    ]
+  }
+];
+
 export const MOCK_TACTICAL_QUERIES: TacticalQuery[] = [
   {
     id: "q-1",

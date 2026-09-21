@@ -62,164 +62,180 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#151026]/95 backdrop-blur-xl border-b border-slate-800 shadow-2xl">
+    <header className="sticky top-0 z-50 bg-[#120c24]/90 backdrop-blur-2xl border-b border-purple-500/20 shadow-[0_12px_32px_rgba(0,0,0,0.65)] relative">
+      {/* 3D Top Specular Light Highlight Line */}
+      <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-400 to-pink-500 opacity-80" />
+      {/* 3D Ambient Bottom Glow Edge */}
+      <div className="absolute -bottom-[1px] inset-x-0 h-[1px] bg-gradient-to-r from-purple-500/20 via-pink-500/40 to-cyan-500/20" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand Logo & Title */}
+        <div className="flex items-center justify-between h-18 py-2">
+          {/* Brand Logo with 3D Embossed Coin Effect */}
           <div
             onClick={() => handleTabChange('discover')}
-            className="flex items-center space-x-3 cursor-pointer group select-none"
+            className="flex items-center space-x-3 cursor-pointer group select-none transition-transform active:scale-95"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-900/60 to-slate-900 border border-purple-500/40 flex items-center justify-center shadow-lg group-hover:border-purple-400 transition-all group-hover:scale-105">
-              <Sparkles className="w-5 h-5 text-purple-400 animate-pulse" />
+            {/* 3D Isometric Emblem */}
+            <div className="relative">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-[#2e2354] via-[#1a1338] to-[#0e0922] border-t border-purple-400/60 border-l border-purple-400/40 border-b-2 border-black/80 shadow-[0_6px_16px_rgba(147,51,234,0.35),inset_0_2px_4px_rgba(255,255,255,0.2)] flex items-center justify-center transform group-hover:-translate-y-0.5 transition-all">
+                <Sparkles className="w-5 h-5 text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] animate-pulse" />
+              </div>
+              <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#120c24] shadow-[0_0_8px_rgba(16,185,129,0.9)]" />
             </div>
+
             <div>
               <div className="flex items-center space-x-2">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">
+                <span className="font-black text-xl tracking-tight bg-gradient-to-r from-white via-purple-200 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(168,85,247,0.4)]">
                   AURA FanVerse
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hidden sm:inline-block font-mono">
-                  AI v4.9
+                <span className="text-[10px] uppercase font-black tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-400/40 shadow-[0_2px_6px_rgba(6,182,212,0.25)] hidden sm:inline-block font-mono">
+                  3D WEBGL AI v4.9
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">Multimodal AI • 3D WebGL • Fullstack</p>
+              <p className="text-[11px] text-slate-400 tracking-wide font-medium hidden sm:block">
+                Multimodal Canon • 3D Stadium • Live Fandom
+              </p>
             </div>
           </div>
 
-          {/* Desktop Navigation Tabs */}
-          <nav className="hidden xl:flex space-x-1 bg-[#100b21]/90 p-1 rounded-xl border border-slate-800 text-xs shadow-inner">
+          {/* Desktop Navigation 3D Floating Console Strip */}
+          <nav className="hidden xl:flex items-center space-x-1 bg-[#100924]/90 p-1.5 rounded-2xl border-t border-white/10 border-b border-black/80 shadow-[0_6px_18px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.06)] text-xs">
             <button
               onClick={() => handleTabChange('discover')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'discover'
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-purple-500 to-pink-600 text-white shadow-[0_4px_12px_rgba(236,72,153,0.4),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Compass className="w-3.5 h-3.5 text-pink-400" />
+              <Compass className="w-3.5 h-3.5 text-pink-300 drop-shadow" />
               <span>Discover</span>
             </button>
 
             <button
               onClick={() => handleTabChange('reels')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'reels'
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-purple-500 to-indigo-600 text-white shadow-[0_4px_12px_rgba(168,85,247,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Radio className="w-3.5 h-3.5 text-purple-400" />
-              <span>Shorts & Reels</span>
+              <Radio className="w-3.5 h-3.5 text-purple-300 drop-shadow animate-pulse" />
+              <span>Shorts & Videos</span>
             </button>
 
             <button
               onClick={() => handleTabChange('tactical')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'tactical'
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-purple-600 to-violet-700 text-white shadow-[0_4px_12px_rgba(139,92,246,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Activity className="w-3.5 h-3.5 text-purple-400" />
+              <Activity className="w-3.5 h-3.5 text-purple-300 drop-shadow" />
               <span>Tactical Co-Pilot</span>
             </button>
 
             <button
               onClick={() => handleTabChange('stadium3d')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'stadium3d'
-                  ? 'bg-cyan-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-cyan-500 to-blue-600 text-white shadow-[0_4px_14px_rgba(6,182,212,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5 ring-1 ring-cyan-300/40'
+                  : 'text-slate-400 hover:text-cyan-300 hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Box className="w-3.5 h-3.5 text-cyan-400" />
+              <Box className="w-3.5 h-3.5 text-cyan-300 drop-shadow" />
               <span>3D Stadium</span>
             </button>
 
             <button
               onClick={() => handleTabChange('analytics')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'analytics'
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-emerald-500 to-teal-700 text-white shadow-[0_4px_12px_rgba(16,185,129,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Shield className="w-3.5 h-3.5 text-emerald-400" />
+              <Shield className="w-3.5 h-3.5 text-emerald-300 drop-shadow" />
               <span>Match Radar</span>
             </button>
 
             <button
               onClick={() => handleTabChange('rl')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'rl'
-                  ? 'bg-amber-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-amber-500 to-orange-600 text-white shadow-[0_4px_12px_rgba(245,158,11,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Cpu className="w-3.5 h-3.5 text-amber-400" />
+              <Cpu className="w-3.5 h-3.5 text-amber-300 drop-shadow" />
               <span>RL Agent</span>
             </button>
 
             <button
               onClick={() => handleTabChange('cybersecurity')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'cybersecurity'
-                  ? 'bg-red-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-red-500 to-rose-700 text-white shadow-[0_4px_12px_rgba(239,68,68,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Lock className="w-3.5 h-3.5 text-red-400" />
+              <Lock className="w-3.5 h-3.5 text-red-300 drop-shadow" />
               <span>Cyber Shield</span>
             </button>
 
             <button
               onClick={() => handleTabChange('athletes')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                 activeTab === 'athletes'
-                  ? 'bg-pink-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-b from-pink-500 to-rose-600 text-white shadow-[0_4px_12px_rgba(236,72,153,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
-              <Users className="w-3.5 h-3.5 text-pink-400" />
+              <Users className="w-3.5 h-3.5 text-pink-300 drop-shadow" />
               <span>Athlete Hub</span>
             </button>
 
             {user && (
               <button
                 onClick={() => handleTabChange('profile')}
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
+                className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
                   activeTab === 'profile'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    ? 'bg-gradient-to-b from-purple-500 to-indigo-600 text-white shadow-[0_4px_12px_rgba(168,85,247,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
                 }`}
               >
-                <User className="w-3.5 h-3.5 text-purple-300" />
+                <User className="w-3.5 h-3.5 text-purple-200 drop-shadow" />
                 <span>Profile</span>
               </button>
             )}
           </nav>
 
-          {/* Right Header Actions: Sound, Lang, User / Sign In, Mobile Hamburger */}
+          {/* Right Header 3D Tactile Buttons */}
           <div className="flex items-center space-x-2.5">
-            {/* Audio SFX Synthesizer Toggle */}
+            {/* 3D Audio SFX Synthesizer Toggle */}
             <button
               onClick={handleToggleSound}
-              className="p-2 rounded-xl bg-[#1d182f] border border-slate-700/80 text-slate-300 hover:text-cyan-400 transition-colors"
+              className="p-2.5 rounded-2xl bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 transition-all active:translate-y-0.5"
               title={isMuted ? 'Unmute Futuristic UI SFX' : 'Mute UI SFX'}
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-slate-500" /> : <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />}
+              {isMuted ? (
+                <VolumeX className="w-4 h-4 text-slate-500" />
+              ) : (
+                <Volume2 className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] animate-pulse" />
+              )}
             </button>
 
-            {/* Language Selector */}
-            <div className="flex items-center space-x-1 bg-[#1d182f] border border-slate-700/80 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs">
-              <Globe2 className="w-3.5 h-3.5 text-purple-400" />
+            {/* 3D Beveled Language Selector */}
+            <div className="flex items-center space-x-1.5 bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] px-2.5 sm:px-3 py-2 rounded-2xl text-xs">
+              <Globe2 className="w-3.5 h-3.5 text-purple-400 drop-shadow" />
               <select
                 value={selectedLang}
                 onChange={(e) => {
                   soundFX.playClick();
                   setSelectedLang(e.target.value);
                 }}
-                className="bg-transparent text-slate-200 font-medium focus:outline-none cursor-pointer text-xs"
+                className="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer text-xs"
               >
                 {languages.map((lang) => (
                   <option key={lang.code} value={lang.code} className="bg-slate-900 text-slate-200">
@@ -229,18 +245,25 @@ export const Navbar: React.FC<NavbarProps> = ({
               </select>
             </div>
 
-            {/* Profile Avatar or Sign In Button */}
+            {/* 3D Profile Avatar or 3D Beveled Sign In Button */}
             {user ? (
               <button
                 onClick={() => handleTabChange('profile')}
-                className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-[#211c33] border border-purple-500/40 hover:border-purple-400 transition-all shadow-md active:scale-95"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-gradient-to-b from-[#2a1d52] to-[#150d30] border-t border-purple-400/50 border-b border-black shadow-[0_4px_12px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.2)] hover:border-pink-400/60 transition-all active:translate-y-0.5"
               >
-                <div className="w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-[10px] text-white font-bold">
-                  {user.name.charAt(0)}
+                <div className="w-6 h-6 rounded-xl bg-gradient-to-tr from-cyan-400 via-purple-500 to-pink-500 p-0.5 shadow-md flex items-center justify-center">
+                  <div className="w-full h-full bg-[#120c24] rounded-[10px] flex items-center justify-center text-[10px] text-white font-black">
+                    {user.name.charAt(0)}
+                  </div>
                 </div>
-                <span className="text-xs font-semibold text-white truncate max-w-[70px] sm:max-w-[80px]">
-                  {user.name}
-                </span>
+                <div className="text-left hidden sm:block">
+                  <span className="text-xs font-bold text-white block leading-none">
+                    {user.name}
+                  </span>
+                  <span className="text-[10px] text-cyan-400 font-mono font-semibold">
+                    {user.sparks} ⚡
+                  </span>
+                </div>
               </button>
             ) : (
               <button
@@ -248,23 +271,27 @@ export const Navbar: React.FC<NavbarProps> = ({
                   soundFX.playPortal();
                   onOpenAuth();
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold shadow-md hover:opacity-95 active:scale-95 transition-all"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-gradient-to-b from-purple-500 to-pink-600 text-white text-xs font-black shadow-[0_4px_14px_rgba(236,72,153,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:opacity-95 active:translate-y-0.5 transition-all"
               >
-                <LogIn className="w-3.5 h-3.5" />
+                <LogIn className="w-3.5 h-3.5 drop-shadow" />
                 <span>Sign In</span>
               </button>
             )}
 
-            {/* Mobile Menu Toggle Button */}
+            {/* 3D Mobile Menu Toggle Button */}
             <button
               onClick={() => {
                 soundFX.playClick();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className="p-2 rounded-xl bg-[#1d182f] border border-slate-700/80 text-slate-300 hover:text-white xl:hidden transition-colors"
+              className="p-2.5 rounded-2xl bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] text-slate-300 hover:text-white xl:hidden transition-all active:translate-y-0.5"
               title="Toggle Menu"
             >
-              {isMobileMenuOpen ? <X className="w-4 h-4 text-pink-400" /> : <Menu className="w-4 h-4" />}
+              {isMobileMenuOpen ? (
+                <X className="w-4 h-4 text-pink-400" />
+              ) : (
+                <Menu className="w-4 h-4" />
+              )}
             </button>
           </div>
         </div>

@@ -137,30 +137,33 @@ export function App() {
         }}
       />
 
-      {/* Live Match Sub-Bar */}
-      <div className="border-b border-slate-800/80 bg-[#1d182f]/70 backdrop-blur-md py-2.5 z-10 relative">
+      {/* Live Match 3D Ribbon Sub-Bar */}
+      <div className="border-b border-purple-500/20 bg-gradient-to-r from-[#170e30]/90 via-[#100824]/90 to-[#170e30]/90 backdrop-blur-xl py-2 z-10 relative shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center space-x-3">
-            <span className="flex items-center gap-1.5 text-slate-200 font-semibold">
-              <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold shadow-[0_2px_8px_rgba(245,158,11,0.2)]">
+              <Trophy className="w-3.5 h-3.5 text-amber-400 drop-shadow animate-bounce" />
               ICC Women's T20 World Cup Final
             </span>
-            <span className="text-slate-600">•</span>
-            <span className="text-slate-400">Dubai International Stadium</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-purple-400 font-semibold flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 text-pink-500 fill-pink-500 animate-pulse" />
-              8.4M Fans Synced
+            <span className="text-slate-600 hidden sm:inline">•</span>
+            <span className="text-slate-300 font-mono hidden sm:inline">Dubai International Stadium</span>
+            <span className="text-slate-600 hidden sm:inline">•</span>
+            <span className="px-2.5 py-1 rounded-xl bg-pink-500/10 border border-pink-500/30 text-pink-300 font-bold flex items-center gap-1.5 shadow-[0_2px_8px_rgba(236,72,153,0.2)]">
+              <Flame className="w-3.5 h-3.5 text-pink-400 fill-pink-400 animate-pulse" />
+              8.4M Fans Synced Live
             </span>
           </div>
 
-          <div className="flex items-center space-x-3 text-slate-400">
-            <span className="flex items-center gap-1">
+          <div className="flex items-center space-x-3 text-slate-300 font-mono text-[11px]">
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">
               <Globe className="w-3.5 h-3.5 text-cyan-400" />
               12 Regional AI Streams
             </span>
             <span className="text-slate-600">|</span>
-            <span className="text-emerald-400 font-semibold">Zero-Trust Guard: Active</span>
+            <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              Zero-Trust Guard: Active
+            </span>
           </div>
         </div>
       </div>

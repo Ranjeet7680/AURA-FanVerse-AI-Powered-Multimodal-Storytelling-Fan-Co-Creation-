@@ -69,40 +69,40 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="absolute -bottom-[1px] inset-x-0 h-[1px] bg-gradient-to-r from-purple-500/20 via-pink-500/40 to-cyan-500/20" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 py-2">
+        <div className="flex items-center justify-between h-16 py-2 gap-2">
           {/* Brand Logo with 3D Embossed Coin Effect */}
           <div
             onClick={() => handleTabChange('discover')}
-            className="flex items-center space-x-3 cursor-pointer group select-none transition-transform active:scale-95"
+            className="flex items-center space-x-2.5 cursor-pointer group select-none transition-transform active:scale-95 flex-shrink-0"
           >
             {/* 3D Isometric Emblem */}
             <div className="relative">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-[#2e2354] via-[#1a1338] to-[#0e0922] border-t border-purple-400/60 border-l border-purple-400/40 border-b-2 border-black/80 shadow-[0_6px_16px_rgba(147,51,234,0.35),inset_0_2px_4px_rgba(255,255,255,0.2)] flex items-center justify-center transform group-hover:-translate-y-0.5 transition-all">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#2e2354] via-[#1a1338] to-[#0e0922] border-t border-purple-400/60 border-l border-purple-400/40 border-b-2 border-black/80 shadow-[0_6px_16px_rgba(147,51,234,0.35),inset_0_2px_4px_rgba(255,255,255,0.2)] flex items-center justify-center transform group-hover:-translate-y-0.5 transition-all">
                 <Sparkles className="w-5 h-5 text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] animate-pulse" />
               </div>
-              <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#120c24] shadow-[0_0_8px_rgba(16,185,129,0.9)]" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#120c24] shadow-[0_0_8px_rgba(16,185,129,0.9)]" />
             </div>
 
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-black text-xl tracking-tight bg-gradient-to-r from-white via-purple-200 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(168,85,247,0.4)]">
+            <div className="flex flex-col justify-center">
+              <div className="flex items-center space-x-1.5 whitespace-nowrap">
+                <span className="font-black text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-purple-100 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(168,85,247,0.4)]">
                   AURA FanVerse
                 </span>
-                <span className="text-[10px] uppercase font-black tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-400/40 shadow-[0_2px_6px_rgba(6,182,212,0.25)] hidden sm:inline-block font-mono">
-                  3D WEBGL AI v4.9
+                <span className="text-[9px] uppercase font-black tracking-wider px-1.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_1px_4px_rgba(6,182,212,0.2)] hidden sm:inline-block font-mono">
+                  v4.9
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 tracking-wide font-medium hidden sm:block">
+              <p className="text-[10px] text-slate-400 tracking-wide font-medium hidden sm:block whitespace-nowrap leading-tight">
                 Multimodal Canon • 3D Stadium • Live Fandom
               </p>
             </div>
           </div>
 
           {/* Desktop Navigation 3D Floating Console Strip */}
-          <nav className="hidden xl:flex items-center space-x-1 bg-[#100924]/90 p-1.5 rounded-2xl border-t border-white/10 border-b border-black/80 shadow-[0_6px_18px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.06)] text-xs">
+          <nav className="hidden lg:flex items-center space-x-1 bg-[#100924]/90 p-1 rounded-2xl border-t border-white/10 border-b border-black/80 shadow-[0_6px_18px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.06)] text-[11px] flex-shrink">
             <button
               onClick={() => handleTabChange('discover')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'discover'
                   ? 'bg-gradient-to-b from-purple-500 to-pink-600 text-white shadow-[0_4px_12px_rgba(236,72,153,0.4),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -114,31 +114,31 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('reels')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'reels'
                   ? 'bg-gradient-to-b from-purple-500 to-indigo-600 text-white shadow-[0_4px_12px_rgba(168,85,247,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
               <Radio className="w-3.5 h-3.5 text-purple-300 drop-shadow animate-pulse" />
-              <span>Shorts & Videos</span>
+              <span>Shorts</span>
             </button>
 
             <button
               onClick={() => handleTabChange('tactical')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'tactical'
                   ? 'bg-gradient-to-b from-purple-600 to-violet-700 text-white shadow-[0_4px_12px_rgba(139,92,246,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
               <Activity className="w-3.5 h-3.5 text-purple-300 drop-shadow" />
-              <span>Tactical Co-Pilot</span>
+              <span>Tactical AI</span>
             </button>
 
             <button
               onClick={() => handleTabChange('stadium3d')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'stadium3d'
                   ? 'bg-gradient-to-b from-cyan-500 to-blue-600 text-white shadow-[0_4px_14px_rgba(6,182,212,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5 ring-1 ring-cyan-300/40'
                   : 'text-slate-400 hover:text-cyan-300 hover:bg-white/5 active:translate-y-0.5'
@@ -150,19 +150,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('analytics')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'analytics'
                   ? 'bg-gradient-to-b from-emerald-500 to-teal-700 text-white shadow-[0_4px_12px_rgba(16,185,129,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
               <Shield className="w-3.5 h-3.5 text-emerald-300 drop-shadow" />
-              <span>Match Radar</span>
+              <span>Radar</span>
             </button>
 
             <button
               onClick={() => handleTabChange('rl')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'rl'
                   ? 'bg-gradient-to-b from-amber-500 to-orange-600 text-white shadow-[0_4px_12px_rgba(245,158,11,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -174,7 +174,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('cybersecurity')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'cybersecurity'
                   ? 'bg-gradient-to-b from-red-500 to-rose-700 text-white shadow-[0_4px_12px_rgba(239,68,68,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -186,20 +186,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('athletes')}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                 activeTab === 'athletes'
                   ? 'bg-gradient-to-b from-pink-500 to-rose-600 text-white shadow-[0_4px_12px_rgba(236,72,153,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
               }`}
             >
               <Users className="w-3.5 h-3.5 text-pink-300 drop-shadow" />
-              <span>Athlete Hub</span>
+              <span>Athletes</span>
             </button>
 
             {user && (
               <button
                 onClick={() => handleTabChange('profile')}
-                className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl font-bold transition-all transform duration-150 ${
+                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
                   activeTab === 'profile'
                     ? 'bg-gradient-to-b from-purple-500 to-indigo-600 text-white shadow-[0_4px_12px_rgba(168,85,247,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                     : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -212,22 +212,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right Header 3D Tactile Buttons */}
-          <div className="flex items-center space-x-2.5">
+          <div className="flex items-center space-x-2 flex-shrink-0">
             {/* 3D Audio SFX Synthesizer Toggle */}
             <button
               onClick={handleToggleSound}
-              className="p-2.5 rounded-2xl bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 transition-all active:translate-y-0.5"
+              className="p-2 rounded-2xl bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 transition-all active:translate-y-0.5"
               title={isMuted ? 'Unmute Futuristic UI SFX' : 'Mute UI SFX'}
             >
               {isMuted ? (
-                <VolumeX className="w-4 h-4 text-slate-500" />
+                <VolumeX className="w-3.5 h-3.5 text-slate-500" />
               ) : (
-                <Volume2 className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] animate-pulse" />
+                <Volume2 className="w-3.5 h-3.5 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] animate-pulse" />
               )}
             </button>
 
             {/* 3D Beveled Language Selector */}
-            <div className="flex items-center space-x-1.5 bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] px-2.5 sm:px-3 py-2 rounded-2xl text-xs">
+            <div className="flex items-center space-x-1 bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] px-2 py-1.5 rounded-2xl text-xs">
               <Globe2 className="w-3.5 h-3.5 text-purple-400 drop-shadow" />
               <select
                 value={selectedLang}

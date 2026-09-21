@@ -517,6 +517,100 @@ export const MOCK_TACTICAL_QUERIES: TacticalQuery[] = [
       { angle: 260, distance: 30, runs: 0 },
       { angle: 310, distance: 75, runs: 4 }
     ]
+  },
+  {
+    id: "q-3",
+    question: "Why drop the mid-off inside the circle against Sophie Devine on ball 18.2?",
+    answer: "Australia's captain intentionally vacated long-off to bait Devine into hitting against the 18 km/h cross-breeze. By placing a deep cover sweeper and deep mid-wicket, the bowling side protected the wind-assisted boundary quadrants while dangling the aerial bait.",
+    bowler: "Tahlia McGrath (Pace)",
+    batter: "Sophie Devine (RHB)",
+    fieldFocus: "Bait Mid-Off In / Deep Cover Sweeper",
+    winProbability: {
+      before: 55,
+      after: 64,
+      team: "Australia"
+    },
+    recommendedFieldingPositions: [
+      { name: "Wicketkeeper", x: 50, y: 74, role: "Keeper" },
+      { name: "Short Third", x: 65, y: 65, role: "Ring" },
+      { name: "Point", x: 75, y: 50, role: "Ring" },
+      { name: "Deep Cover Sweeper", x: 84, y: 35, highlight: true, role: "Boundary Shield" },
+      { name: "Short Mid-Off", x: 58, y: 32, highlight: true, role: "Infield Bait" },
+      { name: "Long-On", x: 38, y: 15, role: "Boundary" },
+      { name: "Deep Mid-Wicket", x: 22, y: 38, highlight: true, role: "Boundary Shield" },
+      { name: "Mid-Wicket", x: 32, y: 48, role: "Ring" },
+      { name: "Deep Square Leg", x: 20, y: 64, role: "Boundary" },
+      { name: "Fine Leg", x: 35, y: 80, role: "Boundary" },
+      { name: "Bowler", x: 50, y: 35, role: "Bowler" }
+    ],
+    wagonWheel: [
+      { angle: 45, distance: 60, runs: 1 },
+      { angle: 110, distance: 45, runs: 0 },
+      { angle: 160, distance: 78, runs: 4 },
+      { angle: 280, distance: 50, runs: 1 }
+    ]
+  },
+  {
+    id: "q-4",
+    question: "How does Deepti Sharma's carrom ball trick the left-handed batter?",
+    answer: "Deepti changes her seam release from standard 11 o'clock scramble to a 1 o'clock thumb-flick. The aerodynamic Magnus effect causes 4.8° of late away-drift before pitching, then cuts sharply into the left-hander's off-stump corridor.",
+    bowler: "Deepti Sharma (Off-Break)",
+    batter: "Smriti Mandhana (LHB)",
+    fieldFocus: "Leg Slip, Silly Point & Backward Square",
+    winProbability: {
+      before: 50,
+      after: 61,
+      team: "India"
+    },
+    recommendedFieldingPositions: [
+      { name: "Wicketkeeper", x: 50, y: 72, role: "Keeper" },
+      { name: "Leg Slip", x: 42, y: 74, highlight: true, role: "Trap Catcher" },
+      { name: "Silly Point", x: 62, y: 58, highlight: true, role: "Close Infield" },
+      { name: "Backward Point", x: 75, y: 55, role: "Ring" },
+      { name: "Cover", x: 70, y: 38, role: "Ring" },
+      { name: "Mid-Off", x: 58, y: 26, role: "Inner" },
+      { name: "Long-On", x: 40, y: 15, role: "Boundary" },
+      { name: "Deep Square Leg", x: 20, y: 60, role: "Boundary" },
+      { name: "Short Fine Leg", x: 34, y: 76, role: "Ring" },
+      { name: "Deep Mid-Wicket", x: 25, y: 40, role: "Boundary" },
+      { name: "Bowler", x: 50, y: 35, role: "Bowler" }
+    ],
+    wagonWheel: [
+      { angle: 25, distance: 40, runs: 0 },
+      { angle: 80, distance: 30, runs: 0 },
+      { angle: 210, distance: 65, runs: 2 }
+    ]
+  },
+  {
+    id: "q-5",
+    question: "What is the optimal field setup against Shafali Verma in powerplay overs?",
+    answer: "Data proves Shafali clears the inner ring over extra cover on 42% of powerplay balls. The optimal counter-strategy brings third man and fine leg up into the circle to post both deep point and deep extra cover on the boundary rope.",
+    bowler: "Megan Schutt (In-Swing)",
+    batter: "Shafali Verma (RHB)",
+    fieldFocus: "Deep Extra Cover & Deep Point Boundary Rope",
+    winProbability: {
+      before: 46,
+      after: 54,
+      team: "Australia"
+    },
+    recommendedFieldingPositions: [
+      { name: "Wicketkeeper", x: 50, y: 75, role: "Keeper" },
+      { name: "First Slip", x: 57, y: 76, role: "Catcher" },
+      { name: "Short Third Man", x: 66, y: 70, role: "Inner" },
+      { name: "Deep Point", x: 82, y: 55, highlight: true, role: "Boundary Rope" },
+      { name: "Deep Extra Cover", x: 78, y: 35, highlight: true, role: "Boundary Rope" },
+      { name: "Mid-Off", x: 58, y: 28, role: "Inner" },
+      { name: "Mid-On", x: 42, y: 28, role: "Inner" },
+      { name: "Mid-Wicket", x: 30, y: 42, role: "Ring" },
+      { name: "Short Square Leg", x: 32, y: 60, role: "Inner" },
+      { name: "Short Fine Leg", x: 38, y: 75, role: "Inner" },
+      { name: "Bowler", x: 50, y: 34, role: "Bowler" }
+    ],
+    wagonWheel: [
+      { angle: 40, distance: 75, runs: 4 },
+      { angle: 90, distance: 35, runs: 0 },
+      { angle: 150, distance: 85, runs: 6 }
+    ]
   }
 ];
 

@@ -1,5 +1,6 @@
-import React from 'react';
-import { Sparkles, Activity, Shield, Users, Radio, Globe2, Cpu, Lock, Box, User, LogIn, Compass } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sparkles, Activity, Shield, Users, Radio, Globe2, Cpu, Lock, Box, User, LogIn, Compass, Volume2, VolumeX } from 'lucide-react';
+import { soundFX } from '../services/soundFX';
 
 export type ActiveTabType = 'discover' | 'reels' | 'tactical' | 'stadium3d' | 'analytics' | 'rl' | 'cybersecurity' | 'athletes' | 'profile';
 
@@ -20,6 +21,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   user,
   onOpenAuth,
 }) => {
+  const [isMuted, setIsMuted] = useState<boolean>(soundFX.getMuted());
+
   const languages = [
     { code: 'en', label: 'English' },
     { code: 'hi', label: 'हिंदी (Hindi)' },
@@ -28,13 +31,24 @@ export const Navbar: React.FC<NavbarProps> = ({
     { code: 'ta', label: 'தமிழ் (Tamil)' },
   ];
 
+  const handleTabChange = (tab: ActiveTabType) => {
+    soundFX.playClick();
+    setActiveTab(tab);
+  };
+
+  const handleToggleSound = () => {
+    const muted = soundFX.toggleMute();
+    setIsMuted(muted);
+    if (!muted) soundFX.playSuccessChime();
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-[#151026]/90 backdrop-blur-md border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo & Tag */}
           <div
-            onClick={() => setActiveTab('discover')}
+            onClick={() => handleTabChange('discover')}
             className="flex items-center space-x-3 cursor-pointer group"
           >
             <div className="w-10 h-10 rounded-xl bg-[#211c33] border border-purple-500/30 flex items-center justify-center shadow-lg group-hover:border-purple-400 transition-colors">
@@ -46,7 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   AURA FanVerse
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                  v4.9
+                  AI v4.9
                 </span>
               </div>
               <p className="text-xs text-slate-400">Multimodal AI • 3D WebGL • Fullstack</p>
@@ -56,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Navigation Tabs */}
           <nav className="hidden xl:flex space-x-1 bg-[#100b21]/80 p-1 rounded-xl border border-slate-800 text-xs">
             <button
-              onClick={() => setActiveTab('discover')}
+              onClick={() => handleTabChange('discover')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'discover'
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
@@ -68,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('reels')}
+              onClick={() => handleTabChange('reels')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'reels'
                   ? 'bg-purple-600 text-white shadow-md'
@@ -80,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('tactical')}
+              onClick={() => handleTabChange('tactical')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'tactical'
                   ? 'bg-purple-600 text-white shadow-md'
@@ -92,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('stadium3d')}
+              onClick={() => handleTabChange('stadium3d')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'stadium3d'
                   ? 'bg-cyan-600 text-white shadow-md'
@@ -104,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('analytics')}
+              onClick={() => handleTabChange('analytics')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'analytics'
                   ? 'bg-purple-600 text-white shadow-md'
@@ -116,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('rl')}
+              onClick={() => handleTabChange('rl')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'rl'
                   ? 'bg-amber-600 text-white shadow-md'
@@ -128,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('cybersecurity')}
+              onClick={() => handleTabChange('cybersecurity')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'cybersecurity'
                   ? 'bg-red-600 text-white shadow-md'
@@ -140,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('athletes')}
+              onClick={() => handleTabChange('athletes')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'athletes'
                   ? 'bg-pink-600 text-white shadow-md'
@@ -153,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {user && (
               <button
-                onClick={() => setActiveTab('profile')}
+                onClick={() => handleTabChange('profile')}
                 className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                   activeTab === 'profile'
                     ? 'bg-purple-600 text-white shadow-md'
@@ -168,11 +182,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Multilingual Selector & User Actions */}
           <div className="flex items-center space-x-3">
+            {/* Audio SFX Toggle Button */}
+            <button
+              onClick={handleToggleSound}
+              className="p-2 rounded-xl bg-[#1d182f] border border-slate-700/80 text-slate-300 hover:text-cyan-400 transition-colors"
+              title={isMuted ? 'Unmute Futuristic UI SFX' : 'Mute UI SFX'}
+            >
+              {isMuted ? <VolumeX className="w-4 h-4 text-slate-500" /> : <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />}
+            </button>
+
             <div className="flex items-center space-x-1.5 bg-[#1d182f] border border-slate-700/80 px-2.5 py-1.5 rounded-lg text-xs">
               <Globe2 className="w-3.5 h-3.5 text-purple-400" />
               <select
                 value={selectedLang}
-                onChange={(e) => setSelectedLang(e.target.value)}
+                onChange={(e) => {
+                  soundFX.playClick();
+                  setSelectedLang(e.target.value);
+                }}
                 className="bg-transparent text-slate-200 font-medium focus:outline-none cursor-pointer"
               >
                 {languages.map((lang) => (
@@ -185,7 +211,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {user ? (
               <button
-                onClick={() => setActiveTab('profile')}
+                onClick={() => handleTabChange('profile')}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#211c33] border border-purple-500/30 hover:border-purple-400 transition-colors"
               >
                 <div className="w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-[10px] text-white font-bold">
@@ -195,7 +221,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             ) : (
               <button
-                onClick={onOpenAuth}
+                onClick={() => {
+                  soundFX.playPortalSweep();
+                  onOpenAuth();
+                }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold shadow-md hover:opacity-95 active:scale-95 transition-all"
               >
                 <LogIn className="w-3.5 h-3.5" />

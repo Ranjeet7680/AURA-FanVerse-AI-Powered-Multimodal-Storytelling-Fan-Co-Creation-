@@ -7,6 +7,8 @@ export interface MicroReel {
   matchContext: string;
   badge: string;
   videoThumb: string;
+  youtubeId: string;
+  category?: string;
   caption: Record<string, string>;
   audioUrl?: string;
   metrics: {
@@ -65,6 +67,8 @@ export interface AthleteProfile {
 export const MOCK_REELS: MicroReel[] = [
   {
     id: "reel-1",
+    youtubeId: "5rVTbQxIczU",
+    category: "Masterclass",
     title: "Smriti's Masterclass: Lofted Inside-Out Over Cover",
     duration: "0:24",
     player: "Smriti Mandhana",
@@ -89,6 +93,8 @@ export const MOCK_REELS: MicroReel[] = [
   },
   {
     id: "reel-2",
+    youtubeId: "Zv2UI9OdDqI",
+    category: "Pace Attack",
     title: "Renuka's Seam Sorcery: Late Inswinger Cleans Up Stumps",
     duration: "0:18",
     player: "Renuka Singh Thakur",
@@ -113,6 +119,8 @@ export const MOCK_REELS: MicroReel[] = [
   },
   {
     id: "reel-3",
+    youtubeId: "vFICXUQZ5yg",
+    category: "Clutch Defense",
     title: "Tahila McGrath's Clutch Death Overs Yorker Defense",
     duration: "0:21",
     player: "Tahlia McGrath",
@@ -134,6 +142,214 @@ export const MOCK_REELS: MicroReel[] = [
       winProbChange: "+6.2% (AUS)"
     },
     tacticalInsight: "Executing at 8 inches outside off stump prevented the batter from generating horizontal bat leverage."
+  },
+  {
+    id: "reel-4",
+    youtubeId: "UK1QHWprmno",
+    category: "Captaincy",
+    title: "Harmanpreet Kaur's Fierce Sweep Against World #1 Spinner",
+    duration: "0:28",
+    player: "Harmanpreet Kaur",
+    role: "Captain & Middle-Order (India)",
+    matchContext: "IND-W vs ENG-W • Over 15.3 • Chase Accelerating",
+    badge: "Captain's Knock 👑",
+    videoThumb: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "Harmanpreet gets down low on one knee, dispatching the left-arm spin over deep backward square leg!",
+      hi: "हरमनप्रीत का तूफानी स्वीप शॉट! विश्व नंबर 1 स्पिनर के खिलाफ डीप बैकवर्ड स्क्वायर लेग पर चौका!",
+      es: "¡Harmanpreet se arrodilla y conecta un barrido demoledor sobre square leg!",
+      ar: "ضربة قوية ودقيقة من القائدة هارمانبريت تتجاوز الميدان ببراعة!",
+      ta: "ஹர்மன்பிரீத் கவுரின் அபாரமான ஸ்வீப் ஷாட் பவுண்டரிக்கு விரண்டது!"
+    },
+    metrics: {
+      exitVelocity: "122.1 km/h",
+      launchAngle: "28°",
+      distance: "68 meters",
+      winProbChange: "+9.1% (IND)"
+    },
+    tacticalInsight: "Read the flight early and pre-empted the full length to generate maximum bottom-hand wrist roll."
+  },
+  {
+    id: "reel-5",
+    youtubeId: "AlLD0VTUjYI",
+    category: "Fielding",
+    title: "Jemimah Rodrigues Boundary Dive: 5 Runs Saved",
+    duration: "0:19",
+    player: "Jemimah Rodrigues",
+    role: "Top-Order & Gun Fielder (India)",
+    matchContext: "IND-W vs NZ-W • Over 17.5 • Boundary Save",
+    badge: "Acrobatic Save 🧤",
+    videoThumb: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "Full-length horizontal airborne slide at deep extra cover to flick the ball back inches before ropes!",
+      hi: "जेमिमा रोड्रिग्स की अविश्वसनीय डाइव! बाउंड्री रस्सी से ठीक पहले गेंद रोककर टीम के लिए रन बचाए!",
+      es: "¡Increíble salvada acrobática en el límite por Jemimah!",
+      ar: "إنقاذ إعجازي من خيميمة على خط التماس ينقذ النقاط الحيوية!",
+      ta: "ஜெமிமாவின் கண்கவர் பவுண்டரி தடுப்பு! அசாத்திய சுறுசுறுப்பு!"
+    },
+    metrics: {
+      exitVelocity: "Sprint: 27.8 km/h",
+      launchAngle: "Dive span: 2.3m",
+      distance: "Flick back: 0.15m from rope",
+      winProbChange: "+4.5% (IND)"
+    },
+    tacticalInsight: "Reaction time measured at 180ms from bat contact, enabling optimal trajectory anticipation."
+  },
+  {
+    id: "reel-6",
+    youtubeId: "c_yuQlq3l5M",
+    category: "Spin Magic",
+    title: "Deepti Sharma's Carrom Ball Trap: Clean Bowled",
+    duration: "0:22",
+    player: "Deepti Sharma",
+    role: "Off-Spin All-Rounder (India)",
+    matchContext: "IND-W vs SA-W • Over 9.4 • Middle Overs Choke",
+    badge: "Spin Wizardry 🌀",
+    videoThumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "Flicked with the middle finger, drifting into the right-hander before spinning away sharply to clip off peg!",
+      hi: "दीप्ति शर्मा की कैरम बॉल का जादू! बल्लेबाज चकमा खा गई और गिल्लियां बिखर गईं!",
+      es: "¡La carrom ball de Deepti desconcierta por completo a la bateadora y derriba los tocones!",
+      ar: "دوران سحري ودقة خارقة من ديبتي شارما تخدع المدافعة!",
+      ta: "தீப்தி சர்மாவின் கேரம் பால் மாயாஜாலம்! ஸ்டம்ப் தகர்ந்தது!"
+    },
+    metrics: {
+      exitVelocity: "79.3 km/h",
+      launchAngle: "Turn: 4.8°",
+      distance: "Revs: 2150 RPM",
+      winProbChange: "+8.9% (IND)"
+    },
+    tacticalInsight: "Hidden release masked by high-arm action; 4.8 degrees of late deviation against the forward push."
+  },
+  {
+    id: "reel-7",
+    youtubeId: "jFqLpe0rNTA",
+    category: "Power Hitting",
+    title: "Shafali Verma's No-Look Pull: Flat Over Square Leg",
+    duration: "0:25",
+    player: "Shafali Verma",
+    role: "Explosive Opener (India)",
+    matchContext: "IND-W vs SL-W • Over 1.4 • Powerplay Blitz",
+    badge: "Maximum Force 💥",
+    videoThumb: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "Shafali picks the bouncer in a split second, muscling a devastating flat pull six over square leg!",
+      hi: "शेफाली वर्मा का प्रचंड पुल शॉट! बाउंसर को खींचकर मारा फ्लैट छक्का!",
+      es: "¡Poder absoluto de Shafali con un golpe plano sobre square leg para 6!",
+      ar: "قوة هائلة وضربة قاضية من شافالي فارما تهز الشباك!",
+      ta: "ஷஃபாலி வர்மாவின் அசுர பலம் வாய்ந்த சிக்ஸர்! பவுண்டரிக்கு அப்பால் பறந்தது!"
+    },
+    metrics: {
+      exitVelocity: "134.2 km/h",
+      launchAngle: "19°",
+      distance: "81 meters",
+      winProbChange: "+12.1% (IND)"
+    },
+    tacticalInsight: "Short ball punished with extreme bat speed (94 km/h bat head velocity at impact)."
+  },
+  {
+    id: "reel-8",
+    youtubeId: "dCxLKsa7Qp4",
+    category: "Death Bowling",
+    title: "Shreyanka Patil: 3 Wickets in the 20th Over Climax",
+    duration: "0:30",
+    player: "Shreyanka Patil",
+    role: "Off-Spinner / Death Specialist (India)",
+    matchContext: "IND-W vs BAN-W • Over 20.0 • Match Decider",
+    badge: "Hat-trick Hunt 🎩",
+    videoThumb: "https://images.unsplash.com/photo-1531415074868-836332ff4296?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "Cold-blooded courage under pressure: flighting the ball to pick 3 wickets in 4 balls and seal the win!",
+      hi: "श्रेयंका पाटिल का 20वें ओवर में कहर! अंतिम 4 गेंदों में 3 विकेट चटकाकर मैच जिताया!",
+      es: "¡Fría como el hielo! Shreyanka toma 3 wickets en el último over para sellar la victoria!",
+      ar: "شجاعة استثنائية وثلاث إقصاءات في الشوط الحاسم من شريانكا!",
+      ta: "ஷ்ரேயங்கா பாட்டீலின் கடைசி ஓவர் ருத்ரதாண்டவம்! 3 விக்கெட்டுகள் எடுத்து வெற்றி!"
+    },
+    metrics: {
+      exitVelocity: "Dot balls: 4",
+      launchAngle: "Economy in 20th: 3.0",
+      distance: "Stump hits: 2",
+      winProbChange: "+38.4% (IND)"
+    },
+    tacticalInsight: "Varying pace between 68 km/h and 84 km/h broke the batters' lunging sweep rhythm."
+  },
+  {
+    id: "reel-9",
+    youtubeId: "rfVR0cneCYg",
+    category: "Grassroots Talent",
+    title: "Puja Mahato's Inswinging Thunderbolts from Nepal",
+    duration: "0:23",
+    player: "Puja Mahato",
+    role: "Fast Bowler (Nepal U-19)",
+    matchContext: "ICC U-19 World Cup Qualifier • Over 4.1",
+    badge: "Future Star 🌟",
+    videoThumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "From Kathmandu to world stage: late banana swing breaching defense at 116 km/h!",
+      hi: "नेपाल की सनसनी पूजा महतो! स्विंग होती गेंद ने बल्लेबाज को चारों खाने चित किया!",
+      es: "¡El talento emergente de Nepal sorprende con un swing imparable a 116 km/h!",
+      ar: "الموهبة الصاعدة من نيبال بوجا ماهاتو تخطف الأنظار برميها المتقن!",
+      ta: "நேபாளத்தின் இளம் புயல் பூஜா மஹதோவின் அற்புதமான ஸ்விங் பந்துவீச்சு!"
+    },
+    metrics: {
+      exitVelocity: "116.4 km/h",
+      launchAngle: "Swing: 3.4°",
+      distance: "Target: Top of off",
+      winProbChange: "+14.0% (NEP)"
+    },
+    tacticalInsight: "Upright seam position maintained with high wrist cock delivers persistent late aerodynamic deviation."
+  },
+  {
+    id: "reel-10",
+    youtubeId: "WHmWV7PdrgU",
+    category: "Wicketkeeping",
+    title: "Richa Ghosh Lightning 0.12s Stumping Dismissal",
+    duration: "0:17",
+    player: "Richa Ghosh",
+    role: "Wicketkeeper-Batter (India)",
+    matchContext: "IND-W vs WI-W • Over 11.2 • Flash Stumping",
+    badge: "Lightning Reflexes ⚡",
+    videoThumb: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "Blink and you miss it: Richa whips the bails off in just 0.12s as batter's back foot lifts a millimeter!",
+      hi: "ऋचा घोष की पलक झपकते स्टंपिंग! मात्र 0.12 सेकंड में गिल्लियां बिखेर दीं!",
+      es: "¡Velocidad sobrehumana! Richa derriba los tocones en 0.12 segundos!",
+      ar: "سرعة خارقة من ريتشا غوش في كسر الأخشاب في جزء من الثانية!",
+      ta: "ரிச்சா கோஷின் மின்னல் வேக ஸ்டம்பிங்! 0.12 வினாடியில் விக்கெட் காலி!"
+    },
+    metrics: {
+      exitVelocity: "Glove Speed: 0.12s",
+      launchAngle: "Foot drag: 1.2 cm",
+      distance: "Bail travel: 12 yds",
+      winProbChange: "+8.5% (IND)"
+    },
+    tacticalInsight: "Kept hands soft and gathered right behind the off stump without gathering backwards, shaving 100ms off standard time."
+  },
+  {
+    id: "reel-11",
+    youtubeId: "sKfaxShVIKg",
+    category: "Final Moments",
+    title: "Championship Climax: The Final Ball Winning Moment",
+    duration: "0:32",
+    player: "Team India & Australia",
+    role: "Championship Final",
+    matchContext: "ICC Women's T20 World Cup Final • Over 20.0 • Dubai",
+    badge: "Trophy Moment 🏆",
+    videoThumb: "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=800&q=80",
+    caption: {
+      en: "Dot ball on the final delivery triggers euphoria across 8.4 million fans synced live in the stadium & FanVerse!",
+      hi: "अंतिम गेंद पर रोमांच की पराकाष्ठा! वर्ल्ड कप फाइनल का ऐतिहासिक विजयी क्षण!",
+      es: "¡El momento culminante del campeonato mundial celebrado por millones!",
+      ar: "لحظة التتويج التاريخية بنهائي كأس العالم بحضور جماهيري ضخم!",
+      ta: "உலகக் கோப்பை இறுதிப் போட்டியின் மறக்க முடியாத வரலாற்று வெற்றித் தருணம்!"
+    },
+    metrics: {
+      exitVelocity: "Stadium Decibels: 114 dB",
+      launchAngle: "Dot Ball",
+      distance: "Trophy Securing",
+      winProbChange: "+100% (WIN)"
+    },
+    tacticalInsight: "Flawless defensive field ring execution with 5 fielders boundary-riding prevented boundary opportunities."
   }
 ];
 

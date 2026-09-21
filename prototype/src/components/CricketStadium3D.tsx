@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Play, Pause, RotateCcw, Box, Compass, Sparkles, Activity } from 'lucide-react';
+import { soundFX } from '../services/soundFX';
 
 export const CricketStadium3D: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -339,14 +340,18 @@ export const CricketStadium3D: React.FC = () => {
                 bowlerType === 'spin' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
               }`}
             >
-              88 km/h Spin Drift
+              82 km/h Leg-Spin
             </button>
           </div>
 
           <div className="flex items-center gap-2 bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 pointer-events-auto">
             <span className="text-[11px] font-bold text-slate-400 uppercase font-mono">Shot:</span>
             <button
-              onClick={() => { setShotType('coverDrive'); tRef.current = 0; }}
+              onClick={() => {
+                soundFX.playSuccess();
+                setShotType('coverDrive');
+                tRef.current = 0;
+              }}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                 shotType === 'coverDrive' ? 'bg-pink-600 text-white' : 'text-slate-400 hover:text-white'
               }`}
@@ -354,7 +359,11 @@ export const CricketStadium3D: React.FC = () => {
               Lofted Cover Drive (6)
             </button>
             <button
-              onClick={() => { setShotType('pullShot'); tRef.current = 0; }}
+              onClick={() => {
+                soundFX.playSuccess();
+                setShotType('pullShot');
+                tRef.current = 0;
+              }}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                 shotType === 'pullShot' ? 'bg-pink-600 text-white' : 'text-slate-400 hover:text-white'
               }`}
@@ -362,7 +371,11 @@ export const CricketStadium3D: React.FC = () => {
               Deep Pull Shot (4)
             </button>
             <button
-              onClick={() => { setShotType('wicket'); tRef.current = 0; }}
+              onClick={() => {
+                soundFX.playSecurityAlert();
+                setShotType('wicket');
+                tRef.current = 0;
+              }}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                 shotType === 'wicket' ? 'bg-pink-600 text-white' : 'text-slate-400 hover:text-white'
               }`}

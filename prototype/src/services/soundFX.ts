@@ -119,6 +119,15 @@ class SoundFXEngine {
     osc.start();
     osc.stop(this.ctx.currentTime + 0.12);
   }
+
+  // Convenient aliases
+  public playPortal() {
+    this.playPortalSweep();
+  }
+
+  public playSuccess() {
+    this.playSuccessChime();
+  }
 }
 
 export const soundFX = new SoundFXEngine();

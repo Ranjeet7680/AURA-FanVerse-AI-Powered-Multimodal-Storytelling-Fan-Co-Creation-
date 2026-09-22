@@ -115,32 +115,60 @@ export const CricketStadium3D: React.FC = () => {
       });
     }
 
-    // ── 5. Ground Surface (Realistic Turf) ──
+    // ── 5. Ground Surface (Realistic Turf with Procedural Texture) ──
+    const grassCanvas = document.createElement('canvas');
+    grassCanvas.width = 512;
+    grassCanvas.height = 512;
+    const gCtx = grassCanvas.getContext('2d')!;
+    // Base grass color
+    const baseGreen = timeOfDay === 'night' ? '#0a2016' : timeOfDay === 'twilight' ? '#133b25' : '#1a6b35';
+    gCtx.fillStyle = baseGreen;
+    gCtx.fillRect(0, 0, 512, 512);
+    // Grass blade noise
+    for (let i = 0; i < 8000; i++) {
+      const gx = Math.random() * 512;
+      const gy = Math.random() * 512;
+      const brightness = Math.random() > 0.5 ? 20 : -15;
+      const r = parseInt(baseGreen.slice(1, 3), 16) + brightness;
+      const g = parseInt(baseGreen.slice(3, 5), 16) + brightness + Math.floor(Math.random() * 10);
+      const b = parseInt(baseGreen.slice(5, 7), 16) + brightness;
+      gCtx.fillStyle = `rgb(${Math.max(0, Math.min(255, r))},${Math.max(0, Math.min(255, g))},${Math.max(0, Math.min(255, b))})`;
+      gCtx.fillRect(gx, gy, 1, Math.random() * 3 + 1);
+    }
+    // Mowing stripe pattern
+    for (let s = 0; s < 16; s++) {
+      gCtx.fillStyle = s % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
+      gCtx.fillRect(0, s * 32, 512, 32);
+    }
+    const grassTexture = new THREE.CanvasTexture(grassCanvas);
+    grassTexture.wrapS = THREE.RepeatWrapping;
+    grassTexture.wrapT = THREE.RepeatWrapping;
+    grassTexture.repeat.set(8, 8);
+
     const groundGeo = new THREE.CylinderGeometry(48, 48, 0.6, 96);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: timeOfDay === 'night' ? 0x0a2016 : timeOfDay === 'twilight' ? 0x133b25 : 0x1a6b35,
-      roughness: 0.85,
-      metalness: 0.05,
+      map: grassTexture,
+      roughness: 0.88,
+      metalness: 0.02,
     });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.position.y = -0.3;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // Grass stripe pattern (alternating dark/light bands)
-    for (let i = -5; i <= 5; i++) {
-      const stripeGeo = new THREE.PlaneGeometry(96, 4);
-      const stripeMat = new THREE.MeshStandardMaterial({
-        color: i % 2 === 0 ? 0x155a2c : 0x1a6b35,
+    // Outfield concentric rings (mowing pattern detail)
+    [15, 25, 35, 42].forEach((radius) => {
+      const ringGeo = new THREE.TorusGeometry(radius, 0.04, 4, 96);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
         transparent: true,
-        opacity: timeOfDay === 'night' ? 0.15 : 0.25,
-        side: THREE.DoubleSide,
+        opacity: 0.04,
       });
-      const stripe = new THREE.Mesh(stripeGeo, stripeMat);
-      stripe.rotation.x = -Math.PI / 2;
-      stripe.position.set(0, 0.02, i * 8);
-      scene.add(stripe);
-    }
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.y = 0.02;
+      scene.add(ring);
+    });
 
     // ── 6. Boundary Rope ──
     const boundaryRopeGeo = new THREE.TorusGeometry(46, 0.15, 8, 128);
@@ -168,12 +196,40 @@ export const CricketStadium3D: React.FC = () => {
     innerRing.position.y = 0.08;
     scene.add(innerRing);
 
-    // ── 7. Realistic Pitch Strip (22 Yards) ──
+    // ── 7. Realistic Pitch Strip (22 Yards) with Worn Texture ──
+    const pitchCanvas = document.createElement('canvas');
+    pitchCanvas.width = 256;
+    pitchCanvas.height = 512;
+    const pCtx = pitchCanvas.getContext('2d')!;
+    const pitchBaseColor = timeOfDay === 'day' ? '#c4a55a' : '#5a4833';
+    pCtx.fillStyle = pitchBaseColor;
+    pCtx.fillRect(0, 0, 256, 512);
+    // Worn/cracked areas
+    for (let i = 0; i < 300; i++) {
+      const px = Math.random() * 256;
+      const py = Math.random() * 512;
+      pCtx.fillStyle = `rgba(${80 + Math.floor(Math.random() * 40)},${60 + Math.floor(Math.random() * 30)},${30 + Math.floor(Math.random() * 20)},${0.1 + Math.random() * 0.15})`;
+      pCtx.fillRect(px, py, Math.random() * 4 + 1, Math.random() * 2 + 1);
+    }
+    // Foot marks at both ends (bowler landing / batsman guard)
+    [80, 430].forEach((cy) => {
+      for (let f = 0; f < 60; f++) {
+        pCtx.fillStyle = `rgba(60,40,20,${0.1 + Math.random() * 0.2})`;
+        pCtx.beginPath();
+        pCtx.arc(128 + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 50, Math.random() * 6 + 2, 0, Math.PI * 2);
+        pCtx.fill();
+      }
+    });
+    // Good length zone (slightly different shade)
+    pCtx.fillStyle = 'rgba(90,60,30,0.08)';
+    pCtx.fillRect(60, 180, 136, 80);
+    const pitchTexture = new THREE.CanvasTexture(pitchCanvas);
+
     const pitchGeo = new THREE.BoxGeometry(3.66, 0.12, 20.12);
     const pitchMat = new THREE.MeshStandardMaterial({
-      color: timeOfDay === 'day' ? 0xc4a55a : 0x5a4833,
-      roughness: 0.92,
-      metalness: 0.02,
+      map: pitchTexture,
+      roughness: 0.94,
+      metalness: 0.01,
     });
     const pitch = new THREE.Mesh(pitchGeo, pitchMat);
     pitch.position.y = 0.08;
@@ -555,14 +611,118 @@ export const CricketStadium3D: React.FC = () => {
     const scoreboard = new THREE.Mesh(sbGeo, sbMat);
     scoreboard.position.set(0, 18, -68);
     scene.add(scoreboard);
-    // Screen face
+    // Screen face with glow
     const screenGeo = new THREE.PlaneGeometry(13, 6);
-    const screenMat = new THREE.MeshBasicMaterial({
-      color: 0x0a1628,
-    });
+    const screenMat = new THREE.MeshBasicMaterial({ color: 0x0a1628 });
     const screenFace = new THREE.Mesh(screenGeo, screenMat);
     screenFace.position.set(0, 18, -67.7);
     scene.add(screenFace);
+
+    // ── 19. Sponsor/Ad Boards around Boundary ──
+    const sponsorTexts = ['AURA FanVerse', 'WebGL 3D', 'Hawk-Eye AI', 'LIVE CRICKET', 'TACTICAL AI', 'FAN ZONE', 'MATCH RADAR', 'RL AGENT'];
+    const numBoards = 24;
+    for (let i = 0; i < numBoards; i++) {
+      const angle = (i / numBoards) * Math.PI * 2;
+      const boardRadius = 47.5;
+
+      const adCanvas = document.createElement('canvas');
+      adCanvas.width = 256;
+      adCanvas.height = 64;
+      const adCtx = adCanvas.getContext('2d')!;
+      // Gradient background
+      const grad = adCtx.createLinearGradient(0, 0, 256, 0);
+      const gradColors = [
+        ['#1a0a3e', '#ec4899'], ['#0d1b2a', '#4cd7f6'], ['#1a1a2e', '#a855f7'],
+        ['#0a2016', '#22c55e'], ['#2d1b4e', '#f59e0b'], ['#16213e', '#ef4444'],
+      ];
+      const gc = gradColors[i % gradColors.length];
+      grad.addColorStop(0, gc[0]);
+      grad.addColorStop(1, gc[1]);
+      adCtx.fillStyle = grad;
+      adCtx.fillRect(0, 0, 256, 64);
+      // Text
+      adCtx.fillStyle = '#ffffff';
+      adCtx.font = 'bold 22px Arial';
+      adCtx.textAlign = 'center';
+      adCtx.textBaseline = 'middle';
+      adCtx.fillText(sponsorTexts[i % sponsorTexts.length], 128, 32);
+      const adTexture = new THREE.CanvasTexture(adCanvas);
+
+      const boardGeo = new THREE.PlaneGeometry(5, 1.2);
+      const boardMat = new THREE.MeshBasicMaterial({
+        map: adTexture,
+        side: THREE.DoubleSide,
+        transparent: true,
+      });
+      const board = new THREE.Mesh(boardGeo, boardMat);
+      board.position.set(
+        Math.sin(angle) * boardRadius,
+        0.7,
+        Math.cos(angle) * boardRadius,
+      );
+      board.lookAt(0, 0.7, 0);
+      scene.add(board);
+    }
+
+    // ── 20. Crowd Particles in Stands ──
+    const crowdGeo = new THREE.BufferGeometry();
+    const crowdCount = 3000;
+    const crowdPositions = new Float32Array(crowdCount * 3);
+    const crowdColors = new Float32Array(crowdCount * 3);
+    const crowdColorPalette = [
+      [1.0, 0.3, 0.5], [0.3, 0.5, 1.0], [1.0, 0.8, 0.2], [0.2, 0.9, 0.4],
+      [0.9, 0.3, 0.9], [1.0, 1.0, 1.0], [0.3, 0.8, 0.9], [1.0, 0.5, 0.2],
+    ];
+    for (let i = 0; i < crowdCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 52 + Math.random() * 12;
+      crowdPositions[i * 3] = Math.sin(angle) * radius;
+      crowdPositions[i * 3 + 1] = 2 + Math.random() * 10;
+      crowdPositions[i * 3 + 2] = Math.cos(angle) * radius;
+      const color = crowdColorPalette[Math.floor(Math.random() * crowdColorPalette.length)];
+      crowdColors[i * 3] = color[0];
+      crowdColors[i * 3 + 1] = color[1];
+      crowdColors[i * 3 + 2] = color[2];
+    }
+    crowdGeo.setAttribute('position', new THREE.BufferAttribute(crowdPositions, 3));
+    crowdGeo.setAttribute('color', new THREE.BufferAttribute(crowdColors, 3));
+    const crowdMat = new THREE.PointsMaterial({
+      size: 0.5,
+      vertexColors: true,
+      transparent: true,
+      opacity: timeOfDay === 'day' ? 0.7 : 0.5,
+    });
+    const crowd = new THREE.Points(crowdGeo, crowdMat);
+    scene.add(crowd);
+
+    // ── 21. Hemisphere Sky Dome ──
+    const skyDomeGeo = new THREE.SphereGeometry(400, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+    const skyGradColors = {
+      day: { top: 0x4a90d9, bottom: 0x87ceeb },
+      twilight: { top: 0x0d0520, bottom: 0xff7b54 },
+      night: { top: 0x020210, bottom: 0x0a0620 },
+    };
+    const skyC = skyGradColors[timeOfDay];
+    const skyDomeMat = new THREE.MeshBasicMaterial({
+      color: skyC.top,
+      side: THREE.BackSide,
+      transparent: true,
+      opacity: 0.6,
+    });
+    const skyDome = new THREE.Mesh(skyDomeGeo, skyDomeMat);
+    scene.add(skyDome);
+
+    // ── 22. LED Boundary Ring (animated glow) ──
+    const ledRingGeo = new THREE.TorusGeometry(46.5, 0.08, 6, 256);
+    const ledRingMat = new THREE.MeshBasicMaterial({
+      color: 0xec4899,
+      transparent: true,
+      opacity: 0.6,
+    });
+    const ledRing = new THREE.Mesh(ledRingGeo, ledRingMat);
+    ledRing.rotation.x = Math.PI / 2;
+    ledRing.position.y = 0.04;
+    scene.add(ledRing);
 
     // ── ANIMATION LOOP ──
     let running = true;
@@ -708,6 +868,20 @@ export const CricketStadium3D: React.FC = () => {
           cam.lookAt(0, 0, 0);
         }
       }
+
+      // LED boundary ring pulse
+      ledRingMat.opacity = 0.3 + Math.sin(clock.elapsedTime * 3) * 0.3;
+      const hue = (clock.elapsedTime * 0.1) % 1;
+      ledRingMat.color.setHSL(hue, 1.0, 0.5);
+
+      // Crowd wave animation
+      const crowdPos = crowd.geometry.attributes.position.array as Float32Array;
+      for (let ci = 0; ci < crowdCount; ci++) {
+        const baseY = 2 + (ci / crowdCount) * 10;
+        const wavePhase = Math.atan2(crowdPos[ci * 3], crowdPos[ci * 3 + 2]);
+        crowdPos[ci * 3 + 1] = baseY + Math.sin(clock.elapsedTime * 2 + wavePhase * 3) * 0.3;
+      }
+      crowd.geometry.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     };

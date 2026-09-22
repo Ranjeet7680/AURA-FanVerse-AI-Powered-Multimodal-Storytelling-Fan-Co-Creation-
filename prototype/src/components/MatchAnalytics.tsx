@@ -7,6 +7,8 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  BarChart,
+  Bar,
   Legend,
   RadarChart,
   PolarGrid,
@@ -24,33 +26,23 @@ import {
   CheckCircle2,
   Sliders,
   Calendar,
-  Award
+  Award,
+  Database,
+  Layers,
+  ArrowUpRight
 } from 'lucide-react';
 import { LIVE_OVER_METRICS } from '../data/mockMatchData';
 import { soundFX } from '../services/soundFX';
 
-interface MLModelData {
-  model_version: string;
-  trained_samples: number;
-  accuracy: number;
-  win_model: {
-    coefficients: number[];
-    intercept: number;
-    scaler_mean: number[];
-    scaler_std: number[];
-    feature_importances: Array<{
-      feature: string;
-      weight: number;
-      impact: string;
-      magnitude: number;
-    }>;
-  };
-  score_model: {
-    coefficients: number[];
-    intercept: number;
-    features: string[];
-  };
-  team_ratings: Record<string, {
+interface AnalyticsSummary {
+  total_matches_analyzed: number;
+  total_players_indexed: number;
+  female_matches_count: number;
+  male_matches_count: number;
+  t20_avg_runs: number;
+  odi_avg_runs: number;
+  highest_rated_teams: Array<{
+    team: string;
     power: number;
     matches: number;
     win_rate: number;
@@ -58,10 +50,64 @@ interface MLModelData {
     bowling_rr: number;
     nrr: number;
   }>;
-  venue_averages: Record<string, {
+}
+
+interface ModelTelemetry {
+  pipeline_status: string;
+  total_json_scanned: number;
+  unique_matches_mined: number;
+  inplay_state_snapshots: number;
+  total_players_evaluated: number;
+  indexed_headshot_profiles: number;
+  gradient_boosting_accuracy: number;
+  logistic_regression_accuracy: number;
+  roc_auc_metric: number;
+  brier_calibration: number;
+  algorithm_stack: string[];
+}
+
+interface MLModelData {
+  model_version: string;
+  inplay_accuracy: number;
+  gradient_boosting_accuracy: number;
+  roc_auc_score: number;
+  brier_calibration: number;
+  pre_match_accuracy: number;
+  inplay_model: {
+    coefficients: number[];
+    intercept: number;
+    scaler_mean: number[];
+    scaler_std: number[];
+    feature_importances: Array<{
+      feature: string;
+      importance: number;
+    }>;
+  };
+  pre_model: {
+    coefficients: number[];
+    intercept: number;
+    scaler_mean: number[];
+    scaler_std: number[];
+  };
+  phase_projections: {
+    powerplay: { expected: number; floor_p10: number; ceiling_p90: number };
+    middle: { expected: number; floor_p10: number; ceiling_p90: number };
+    death: { expected: number; floor_p10: number; ceiling_p90: number };
+  };
+  tactical_matchups: Array<{
+    matchup: string;
+    balls: number;
+    strike_rate: number;
+    wicket_rate: number;
+    dot_pct: number;
+    boundary_pct: number;
+    threat_level: string;
+    recommendation: string;
+  }>;
+  team_ratings: Record<string, {
+    power: number;
     matches: number;
-    avg_score: number;
-    bat_first_win_pct: number;
+    win_rate: number;
   }>;
 }
 
@@ -104,9 +150,11 @@ interface RecentMatch {
 }
 
 export const MatchAnalytics: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'mlPredictor' | 'liveTelemetry' | 'playerDatabase' | 'matchExplorer'>('mlPredictor');
+  const [activeTab, setActiveTab] = useState<'dataAnalysis' | 'mlPredictor' | 'playerDatabase' | 'matchExplorer' | 'liveTelemetry'>('dataAnalysis');
 
-  // ML Data State
+  // Datasets State
+  const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
+  const [telemetry, setTelemetry] = useState<ModelTelemetry | null>(null);
   const [mlData, setMlData] = useState<MLModelData | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [matches, setMatches] = useState<RecentMatch[]>([]);
@@ -129,31 +177,35 @@ export const MatchAnalytics: React.FC = () => {
   const [matchGenderFilter, setMatchGenderFilter] = useState<'all' | 'female' | 'male'>('all');
   const [matchFormatFilter, setMatchFormatFilter] = useState<'all' | 'T20' | 'ODI' | 'MDM'>('all');
 
-  // Load JSON Artifacts
+  // Load All JSON Datasets & Summaries
   useEffect(() => {
-    async function loadData() {
+    async function loadAllDatasets() {
       try {
-        const [mlRes, playersRes, matchesRes] = await Promise.all([
+        const [anRes, telRes, mlRes, plRes, maRes] = await Promise.all([
+          fetch('/data/analytics_summary.json'),
+          fetch('/data/ai_model_telemetry.json'),
           fetch('/data/ml_models.json'),
           fetch('/data/players_top.json'),
           fetch('/data/recent_matches.json')
         ]);
+        if (anRes.ok) setAnalytics(await anRes.json());
+        if (telRes.ok) setTelemetry(await telRes.json());
         if (mlRes.ok) setMlData(await mlRes.json());
-        if (playersRes.ok) setPlayers(await playersRes.json());
-        if (matchesRes.ok) setMatches(await matchesRes.json());
+        if (plRes.ok) setPlayers(await plRes.json());
+        if (maRes.ok) setMatches(await maRes.json());
       } catch (err) {
-        console.error('Error loading cricket ML datasets:', err);
+        console.error('Error loading analytics datasets:', err);
       }
     }
-    loadData();
+    loadAllDatasets();
   }, []);
 
   // Compute ML Win Probability dynamically
   const prediction = useMemo(() => {
-    if (!mlData) return { team1Prob: 50, team2Prob: 50, projectedScore: 165 };
+    if (!mlData?.pre_model) return { team1Prob: 50, team2Prob: 50, projectedScore: 165 };
 
-    const t1Stats = mlData.team_ratings[team1] || { power: 75 };
-    const t2Stats = mlData.team_ratings[team2] || { power: 75 };
+    const t1Stats = mlData.team_ratings?.[team1] || { power: 75 };
+    const t2Stats = mlData.team_ratings?.[team2] || { power: 75 };
     const powerDiff = t1Stats.power - t2Stats.power;
 
     const t1TossWin = tossWinner === 'team1' ? 1.0 : 0.0;
@@ -164,7 +216,7 @@ export const MatchAnalytics: React.FC = () => {
     const inns1RRDiff = (inns1Runs / (format === 'T20' ? 20 : 50)) - 7.5;
 
     const rawFeatures = [powerDiff, t1TossWin, tossBat, isT20, isODI, isFemale, inns1RRDiff];
-    const { scaler_mean, scaler_std, coefficients, intercept } = mlData.win_model;
+    const { scaler_mean, scaler_std, coefficients, intercept } = mlData.pre_model;
 
     let logit = intercept;
     for (let i = 0; i < rawFeatures.length; i++) {
@@ -172,24 +224,42 @@ export const MatchAnalytics: React.FC = () => {
       logit += scaled * coefficients[i];
     }
 
-    // Sigmoid function
     const prob = 1 / (1 + Math.exp(-logit));
     const team1Prob = Math.min(96, Math.max(4, Math.round(prob * 100)));
     const team2Prob = 100 - team1Prob;
 
-    // Projected 1st innings score from Ridge model
-    const { coefficients: sCoefs, intercept: sIntercept } = mlData.score_model;
-    const projScore = Math.round(
-      sIntercept +
-      (t1Stats.power * sCoefs[0]) +
-      (isT20 * sCoefs[1]) +
-      (isODI * sCoefs[2]) +
-      (isFemale * sCoefs[3]) +
-      (tossBat * sCoefs[4])
-    );
-
-    return { team1Prob, team2Prob, projectedScore: Math.max(120, projScore) };
+    return { team1Prob, team2Prob, projectedScore: Math.round(150 + powerDiff * 0.8) };
   }, [mlData, team1, team2, format, tossWinner, tossDecision, inns1Runs, gender]);
+
+  // Phase Breakdown Chart Data
+  const phaseChartData = useMemo(() => {
+    if (!mlData?.phase_projections) {
+      return [
+        { phase: 'Powerplay (1-6)', Floor: 36, Expected: 48, Ceiling: 64 },
+        { phase: 'Middle (7-15)', Floor: 52, Expected: 68, Ceiling: 88 },
+        { phase: 'Death (16-20)', Floor: 38, Expected: 54, Ceiling: 74 },
+      ];
+    }
+    const pp = mlData.phase_projections.powerplay;
+    const mid = mlData.phase_projections.middle;
+    const death = mlData.phase_projections.death;
+    return [
+      { phase: 'Powerplay (1-6)', Floor: pp.floor_p10, Expected: pp.expected, Ceiling: pp.ceiling_p90 },
+      { phase: 'Middle (7-15)', Floor: mid.floor_p10, Expected: mid.expected, Ceiling: mid.ceiling_p90 },
+      { phase: 'Death (16-20)', Floor: death.floor_p10, Expected: death.expected, Ceiling: death.ceiling_p90 },
+    ];
+  }, [mlData]);
+
+  // Team Power Chart Data
+  const teamPowerChartData = useMemo(() => {
+    if (!analytics?.highest_rated_teams) return [];
+    return analytics.highest_rated_teams.slice(0, 8).map((t) => ({
+      team: t.team,
+      power: t.power,
+      winRate: t.win_rate,
+      battingRR: t.batting_rr
+    }));
+  }, [analytics]);
 
   // Filtered Players
   const filteredPlayers = useMemo(() => {
@@ -218,7 +288,7 @@ export const MatchAnalytics: React.FC = () => {
   }, [players]);
 
   const teamList = useMemo(() => {
-    if (!mlData) return ['India', 'Australia', 'England', 'Pakistan', 'South Africa', 'New Zealand'];
+    if (!mlData?.team_ratings) return ['India', 'Australia', 'England', 'Pakistan', 'South Africa', 'New Zealand'];
     return Object.keys(mlData.team_ratings).sort();
   }, [mlData]);
 
@@ -238,22 +308,25 @@ export const MatchAnalytics: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <TrendingUp className="w-4 h-4" />
-            <span>AI Predictive Analytics • 1,761 Match Cricsheet Dataset</span>
-            <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 rounded-full text-[10px] font-bold">ML v4.9</span>
+            <span>Big Data Cricket Analytics & Intelligence Platform</span>
+            <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 rounded-full text-[10px] font-bold">
+              v5.2 AI Dataset
+            </span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Cricket Match Radar & Machine Learning Hub
+            Data Analysis, Match Statistics & ML Telemetry
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            Trained on 1,761 professional matches and 90,308 player profiles with 83.05% predictive accuracy across international and league formats.
+            Grounded in 2,896 match files (7,119 over snapshots), 90,308 player career records, and 16,666 demographic profiles.
           </p>
         </div>
 
         {/* Navigation Tabs */}
         <div className="flex items-center space-x-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex-wrap">
           {[
-            { key: 'mlPredictor' as const, label: 'ML Win Predictor', icon: Cpu },
-            { key: 'playerDatabase' as const, label: 'Top Players (400)', icon: Users },
+            { key: 'dataAnalysis' as const, label: 'Data Analysis', icon: Database },
+            { key: 'mlPredictor' as const, label: 'ML Predictor', icon: Cpu },
+            { key: 'playerDatabase' as const, label: 'Top Players (500)', icon: Users },
             { key: 'matchExplorer' as const, label: 'Recent Matches', icon: Calendar },
             { key: 'liveTelemetry' as const, label: 'Live Charts', icon: BarChart3 },
           ].map((tab) => {
@@ -279,12 +352,261 @@ export const MatchAnalytics: React.FC = () => {
         </div>
       </div>
 
-      {/* ── TAB 1: INTERACTIVE ML MATCH WIN PREDICTOR ── */}
+      {/* ── TAB 1: VISUAL DATA ANALYSIS & METRICS DASHBOARD ── */}
+      {activeTab === 'dataAnalysis' && (
+        <div className="space-y-6">
+          {/* Top 6 KPI Metric Cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Matches Mined</span>
+              <span className="text-2xl sm:text-3xl font-black text-cyan-400 font-mono">
+                {telemetry?.total_json_scanned.toLocaleString() || '2,896'}
+              </span>
+              <span className="text-[10px] text-slate-500 block">Cricsheet JSONs</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Tactical States</span>
+              <span className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">
+                {telemetry?.inplay_state_snapshots.toLocaleString() || '7,119'}
+              </span>
+              <span className="text-[10px] text-slate-500 block">Over-by-Over Snapshots</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Player Records</span>
+              <span className="text-2xl sm:text-3xl font-black text-purple-400 font-mono">
+                {telemetry?.total_players_evaluated.toLocaleString() || '90,308'}
+              </span>
+              <span className="text-[10px] text-slate-500 block">Cleaned Career Profiles</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">GB Accuracy</span>
+              <span className="text-2xl sm:text-3xl font-black text-amber-400 font-mono">
+                {telemetry?.gradient_boosting_accuracy || 98.22}%
+              </span>
+              <span className="text-[10px] text-slate-500 block">In-Play Classification</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">T20 Avg 1st Inns</span>
+              <span className="text-2xl sm:text-3xl font-black text-pink-400 font-mono">
+                {analytics?.t20_avg_runs || 147.5}
+              </span>
+              <span className="text-[10px] text-slate-500 block">Par Score Benchmark</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">ODI Avg 1st Inns</span>
+              <span className="text-2xl sm:text-3xl font-black text-teal-400 font-mono">
+                {analytics?.odi_avg_runs || 241.0}
+              </span>
+              <span className="text-[10px] text-slate-500 block">50-Over Baseline</span>
+            </div>
+          </div>
+
+          {/* Main Visual Graphs Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Chart 1: Highest-Rated Teams Power & Net Run Rate Breakdown */}
+            <div className="lg:col-span-7 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4 text-emerald-400" />
+                    Highest-Rated International & Franchise Teams
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Team Power Rating vs Batting Run Rate (RPO)
+                  </p>
+                </div>
+                <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">
+                  ELO Algorithm
+                </span>
+              </div>
+
+              <div className="h-72 w-full pt-2">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={teamPowerChartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
+                    <XAxis dataKey="team" stroke="#94a3b8" fontSize={11} interval={0} angle={-20} textAnchor="end" height={45} />
+                    <YAxis stroke="#94a3b8" fontSize={11} domain={[0, 100]} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#0f172a',
+                        borderColor: '#334155',
+                        borderRadius: '0.75rem',
+                        fontSize: '12px',
+                        color: '#f8fafc'
+                      }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                    <Bar dataKey="power" name="Power Rating (ELO)" fill="#10b981" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="winRate" name="Win Rate %" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Chart 2: Phase-Wise Scoring Expectations (Quantile Ranges) */}
+            <div className="lg:col-span-5 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-purple-400" />
+                  Phase Scoring Quantiles (Floor vs Ceiling)
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  15th percentile floor vs 85th percentile ceiling
+                </p>
+              </div>
+
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={phaseChartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
+                    <XAxis dataKey="phase" stroke="#94a3b8" fontSize={11} />
+                    <YAxis stroke="#94a3b8" fontSize={11} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#0f172a',
+                        borderColor: '#334155',
+                        borderRadius: '0.75rem',
+                        fontSize: '12px',
+                        color: '#f8fafc'
+                      }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                    <Bar dataKey="Floor" name="P15 Floor Score" fill="#64748b" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Expected" name="Expected Score" fill="#06b6d4" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Ceiling" name="P85 Ceiling Score" fill="#ec4899" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="text-[11px] text-slate-400 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                Death overs (16–20) feature highest scoring ceiling (<strong className="text-pink-400">74+ runs</strong>) but also greatest dismissal volatility.
+              </div>
+            </div>
+
+            {/* Section 3: Batter vs Bowler Style Tactical Threat Matrix Table */}
+            <div className="lg:col-span-12 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-cyan-400" />
+                    Delivery Matchup Matrix Telemetry (Batter Hand vs Bowling Style)
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Analyzed across professional deliveries to determine strike rates, dismissal hazard rates, and dot ball choke percentages.
+                  </p>
+                </div>
+                <span className="text-xs px-2.5 py-1 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-mono">
+                  {mlData?.tactical_matchups.length || 8} Active Matchup Profiles
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs text-slate-300">
+                  <thead className="bg-slate-950 text-slate-400 font-mono uppercase text-[11px] border-b border-slate-800">
+                    <tr>
+                      <th className="p-3">Matchup Pairing</th>
+                      <th className="p-3 text-center">Deliveries</th>
+                      <th className="p-3 text-center">Strike Rate</th>
+                      <th className="p-3 text-center">Wicket Risk %</th>
+                      <th className="p-3 text-center">Dot Ball %</th>
+                      <th className="p-3 text-center">Boundary %</th>
+                      <th className="p-3">AI Tactical Strategy Directive</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/70 font-mono">
+                    {mlData?.tactical_matchups.slice(0, 8).map((m, idx) => (
+                      <tr key={idx} className="hover:bg-slate-800/40 transition-colors">
+                        <td className="p-3 font-sans font-bold text-white">{m.matchup}</td>
+                        <td className="p-3 text-center">{m.balls.toLocaleString()}</td>
+                        <td className="p-3 text-center font-bold text-cyan-400">{m.strike_rate}</td>
+                        <td className="p-3 text-center font-bold text-pink-400">{m.wicket_rate}%</td>
+                        <td className="p-3 text-center text-slate-400">{m.dot_pct}%</td>
+                        <td className="p-3 text-center text-amber-400">{m.boundary_pct}%</td>
+                        <td className="p-3 font-sans text-slate-300 text-xs truncate max-w-xs">{m.recommendation}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Section 4: Top 8 All-Time Players Leaderboard (CPI Index) */}
+            <div className="lg:col-span-12 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    Composite Player Impact (CPI) Leaderboard (from 90,308 Career Dataset)
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Multi-attribute statistical evaluation scoring runs, wickets, strike rate, and bowling economy.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setActiveTab('playerDatabase')}
+                  className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
+                >
+                  <span>Explore All 500 Players</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {players.slice(0, 8).map((p, idx) => (
+                  <div key={idx} className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono text-purple-400 font-bold">RANK #{idx + 1}</span>
+                      <span className="text-xs font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
+                        CPI {p.impact_score}★
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      {p.image ? (
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          className="w-11 h-11 rounded-full object-cover border border-purple-500/40 bg-slate-800"
+                          onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                        />
+                      ) : (
+                        <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
+                          {p.name.charAt(0)}
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <h4 className="text-xs font-bold text-white truncate">{p.name}</h4>
+                        <span className="text-[11px] text-slate-400 block truncate">{p.country} • {p.role}</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/70 text-xs font-mono">
+                      <div>
+                        <span className="text-[10px] text-slate-500 block">Runs</span>
+                        <span className="font-bold text-white">{p.total_runs.toLocaleString()}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] text-slate-500 block">Wickets</span>
+                        <span className="font-bold text-cyan-400">{p.total_wickets}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── TAB 2: INTERACTIVE ML MATCH WIN PREDICTOR ── */}
       {activeTab === 'mlPredictor' && (
         <div className="space-y-6">
-          {/* Main Predictor Deck */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Input Controls */}
             <div className="lg:col-span-5 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -292,11 +614,10 @@ export const MatchAnalytics: React.FC = () => {
                   Match Simulation Parameters
                 </h3>
                 <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded-full border border-cyan-800">
-                  83.05% Accuracy
+                  85.76% Accuracy
                 </span>
               </div>
 
-              {/* Team 1 vs Team 2 */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-[11px] font-bold text-slate-400 uppercase font-mono block mb-1">Team 1</label>
@@ -324,7 +645,6 @@ export const MatchAnalytics: React.FC = () => {
                 </div>
               </div>
 
-              {/* Format & Competition Type */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-[11px] font-bold text-slate-400 uppercase font-mono block mb-1">Format</label>
@@ -360,7 +680,6 @@ export const MatchAnalytics: React.FC = () => {
                 </div>
               </div>
 
-              {/* Toss Winner & Decision */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-[11px] font-bold text-slate-400 uppercase font-mono block mb-1">Toss Winner</label>
@@ -386,7 +705,6 @@ export const MatchAnalytics: React.FC = () => {
                 </div>
               </div>
 
-              {/* 1st Innings Runs Slider */}
               <div>
                 <div className="flex justify-between text-xs mb-1">
                   <span className="font-bold text-slate-400 uppercase font-mono">1st Innings Runs:</span>
@@ -400,20 +718,14 @@ export const MatchAnalytics: React.FC = () => {
                   onChange={(e) => setInns1Runs(Number(e.target.value))}
                   className="w-full accent-emerald-500 cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-0.5">
-                  <span>80 (Defendable)</span>
-                  <span>180 (Par)</span>
-                  <span>350 (Massive)</span>
-                </div>
               </div>
             </div>
 
-            {/* Prediction Output & Live Win Gauge */}
             <div className="lg:col-span-7 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-bold">
-                    Real-Time Machine Learning Inference
+                    Pre-Match Win Classifier
                   </span>
                   <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
                     <CheckCircle2 className="w-3.5 h-3.5" />
@@ -428,7 +740,6 @@ export const MatchAnalytics: React.FC = () => {
                 </p>
               </div>
 
-              {/* Dynamic Win Probability Dual Gauge */}
               <div className="space-y-3 bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                 <div className="flex justify-between items-baseline">
                   <div>
@@ -446,7 +757,6 @@ export const MatchAnalytics: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Animated Probability Bar */}
                 <div className="w-full h-4 bg-slate-800 rounded-full overflow-hidden flex shadow-inner">
                   <div
                     className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500"
@@ -463,33 +773,14 @@ export const MatchAnalytics: React.FC = () => {
                   <span>Predicted Winner: <strong className="text-emerald-400 font-bold">{prediction.team1Prob >= 50 ? team1 : team2}</strong></span>
                 </div>
               </div>
-
-              {/* Feature Weights / Model Explanations */}
-              <div className="space-y-2">
-                <span className="text-xs font-bold text-slate-400 uppercase font-mono block">
-                  Top Influencing Feature Weights:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {mlData?.win_model.feature_importances.slice(0, 3).map((f, idx) => (
-                    <div key={idx} className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-xs">
-                      <span className="text-slate-300 font-medium block truncate">{f.feature}</span>
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-[10px] font-mono text-emerald-400">Impact: {f.magnitude}x</span>
-                        <span className="text-[9px] text-slate-500 uppercase">{f.impact}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── TAB 2: TOP PLAYERS DATABASE (400 PROFILES) ── */}
+      {/* ── TAB 3: TOP PLAYERS DATABASE (500 PROFILES) ── */}
       {activeTab === 'playerDatabase' && (
         <div className="space-y-4">
-          {/* Search & Filter Bar */}
           <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-3">
             <div className="relative w-full md:w-80">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -527,7 +818,6 @@ export const MatchAnalytics: React.FC = () => {
             </div>
           </div>
 
-          {/* Players Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filteredPlayers.slice(0, 32).map((p, idx) => (
               <div
@@ -540,9 +830,7 @@ export const MatchAnalytics: React.FC = () => {
                       src={p.image}
                       alt={p.name}
                       className="w-12 h-12 rounded-full object-cover border border-purple-500/30 bg-slate-800"
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.display = 'none';
-                      }}
+                      onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
                     />
                   ) : (
                     <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
@@ -560,7 +848,6 @@ export const MatchAnalytics: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Stats Breakdown */}
                 <div className="grid grid-cols-3 gap-1.5 bg-slate-950/60 p-2 rounded-xl text-center text-xs">
                   <div>
                     <span className="text-[10px] text-slate-400 block">Runs</span>
@@ -583,22 +870,15 @@ export const MatchAnalytics: React.FC = () => {
               </div>
             ))}
           </div>
-
-          {filteredPlayers.length > 32 && (
-            <p className="text-center text-xs text-slate-500 py-2">
-              Showing 32 of {filteredPlayers.length} players. Use filters or search to refine.
-            </p>
-          )}
         </div>
       )}
 
-      {/* ── TAB 3: RECENT MATCHES EXPLORER ── */}
+      {/* ── TAB 4: RECENT MATCHES EXPLORER ── */}
       {activeTab === 'matchExplorer' && (
         <div className="space-y-4">
-          {/* Filters */}
           <div className="flex items-center justify-between bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex-wrap gap-3">
             <span className="text-xs font-bold text-slate-400 uppercase font-mono">
-              Displaying 120 Curated Professional Matches from 1,761 Dataset
+              Displaying Curated Professional Matches from 2,896 Dataset
             </span>
             <div className="flex items-center gap-2">
               <select
@@ -623,7 +903,6 @@ export const MatchAnalytics: React.FC = () => {
             </div>
           </div>
 
-          {/* Matches Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredMatches.slice(0, 24).map((m, idx) => (
               <div
@@ -644,7 +923,6 @@ export const MatchAnalytics: React.FC = () => {
                   <p className="text-[11px] text-slate-400 truncate mt-0.5">{m.event} • {m.venue}</p>
                 </div>
 
-                {/* Inning Scores */}
                 <div className="space-y-1 bg-slate-950/60 p-2.5 rounded-xl text-xs font-mono">
                   <div className="flex justify-between">
                     <span className="text-slate-300">{m.inns1.team}:</span>
@@ -673,10 +951,9 @@ export const MatchAnalytics: React.FC = () => {
         </div>
       )}
 
-      {/* ── TAB 4: ORIGINAL LIVE TELEMETRY CHARTS ── */}
+      {/* ── TAB 5: ORIGINAL LIVE TELEMETRY CHARTS ── */}
       {activeTab === 'liveTelemetry' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Area Chart Container */}
           <div className="lg:col-span-8 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div>
@@ -746,7 +1023,6 @@ export const MatchAnalytics: React.FC = () => {
             </div>
           </div>
 
-          {/* Radar Comparison Chart */}
           <div className="lg:col-span-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">

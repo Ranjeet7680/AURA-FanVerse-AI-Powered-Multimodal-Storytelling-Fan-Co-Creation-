@@ -22,4 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Raw Data
 /data/
+/raw_matches/

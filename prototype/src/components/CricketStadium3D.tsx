@@ -9,50 +9,195 @@ import {
   Sparkles,
   Activity,
   Zap,
+  Trophy,
   Eye,
+  Sun,
+  Moon,
+  Sunset,
   Camera,
-  Globe2,
-  ShieldAlert,
-  Flame
+  Layers
 } from 'lucide-react';
-import {
-  STADIUM_TRANSLATIONS,
-  STADIUM_CAMERAS,
-  STADIUM_BOWLING_STYLES,
-  STADIUM_SHOTS
-} from '../data/stadiumLocalization';
 import { soundFX } from '../services/soundFX';
 
-interface CricketStadium3DProps {
-  selectedLang?: string;
-  onSelectLang?: (lang: string) => void;
+// ─── PROCEDURAL CANVAS TEXTURE GENERATORS ──────────────────────────────────
+function createTurfTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 1024;
+  const ctx = canvas.getContext('2d')!;
+
+  // Base grass tone
+  ctx.fillStyle = '#14532d';
+  ctx.fillRect(0, 0, 1024, 1024);
+
+  // Mower directional lawn stripes (radial & linear bands)
+  const stripeWidth = 32;
+  for (let x = 0; x < 1024; x += stripeWidth) {
+    const isLight = (x / stripeWidth) % 2 === 0;
+    ctx.fillStyle = isLight ? 'rgba(34, 197, 94, 0.12)' : 'rgba(15, 60, 30, 0.18)';
+    ctx.fillRect(x, 0, stripeWidth, 1024);
+  }
+
+  // Circular outfield mower ring highlights
+  for (let r = 80; r < 500; r += 70) {
+    ctx.beginPath();
+    ctx.arc(512, 512, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.lineWidth = 12;
+    ctx.stroke();
+  }
+
+  // Pitch apron wear ring
+  const apronGrad = ctx.createRadialGradient(512, 512, 30, 512, 512, 140);
+  apronGrad.addColorStop(0, 'rgba(161, 126, 75, 0.25)');
+  apronGrad.addColorStop(1, 'rgba(20, 83, 45, 0)');
+  ctx.fillStyle = apronGrad;
+  ctx.beginPath();
+  ctx.arc(512, 512, 140, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Grass blade noise speckling
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+  for (let i = 0; i < 15000; i++) {
+    const rx = Math.random() * 1024;
+    const ry = Math.random() * 1024;
+    ctx.fillRect(rx, ry, 1.5, 1.5);
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(1, 1);
+  return texture;
 }
 
-export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
-  selectedLang = 'en',
-  onSelectLang
-}) => {
+function createPitchTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 1024;
+  const ctx = canvas.getContext('2d')!;
+
+  // Clay pitch base gradient (ochre/khaki soil)
+  const grad = ctx.createLinearGradient(0, 0, 512, 0);
+  grad.addColorStop(0, '#8c6e43');
+  grad.addColorStop(0.2, '#aa8856');
+  grad.addColorStop(0.5, '#ba9762');
+  grad.addColorStop(0.8, '#aa8856');
+  grad.addColorStop(1, '#8c6e43');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 512, 1024);
+
+  // Bowler landing scuff marks & spike marks
+  const addScuffArea = (cy: number) => {
+    ctx.fillStyle = 'rgba(70, 50, 25, 0.45)';
+    for (let i = 0; i < 120; i++) {
+      const sx = 200 + (Math.random() - 0.5) * 160;
+      const sy = cy + (Math.random() - 0.5) * 80;
+      ctx.beginPath();
+      ctx.ellipse(sx, sy, 3 + Math.random() * 6, 1 + Math.random() * 3, Math.random() * Math.PI, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  };
+  addScuffArea(200); // Bowling end scuffs
+  addScuffArea(824); // Batting crease footmarks
+
+  // Micro pitch crack lines
+  ctx.strokeStyle = 'rgba(60, 40, 20, 0.35)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 15; i++) {
+    const startX = 100 + Math.random() * 312;
+    const startY = 150 + Math.random() * 724;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(startX + (Math.random() - 0.5) * 30, startY + Math.random() * 40);
+    ctx.stroke();
+  }
+
+  // Painted crisp white crease markings
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 4;
+
+  // Popping Crease (Batting end)
+  ctx.fillRect(64, 860, 384, 6);
+  // Bowling Crease (Batting end stumps line)
+  ctx.fillRect(64, 940, 384, 5);
+  // Return Creases
+  ctx.fillRect(64, 860, 5, 120);
+  ctx.fillRect(444, 860, 5, 120);
+
+  // Popping Crease (Bowling end)
+  ctx.fillRect(64, 164, 384, 6);
+  // Bowling Crease (Bowling end stumps line)
+  ctx.fillRect(64, 84, 384, 5);
+  // Return Creases
+  ctx.fillRect(64, 44, 5, 120);
+  ctx.fillRect(444, 44, 5, 120);
+
+  // Wide ball guide marks
+  ctx.fillRect(140, 860, 3, 30);
+  ctx.fillRect(368, 860, 3, 30);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  return texture;
+}
+
+function createLedBoardTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 2048;
+  canvas.height = 128;
+  const ctx = canvas.getContext('2d')!;
+
+  // Dark cyber background
+  ctx.fillStyle = '#060416';
+  ctx.fillRect(0, 0, 2048, 128);
+
+  // Top/bottom neon glow lines
+  ctx.fillStyle = '#06b6d4';
+  ctx.fillRect(0, 0, 2048, 4);
+  ctx.fillStyle = '#ec4899';
+  ctx.fillRect(0, 124, 2048, 4);
+
+  // Glowing sponsor typography repeated
+  ctx.font = 'bold 36px monospace';
+  ctx.textBaseline = 'middle';
+
+  const banners = [
+    { text: '⚡ AURA FANVERSE', color: '#38bdf8' },
+    { text: '• AI HAWK-EYE 3D', color: '#f472b6' },
+    { text: '• 150 KM/H SPEED GUN', color: '#fbbf24' },
+    { text: '• CYBER SHIELD v4.9', color: '#34d399' },
+    { text: '• ZERO-TRUST CANON', color: '#a78bfa' },
+  ];
+
+  let curX = 20;
+  for (let repeat = 0; repeat < 4; repeat++) {
+    for (const b of banners) {
+      ctx.shadowColor = b.color;
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = b.color;
+      ctx.fillText(b.text, curX, 64);
+      curX += ctx.measureText(b.text).width + 36;
+    }
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.repeat.set(4, 1);
+  return texture;
+}
+
+export const CricketStadium3D: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentLang, setCurrentLang] = useState<string>(selectedLang);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
-  const [cameraViewKey, setCameraViewKey] = useState<string>('broadcast');
-  const [bowlerStyleKey, setBowlerStyleKey] = useState<string>('outswinger');
-  const [shotTypeKey, setShotTypeKey] = useState<string>('coverDrive');
+  const [cameraView, setCameraView] = useState<'broadcast' | 'batsman' | 'hawkEye' | 'topDown' | 'stumpCam' | 'drone'>('broadcast');
+  const [bowlerType, setBowlerType] = useState<'pace' | 'spin' | 'yorker'>('pace');
+  const [shotType, setShotType] = useState<'coverDrive' | 'pullShot' | 'wicket' | 'straightDrive' | 'upperCut'>('coverDrive');
   const [timeOfDay, setTimeOfDay] = useState<'day' | 'twilight' | 'night'>('night');
   const [showTrajectory, setShowTrajectory] = useState<boolean>(true);
-  const [ballSpeed, setBallSpeed] = useState<number>(145);
-  const [ballPhase, setBallPhase] = useState<'bowled' | 'hit' | 'catch' | 'idle'>('idle');
-  const [eventBanner, setEventBanner] = useState<string | null>(null);
-
-  // Synchronize language prop
-  useEffect(() => {
-    if (selectedLang && selectedLang !== currentLang) {
-      setCurrentLang(selectedLang);
-    }
-  }, [selectedLang]);
-
-  const trans = STADIUM_TRANSLATIONS[currentLang] || STADIUM_TRANSLATIONS.en;
-  const isRtl = currentLang === 'ar';
+  const [ballSpeed, setBallSpeed] = useState<number>(142);
+  const [ballPhase, setBallPhase] = useState<'bowled' | 'hit' | 'idle'>('idle');
+  const [crowdFlashes, setCrowdFlashes] = useState<boolean>(true);
 
   const animationIdRef = useRef<number | null>(null);
   const ballRef = useRef<THREE.Mesh | null>(null);
@@ -62,19 +207,11 @@ export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const batsmanGroupRef = useRef<THREE.Group | null>(null);
   const bowlerGroupRef = useRef<THREE.Group | null>(null);
-  const battingStumpsRef = useRef<THREE.Group | null>(null);
-  const fielderDeepCoverRef = useRef<THREE.Group | null>(null);
+  const stumpsGroupRef = useRef<THREE.Group | null>(null);
+  const jumbotronScreenRef = useRef<THREE.Mesh | null>(null);
 
   const tRef = useRef<number>(0);
   const clockRef = useRef<THREE.Clock>(new THREE.Clock());
-
-  const handleLanguageSwitch = (langCode: string) => {
-    soundFX.playClick();
-    setCurrentLang(langCode);
-    if (onSelectLang) {
-      onSelectLang(langCode);
-    }
-  };
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -82,849 +219,671 @@ export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
     const width = container.clientWidth;
     const height = 540;
 
-    // ── 1. Scene ──
+    // ── 1. Scene & Environment Lighting ──────────────────────────────────────
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    const skyConfigs = {
-      day: { bg: 0x70b5f9, fog: 0x70b5f9, fogDensity: 0.002, ambient: 1.3, sunColor: 0xfff6e5, sunIntensity: 2.6 },
-      twilight: { bg: 0x221138, fog: 0x221138, fogDensity: 0.004, ambient: 0.7, sunColor: 0xff6b42, sunIntensity: 1.6 },
-      night: { bg: 0x040212, fog: 0x040212, fogDensity: 0.005, ambient: 0.45, sunColor: 0xdcb7ff, sunIntensity: 1.9 },
+    const skyConfig = {
+      day: {
+        bg: 0x87ceeb,
+        fog: 0x93c5fd,
+        fogDensity: 0.0025,
+        ambientColor: 0xffffff,
+        ambientIntensity: 1.4,
+        sunColor: 0xfffbeb,
+        sunIntensity: 2.8,
+        sunPos: [80, 100, 50] as [number, number, number],
+      },
+      twilight: {
+        bg: 0x1e1136,
+        fog: 0x311a4f,
+        fogDensity: 0.004,
+        ambientColor: 0xffa585,
+        ambientIntensity: 0.7,
+        sunColor: 0xf97316,
+        sunIntensity: 1.9,
+        sunPos: [90, 30, -60] as [number, number, number],
+      },
+      night: {
+        bg: 0x050414,
+        fog: 0x07061d,
+        fogDensity: 0.005,
+        ambientColor: 0x818cf8,
+        ambientIntensity: 0.45,
+        sunColor: 0x38bdf8,
+        sunIntensity: 0.9,
+        sunPos: [30, 80, 30] as [number, number, number],
+      },
     };
-    const sky = skyConfigs[timeOfDay];
+    const sky = skyConfig[timeOfDay];
     scene.background = new THREE.Color(sky.bg);
     scene.fog = new THREE.FogExp2(sky.fog, sky.fogDensity);
 
-    // ── 2. Camera ──
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1400);
-    camera.position.set(0, 26, 54);
+    // ── 2. Camera Setup ──────────────────────────────────────────────────────
+    const camera = new THREE.PerspectiveCamera(48, width / height, 0.1, 1400);
+    camera.position.set(0, 32, 62);
     camera.lookAt(0, 2, 0);
     cameraRef.current = camera;
 
-    // ── 3. Renderer ──
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    // ── 3. High-Quality WebGL Renderer ────────────────────────────────────────
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = timeOfDay === 'day' ? 1.25 : 0.85;
+    renderer.toneMappingExposure = timeOfDay === 'day' ? 1.15 : timeOfDay === 'twilight' ? 1.05 : 0.95;
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
-    // ── 4. Main Lighting ──
-    const ambientLight = new THREE.AmbientLight(0xffffff, sky.ambient);
+    // ── 4. Dynamic Stadium Lighting & Shadows ────────────────────────────────
+    const ambientLight = new THREE.AmbientLight(sky.ambientColor, sky.ambientIntensity);
     scene.add(ambientLight);
 
-    const sunLight = new THREE.DirectionalLight(sky.sunColor, sky.sunIntensity);
-    sunLight.position.set(55, 85, 45);
-    sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 2048;
-    sunLight.shadow.mapSize.height = 2048;
-    sunLight.shadow.camera.near = 1;
-    sunLight.shadow.camera.far = 250;
-    sunLight.shadow.camera.left = -65;
-    sunLight.shadow.camera.right = 65;
-    sunLight.shadow.camera.top = 65;
-    sunLight.shadow.camera.bottom = -65;
-    sunLight.shadow.bias = -0.0005;
-    scene.add(sunLight);
+    const mainSun = new THREE.DirectionalLight(sky.sunColor, sky.sunIntensity);
+    mainSun.position.set(...sky.sunPos);
+    mainSun.castShadow = true;
+    mainSun.shadow.mapSize.width = 2048;
+    mainSun.shadow.mapSize.height = 2048;
+    mainSun.shadow.bias = -0.0003;
+    mainSun.shadow.camera.near = 1;
+    mainSun.shadow.camera.far = 280;
+    mainSun.shadow.camera.left = -65;
+    mainSun.shadow.camera.right = 65;
+    mainSun.shadow.camera.top = 65;
+    mainSun.shadow.camera.bottom = -65;
+    scene.add(mainSun);
 
-    const rimLight = new THREE.DirectionalLight(0x4cd7f6, timeOfDay === 'night' ? 1.4 : 0.4);
-    rimLight.position.set(-55, 65, -45);
-    scene.add(rimLight);
-
-    // ── 5. Steel Lattice Floodlight Towers (4 corners) ──
-    const floodlightCoords = [
-      { x: 56, z: 56 }, { x: -56, z: 56 }, { x: 56, z: -56 }, { x: -56, z: -56 }
+    // ── 5. 4 Corner Floodlight Towers with Volumetric Cones ──────────────────
+    const floodlightPositions = [
+      { x: 58, z: 58, rotY: -Math.PI * 0.75 },
+      { x: -58, z: 58, rotY: -Math.PI * 0.25 },
+      { x: 58, z: -58, rotY: Math.PI * 0.75 },
+      { x: -58, z: -58, rotY: Math.PI * 0.25 },
     ];
-    floodlightCoords.forEach((pos) => {
-      // Main 4-column steel lattice tower
-      const towerGroup = new THREE.Group();
-      const mastHeight = 82;
-      const legGeo = new THREE.CylinderGeometry(0.25, 0.4, mastHeight, 8);
-      const legMat = new THREE.MeshStandardMaterial({ color: 0x555566, metalness: 0.8, roughness: 0.3 });
 
-      [-1.2, 1.2].forEach((lx) => {
-        [-1.2, 1.2].forEach((lz) => {
-          const leg = new THREE.Mesh(legGeo, legMat);
-          leg.position.set(lx, mastHeight / 2, lz);
-          towerGroup.add(leg);
-        });
+    floodlightPositions.forEach((pos) => {
+      // Lattice Steel Pylon Tower
+      const towerMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.25 });
+      const towerGeo = new THREE.CylinderGeometry(0.35, 0.9, 78, 8);
+      const tower = new THREE.Mesh(towerGeo, towerMat);
+      tower.position.set(pos.x, 39, pos.z);
+      tower.castShadow = true;
+      scene.add(tower);
+
+      // Floodlight Bank Head
+      const headGeo = new THREE.BoxGeometry(7, 3.5, 2.5);
+      const headMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9 });
+      const head = new THREE.Mesh(headGeo, headMat);
+      head.position.set(pos.x, 78, pos.z);
+      head.lookAt(0, 10, 0);
+      scene.add(head);
+
+      // Glowing Multi-Lamp Halogen Matrix
+      const lampArrayGeo = new THREE.PlaneGeometry(6.4, 3);
+      const lampArrayMat = new THREE.MeshBasicMaterial({
+        color: timeOfDay === 'day' ? 0xcccccc : 0xfffbeb,
+        side: THREE.DoubleSide,
       });
+      const lampArray = new THREE.Mesh(lampArrayGeo, lampArrayMat);
+      lampArray.position.set(0, 0, 1.3);
+      head.add(lampArray);
 
-      // Horizontal cross braces
-      for (let b = 10; b < mastHeight; b += 12) {
-        const braceGeo = new THREE.BoxGeometry(2.6, 0.2, 2.6);
-        const brace = new THREE.Mesh(braceGeo, legMat);
-        brace.position.y = b;
-        towerGroup.add(brace);
-      }
-
-      // Large head frame with 4x3 grid of lamps
-      const headFrameGeo = new THREE.BoxGeometry(7, 4.5, 1.2);
-      const headFrame = new THREE.Mesh(headFrameGeo, legMat);
-      headFrame.position.set(0, mastHeight + 2, 0);
-      headFrame.lookAt(0, 0, 0);
-      towerGroup.add(headFrame);
-
-      // Emissive Lamp Array
-      for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 4; c++) {
-          const lampGeo = new THREE.BoxGeometry(1.2, 1, 0.5);
-          const lampMat = new THREE.MeshBasicMaterial({
-            color: timeOfDay === 'night' ? 0xfffce0 : 0xdddddd
-          });
-          const lamp = new THREE.Mesh(lampGeo, lampMat);
-          lamp.position.set(-2.2 + c * 1.5, mastHeight + 0.8 + r * 1.3, 0.4);
-          lamp.lookAt(0, 0, 0);
-          towerGroup.add(lamp);
-        }
-      }
-
-      towerGroup.position.set(pos.x, 0, pos.z);
-      scene.add(towerGroup);
-
-      // Night Spotlight illumination
+      // Night & Twilight Spotlights with Volumetric Cones
       if (timeOfDay !== 'day') {
-        const spot = new THREE.SpotLight(0xfff8d6, 3.2, 200, Math.PI / 5.5, 0.45, 1);
-        spot.position.set(pos.x, mastHeight, pos.z);
-        spot.target.position.set(0, 1, 0);
+        const spot = new THREE.SpotLight(0xfef08a, 3.2, 190, Math.PI / 5, 0.45, 1.2);
+        spot.position.set(pos.x, 78, pos.z);
+        spot.target.position.set(0, 0, 0);
         scene.add(spot);
         scene.add(spot.target);
+
+        // Volumetric Light Cone
+        const coneGeo = new THREE.CylinderGeometry(1.5, 28, 76, 24, 1, true);
+        const coneMat = new THREE.MeshBasicMaterial({
+          color: 0xfef9c3,
+          transparent: true,
+          opacity: timeOfDay === 'night' ? 0.055 : 0.035,
+          side: THREE.DoubleSide,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+        const cone = new THREE.Mesh(coneGeo, coneMat);
+        cone.position.set(pos.x * 0.5, 39, pos.z * 0.5);
+        cone.lookAt(0, 0, 0);
+        cone.rotateX(Math.PI / 2);
+        scene.add(cone);
       }
     });
 
-    // ── 6. Realistic Turf Ground with Mowing Pattern ──
-    const grassCanvas = document.createElement('canvas');
-    grassCanvas.width = 512;
-    grassCanvas.height = 512;
-    const gCtx = grassCanvas.getContext('2d')!;
-    const baseGreen = timeOfDay === 'night' ? '#091c13' : timeOfDay === 'twilight' ? '#113521' : '#196833';
-    gCtx.fillStyle = baseGreen;
-    gCtx.fillRect(0, 0, 512, 512);
-
-    // Blades noise
-    for (let i = 0; i < 9000; i++) {
-      const gx = Math.random() * 512;
-      const gy = Math.random() * 512;
-      const brightness = Math.random() > 0.5 ? 22 : -18;
-      const r = parseInt(baseGreen.slice(1, 3), 16) + brightness;
-      const g = parseInt(baseGreen.slice(3, 5), 16) + brightness + Math.floor(Math.random() * 12);
-      const b = parseInt(baseGreen.slice(5, 7), 16) + brightness;
-      gCtx.fillStyle = `rgb(${Math.max(0, Math.min(255, r))},${Math.max(0, Math.min(255, g))},${Math.max(0, Math.min(255, b))})`;
-      gCtx.fillRect(gx, gy, 1, Math.random() * 3 + 1);
-    }
-    // Subtle circular concentric lawn mower rings
-    for (let cr = 10; cr < 250; cr += 20) {
-      gCtx.strokeStyle = 'rgba(255,255,255,0.025)';
-      gCtx.lineWidth = 10;
-      gCtx.beginPath();
-      gCtx.arc(256, 256, cr, 0, Math.PI * 2);
-      gCtx.stroke();
-    }
-    const grassTexture = new THREE.CanvasTexture(grassCanvas);
-    grassTexture.wrapS = THREE.RepeatWrapping;
-    grassTexture.wrapT = THREE.RepeatWrapping;
-    grassTexture.repeat.set(6, 6);
-
+    // ── 6. Realistic Procedural Turf Ground (Oval) ───────────────────────────
+    const turfTexture = createTurfTexture();
     const groundGeo = new THREE.CylinderGeometry(49, 49, 0.6, 96);
     const groundMat = new THREE.MeshStandardMaterial({
-      map: grassTexture,
+      map: turfTexture,
       roughness: 0.88,
-      metalness: 0.02
+      metalness: 0.04,
     });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.position.y = -0.3;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // Boundary Rope
-    const boundaryRopeGeo = new THREE.TorusGeometry(47, 0.16, 8, 128);
-    const boundaryRopeMat = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      emissive: 0xec4899,
-      emissiveIntensity: 0.4
+    // ── 7. LED Digital Sponsor Perimeter Ribbon Hoarding ─────────────────────
+    const ledTexture = createLedBoardTexture();
+    const ledBoardGeo = new THREE.CylinderGeometry(47.2, 47.2, 0.95, 128, 1, true);
+    const ledBoardMat = new THREE.MeshBasicMaterial({
+      map: ledTexture,
+      side: THREE.DoubleSide,
     });
-    const boundaryRope = new THREE.Mesh(boundaryRopeGeo, boundaryRopeMat);
-    boundaryRope.rotation.x = Math.PI / 2;
-    boundaryRope.position.y = 0.16;
-    scene.add(boundaryRope);
+    const ledBoard = new THREE.Mesh(ledBoardGeo, ledBoardMat);
+    ledBoard.position.y = 0.47;
+    scene.add(ledBoard);
 
-    // 30-Yard Circle
-    const innerRingGeo = new THREE.TorusGeometry(23.5, 0.08, 8, 96);
+    // Boundary Rope
+    const ropeGeo = new THREE.TorusGeometry(46.8, 0.14, 8, 128);
+    const ropeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 });
+    const rope = new THREE.Mesh(ropeGeo, ropeMat);
+    rope.rotation.x = Math.PI / 2;
+    rope.position.y = 0.12;
+    scene.add(rope);
+
+    // 30-Yard Fielding Restriction Circle
+    const innerRingGeo = new THREE.TorusGeometry(23.2, 0.07, 8, 96);
     const innerRingMat = new THREE.MeshStandardMaterial({
-      color: 0x4cd7f6,
-      emissive: 0x4cd7f6,
-      emissiveIntensity: 0.35,
+      color: 0x38bdf8,
+      emissive: 0x0284c7,
+      emissiveIntensity: 0.4,
       transparent: true,
-      opacity: 0.75
+      opacity: 0.75,
     });
     const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
     innerRing.rotation.x = Math.PI / 2;
-    innerRing.position.y = 0.09;
+    innerRing.position.y = 0.08;
     scene.add(innerRing);
 
-    // ── 7. Worn Pitch Strip (22 Yards) ──
-    const pitchCanvas = document.createElement('canvas');
-    pitchCanvas.width = 256;
-    pitchCanvas.height = 512;
-    const pCtx = pitchCanvas.getContext('2d')!;
-    const pitchBase = timeOfDay === 'day' ? '#c8aa62' : '#5c4a35';
-    pCtx.fillStyle = pitchBase;
-    pCtx.fillRect(0, 0, 256, 512);
-
-    // Pitch cracks and grass tufts on edges
-    for (let i = 0; i < 350; i++) {
-      const px = Math.random() * 256;
-      const py = Math.random() * 512;
-      pCtx.fillStyle = `rgba(70,50,25,${0.12 + Math.random() * 0.18})`;
-      pCtx.fillRect(px, py, Math.random() * 4 + 1, Math.random() * 2 + 1);
-    }
-    // Foot marks at popping creases
-    [85, 425].forEach((cy) => {
-      for (let f = 0; f < 80; f++) {
-        pCtx.fillStyle = `rgba(50,35,15,${0.15 + Math.random() * 0.25})`;
-        pCtx.beginPath();
-        pCtx.arc(128 + (Math.random() - 0.5) * 85, cy + (Math.random() - 0.5) * 55, Math.random() * 6 + 2, 0, Math.PI * 2);
-        pCtx.fill();
-      }
-    });
-    const pitchTexture = new THREE.CanvasTexture(pitchCanvas);
-    const pitchGeo = new THREE.BoxGeometry(3.66, 0.12, 20.12);
+    // ── 8. Weathered Clay Pitch Strip (22 Yards) ─────────────────────────────
+    const pitchTexture = createPitchTexture();
+    const pitchGeo = new THREE.BoxGeometry(3.66, 0.14, 20.12);
     const pitchMat = new THREE.MeshStandardMaterial({
       map: pitchTexture,
       roughness: 0.94,
-      metalness: 0.01
+      metalness: 0.02,
     });
     const pitch = new THREE.Mesh(pitchGeo, pitchMat);
-    pitch.position.y = 0.08;
+    pitch.position.y = 0.07;
     pitch.receiveShadow = true;
     scene.add(pitch);
 
-    // Pitch Crease Markings
-    const creaseMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const createCrease = (w: number, d: number, x: number, z: number) => {
-      const geo = new THREE.PlaneGeometry(w, d);
-      const mesh = new THREE.Mesh(geo, creaseMat);
-      mesh.rotation.x = -Math.PI / 2;
-      mesh.position.set(x, 0.16, z);
-      return mesh;
-    };
-    scene.add(createCrease(3.66, 0.06, 0, 8.8));    // Batting popping
-    scene.add(createCrease(3.66, 0.06, 0, 10.06));  // Batting bowling
-    scene.add(createCrease(0.06, 1.26, -1.32, 9.43));
-    scene.add(createCrease(0.06, 1.26, 1.32, 9.43));
-    scene.add(createCrease(3.66, 0.06, 0, -8.8));   // Bowling popping
-    scene.add(createCrease(3.66, 0.06, 0, -10.06)); // Bowling bowling
-    scene.add(createCrease(0.06, 1.26, -1.32, -9.43));
-    scene.add(createCrease(0.06, 1.26, 1.32, -9.43));
-
-    // ── 8. Stumps & Bails ──
-    const createWicketStumps = (zPos: number) => {
+    // ── 9. Sight Screens at Both Ends ────────────────────────────────────────
+    const createSightScreen = (zPos: number) => {
       const group = new THREE.Group();
-      [-0.28, 0, 0.28].forEach((xOff) => {
-        const stumpGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.72, 12);
-        const stumpMat = new THREE.MeshStandardMaterial({ color: 0xf5f0dc, roughness: 0.4 });
-        const stump = new THREE.Mesh(stumpGeo, stumpMat);
+      // Screen frame
+      const frameMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8 });
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(10, 5, 0.3), frameMat);
+      frame.position.y = 2.8;
+      group.add(frame);
+      // White/Black Slats (White for pink/red ball)
+      const slatMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3 });
+      const screen = new THREE.Mesh(new THREE.BoxGeometry(9.4, 4.4, 0.35), slatMat);
+      screen.position.y = 2.8;
+      group.add(screen);
+      // Wheeled Legs
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x0f172a });
+      const leg1 = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 3, 8), legMat);
+      leg1.position.set(-3.5, 1.5, 0);
+      group.add(leg1);
+      const leg2 = leg1.clone();
+      leg2.position.set(3.5, 1.5, 0);
+      group.add(leg2);
+
+      group.position.set(0, 0, zPos);
+      return group;
+    };
+    scene.add(createSightScreen(47.5));
+    scene.add(createSightScreen(-47.5));
+
+    // ── 10. Stumps + Bails ───────────────────────────────────────────────────
+    const createWickets = (zPos: number) => {
+      const group = new THREE.Group();
+      const stumpPositions = [-0.28, 0, 0.28];
+      stumpPositions.forEach((xOff) => {
+        const sGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.72, 12);
+        const sMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, roughness: 0.4 });
+        const stump = new THREE.Mesh(sGeo, sMat);
         stump.position.set(xOff, 0.36, zPos);
         stump.castShadow = true;
         group.add(stump);
       });
+      // 2 Bails
       [-0.14, 0.14].forEach((xOff) => {
-        const bailGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.16, 8);
-        const bailMat = new THREE.MeshStandardMaterial({ color: 0xf5e6c8 });
-        const bail = new THREE.Mesh(bailGeo, bailMat);
+        const bGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.18, 8);
+        const bMat = new THREE.MeshStandardMaterial({ color: 0xfde047 });
+        const bail = new THREE.Mesh(bGeo, bMat);
         bail.position.set(xOff, 0.74, zPos);
         bail.rotation.z = Math.PI / 2;
         group.add(bail);
       });
       return group;
     };
-    const battingStumps = createWicketStumps(10.06);
+    const battingStumps = createWickets(10.06);
     scene.add(battingStumps);
-    battingStumpsRef.current = battingStumps;
-    scene.add(createWicketStumps(-10.06));
+    stumpsGroupRef.current = battingStumps;
+    scene.add(createWickets(-10.06));
 
-    // ── 9. Sight Screens at both Ends ──
-    [-36, 36].forEach((sz) => {
-      const screenGroup = new THREE.Group();
-      const frameGeo = new THREE.BoxGeometry(8.5, 5, 0.4);
-      const frameMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.5 });
-      const screen = new THREE.Mesh(frameGeo, frameMat);
-      screen.position.y = 3;
-      screenGroup.add(screen);
-
-      // Stand posts
-      [-3.5, 3.5].forEach((sx) => {
-        const postGeo = new THREE.CylinderGeometry(0.15, 0.15, 3, 8);
-        const post = new THREE.Mesh(postGeo, frameMat);
-        post.position.set(sx, 1.5, 0);
-        screenGroup.add(post);
-      });
-      screenGroup.position.set(0, 0, sz);
-      scene.add(screenGroup);
-    });
-
-    // ── 10. Batsman Figure & Bat Model ──
+    // ── 11. Batsman Model with Willow Bat, Helmet, and Pads ──────────────────
     const batsmanGroup = new THREE.Group();
-    const bodyGeo = new THREE.CapsuleGeometry(0.35, 1.2, 8, 16);
-    const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 });
-    const body = new THREE.Mesh(bodyGeo, bodyMat);
-    body.position.y = 1.1;
-    body.castShadow = true;
-    batsmanGroup.add(body);
+    // Torso / Jersey
+    const torsoMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 });
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.36, 1.15, 8, 16), torsoMat);
+    torso.position.y = 1.1;
+    torso.castShadow = true;
+    batsmanGroup.add(torso);
 
-    // Helmet with peak & grill
-    const helmetGeo = new THREE.SphereGeometry(0.28, 16, 16);
-    const helmetMat = new THREE.MeshStandardMaterial({ color: 0x1e3a5f, metalness: 0.7, roughness: 0.2 });
-    const helmet = new THREE.Mesh(helmetGeo, helmetMat);
-    helmet.position.y = 2.0;
+    // Helmet with Visor Grill
+    const helmetMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.3, metalness: 0.6 });
+    const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 16), helmetMat);
+    helmet.position.y = 1.98;
     helmet.castShadow = true;
     batsmanGroup.add(helmet);
 
-    const grillGeo = new THREE.TorusGeometry(0.16, 0.015, 4, 12, Math.PI);
-    const grillMat = new THREE.MeshStandardMaterial({ color: 0x999999, metalness: 0.9 });
-    const grill = new THREE.Mesh(grillGeo, grillMat);
-    grill.position.set(0, 1.92, 0.22);
+    const grillMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.95 });
+    const grill = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.018, 4, 16, Math.PI), grillMat);
+    grill.position.set(0, 1.9, 0.22);
     grill.rotation.x = Math.PI / 2;
     batsmanGroup.add(grill);
 
-    // Cricket Bat with Handle and Blade
+    // Cricket Bat
     const batGroup = new THREE.Group();
-    const batHandleGeo = new THREE.CylinderGeometry(0.035, 0.035, 0.55, 8);
-    const batHandleMat = new THREE.MeshStandardMaterial({ color: 0x8b6914, roughness: 0.7 });
-    const batHandle = new THREE.Mesh(batHandleGeo, batHandleMat);
-    batHandle.position.y = 0.55;
-    batGroup.add(batHandle);
+    // Cane Handle
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.7 });
+    const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.55, 8), handleMat);
+    handle.position.y = 0.55;
+    batGroup.add(handle);
+    // Willow Blade
+    const bladeMat = new THREE.MeshStandardMaterial({ color: 0xfde68a, roughness: 0.4 });
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.62, 0.09), bladeMat);
+    blade.position.y = 0.05;
+    blade.castShadow = true;
+    batGroup.add(blade);
+    // Batting gloves
+    const gloveMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const glove = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), gloveMat);
+    glove.position.set(0, 0.52, 0);
+    batGroup.add(glove);
 
-    const batBladeGeo = new THREE.BoxGeometry(0.13, 0.6, 0.07);
-    const batBladeMat = new THREE.MeshStandardMaterial({ color: 0xf5e6c8, roughness: 0.4 });
-    const batBlade = new THREE.Mesh(batBladeGeo, batBladeMat);
-    batBlade.position.y = 0.15;
-    batBlade.castShadow = true;
-    batGroup.add(batBlade);
-
-    batGroup.position.set(0.4, 0.8, 0.2);
-    batGroup.rotation.z = -0.25;
+    batGroup.position.set(0.55, 1.1, 0.15);
+    batGroup.rotation.z = -0.35;
     batsmanGroup.add(batGroup);
 
-    // Leg Pads
-    const padGeo = new THREE.CylinderGeometry(0.14, 0.11, 0.65, 8);
-    const padMat = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, roughness: 0.5 });
+    // Batting Pads
+    const padMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.5 });
     [-0.18, 0.18].forEach((xOff) => {
-      const pad = new THREE.Mesh(padGeo, padMat);
-      pad.position.set(xOff, 0.32, 0.1);
+      const pad = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.12, 0.65, 8), padMat);
+      pad.position.set(xOff, 0.32, 0.12);
       pad.castShadow = true;
       batsmanGroup.add(pad);
     });
 
-    batsmanGroup.position.set(0.3, 0, 9.2);
+    batsmanGroup.position.set(0.35, 0, 9.2);
     batsmanGroup.rotation.y = Math.PI;
     scene.add(batsmanGroup);
     batsmanGroupRef.current = batsmanGroup;
 
-    // ── 11. Bowler Model with Arm ──
+    // ── 12. Bowler Model with Run-Up Momentum ────────────────────────────────
     const bowlerGroup = new THREE.Group();
-    const bowlerBody = new THREE.CapsuleGeometry(0.32, 1.1, 8, 16);
-    const bowlerMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.6 });
-    const bowlerMesh = new THREE.Mesh(bowlerBody, bowlerMat);
-    bowlerMesh.position.y = 1.0;
-    bowlerMesh.castShadow = true;
-    bowlerGroup.add(bowlerMesh);
+    const bTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.34, 1.1, 8, 16), new THREE.MeshStandardMaterial({ color: 0x2563eb }));
+    bTorso.position.y = 1.05;
+    bTorso.castShadow = true;
+    bowlerGroup.add(bTorso);
 
-    const bowlerHead = new THREE.Mesh(
-      new THREE.SphereGeometry(0.24, 16, 16),
-      new THREE.MeshStandardMaterial({ color: 0x8b5e3c })
-    );
-    bowlerHead.position.y = 1.82;
-    bowlerGroup.add(bowlerHead);
+    const bHead = new THREE.Mesh(new THREE.SphereGeometry(0.24, 16, 16), new THREE.MeshStandardMaterial({ color: 0x92400e }));
+    bHead.position.y = 1.85;
+    bowlerGroup.add(bHead);
 
-    const armGeo = new THREE.CylinderGeometry(0.06, 0.05, 0.75, 8);
-    const armMat = new THREE.MeshStandardMaterial({ color: 0x2563eb });
-    const bowlArm = new THREE.Mesh(armGeo, armMat);
-    bowlArm.position.set(0.4, 1.5, 0);
-    bowlerGroup.add(bowlArm);
+    const bArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.72, 8), new THREE.MeshStandardMaterial({ color: 0x2563eb }));
+    bArm.position.set(0.42, 1.5, 0);
+    bArm.rotation.z = -0.85;
+    bowlerGroup.add(bArm);
 
-    bowlerGroup.position.set(0, 0, -10.06);
+    bowlerGroup.position.set(0, 0, -9.8);
     scene.add(bowlerGroup);
     bowlerGroupRef.current = bowlerGroup;
 
-    // ── 12. Grandstand Tiers with Canopy Roofs ──
-    const standSections = 18;
-    const standRadius = 59;
-    const standGroup = new THREE.Group();
+    // ── 13. Multi-Tier Stadium Bowl with Cantilever Canopy Roof ───────────────
+    const standColor = timeOfDay === 'night' ? 0x1e1b4b : timeOfDay === 'twilight' ? 0x2e1065 : 0x475569;
+    const numBays = 20;
 
-    for (let i = 0; i < standSections; i++) {
-      const angle = (i / standSections) * Math.PI * 2;
-      const singleStand = new THREE.Group();
+    for (let i = 0; i < numBays; i++) {
+      const angle = (i / numBays) * Math.PI * 2;
+      const bayRadius = 59;
+      const bayGroup = new THREE.Group();
 
-      // Lower & Upper Deck Tiers
-      const tierGeo = new THREE.BoxGeometry(16, 13, 7);
-      const tierMat = new THREE.MeshStandardMaterial({
-        color: timeOfDay === 'night' ? 0x181232 : 0x444458,
-        roughness: 0.75
-      });
-      const tier = new THREE.Mesh(tierGeo, tierMat);
-      tier.position.y = 6.5;
-      singleStand.add(tier);
+      // Concrete Tier Rake Bay
+      const bayGeo = new THREE.BoxGeometry(16, 14, 8);
+      const bayMat = new THREE.MeshStandardMaterial({ color: standColor, roughness: 0.8, metalness: 0.1 });
+      const bay = new THREE.Mesh(bayGeo, bayMat);
+      bay.position.y = 7;
+      bay.castShadow = true;
+      bay.receiveShadow = true;
+      bayGroup.add(bay);
 
-      // Seat Rows
-      for (let r = 0; r < 4; r++) {
-        const seatGeo = new THREE.BoxGeometry(14, 0.45, 1.1);
-        const seatPalette = [0xec4899, 0xa855f7, 0x4cd7f6, 0x22c55e, 0xf59e0b];
-        const seatMat = new THREE.MeshStandardMaterial({
-          color: seatPalette[(i + r) % seatPalette.length],
-          roughness: 0.85
-        });
-        const seat = new THREE.Mesh(seatGeo, seatMat);
-        seat.position.set(0, 1 + r * 3, -2 + r * 0.4);
-        singleStand.add(seat);
+      // Colorful Spectator Seat Rows
+      const seatPalette = [0xec4899, 0xa855f7, 0x06b6d4, 0x10b981, 0xf59e0b];
+      for (let s = 0; s < 4; s++) {
+        const rowGeo = new THREE.BoxGeometry(14, 0.45, 1.2);
+        const rowMat = new THREE.MeshStandardMaterial({ color: seatPalette[(i + s) % seatPalette.length], roughness: 0.7 });
+        const row = new THREE.Mesh(rowGeo, rowMat);
+        row.position.set(0, 2 + s * 3, -2 + s * 0.4);
+        bayGroup.add(row);
       }
 
-      // Grandstand Modern Curved Canopy Roof
-      const roofGeo = new THREE.BoxGeometry(17, 0.4, 10);
-      const roofMat = new THREE.MeshStandardMaterial({
-        color: 0xefefef,
-        metalness: 0.3,
-        roughness: 0.4
-      });
+      // Cantilever Canopy Roof Truss (Overhang over seats)
+      const roofGeo = new THREE.BoxGeometry(15.5, 0.5, 10);
+      const roofMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.3 });
       const roof = new THREE.Mesh(roofGeo, roofMat);
-      roof.position.set(0, 14.5, -1);
-      roof.rotation.x = -0.15; // Slope inward towards field
-      singleStand.add(roof);
+      roof.position.set(0, 14.5, -2);
+      roof.rotation.x = 0.1;
+      roof.castShadow = true;
+      bayGroup.add(roof);
 
-      singleStand.position.set(
-        Math.sin(angle) * standRadius,
-        0,
-        Math.cos(angle) * standRadius
-      );
-      singleStand.lookAt(0, 6, 0);
-      standGroup.add(singleStand);
-    }
-    scene.add(standGroup);
-
-    // ── 13. Dual Giant Scoreboards / Jumbotrons ──
-    const createJumbotron = (x: number, z: number, yRot: number) => {
-      const jGroup = new THREE.Group();
-      const frameGeo = new THREE.BoxGeometry(18, 9, 0.8);
-      const frameMat = new THREE.MeshStandardMaterial({ color: 0x111124, metalness: 0.6 });
-      const frame = new THREE.Mesh(frameGeo, frameMat);
-      jGroup.add(frame);
-
-      // Screen Face with high-tech canvas display
-      const scCanvas = document.createElement('canvas');
-      scCanvas.width = 512;
-      scCanvas.height = 256;
-      const sCtx = scCanvas.getContext('2d')!;
-      sCtx.fillStyle = '#060a1e';
-      sCtx.fillRect(0, 0, 512, 256);
-      sCtx.fillStyle = '#00f0ff';
-      sCtx.font = 'bold 26px monospace';
-      sCtx.fillText('AURA CRICKET CUP 2026', 70, 45);
-      sCtx.fillStyle = '#ffffff';
-      sCtx.font = 'bold 36px Arial';
-      sCtx.fillText('IND-W  184/4 (19.2)', 60, 110);
-      sCtx.fillStyle = '#f59e0b';
-      sCtx.font = 'bold 24px monospace';
-      sCtx.fillText('BALL SPEED: ' + ballSpeed + ' km/h', 60, 160);
-      sCtx.fillStyle = '#ec4899';
-      sCtx.font = 'bold 22px Arial';
-      sCtx.fillText('WIN EQUITY: IND-W 62% vs AUS-W 38%', 60, 215);
-
-      const scTexture = new THREE.CanvasTexture(scCanvas);
-      const screenGeo = new THREE.PlaneGeometry(17, 8);
-      const screenMat = new THREE.MeshBasicMaterial({ map: scTexture });
-      const screen = new THREE.Mesh(screenGeo, screenMat);
-      screen.position.z = 0.45;
-      jGroup.add(screen);
-
-      jGroup.position.set(x, 22, z);
-      jGroup.rotation.y = yRot;
-      return jGroup;
-    };
-    scene.add(createJumbotron(0, -68, 0));
-    scene.add(createJumbotron(0, 68, Math.PI));
-
-    // ── 14. 24 Boundary LED Sponsor Boards ──
-    const sponsorSlogans = [
-      'AURA FanVerse', '3D Hawk-Eye AI', 'DUBAI 2026', 'T20 WORLD STADIUM',
-      'TACTICAL RADAR', 'V2V VOICE AI', 'ZERO TRUST', 'MULTIMODAL CRICKET'
-    ];
-    for (let i = 0; i < 24; i++) {
-      const angle = (i / 24) * Math.PI * 2;
-      const bCanvas = document.createElement('canvas');
-      bCanvas.width = 256;
-      bCanvas.height = 64;
-      const bCtx = bCanvas.getContext('2d')!;
-      bCtx.fillStyle = i % 2 === 0 ? '#1b0a3d' : '#0a1d35';
-      bCtx.fillRect(0, 0, 256, 64);
-      bCtx.fillStyle = i % 2 === 0 ? '#ec4899' : '#00f0ff';
-      bCtx.font = 'bold 22px Arial';
-      bCtx.textAlign = 'center';
-      bCtx.fillText(sponsorSlogans[i % sponsorSlogans.length], 128, 38);
-
-      const bTex = new THREE.CanvasTexture(bCanvas);
-      const bGeo = new THREE.PlaneGeometry(5.2, 1.25);
-      const bMat = new THREE.MeshBasicMaterial({ map: bTex, side: THREE.DoubleSide });
-      const board = new THREE.Mesh(bGeo, bMat);
-      board.position.set(Math.sin(angle) * 47.6, 0.65, Math.cos(angle) * 47.6);
-      board.lookAt(0, 0.65, 0);
-      scene.add(board);
+      bayGroup.position.set(Math.sin(angle) * bayRadius, 0, Math.cos(angle) * bayRadius);
+      bayGroup.lookAt(0, 0, 0);
+      scene.add(bayGroup);
     }
 
-    // ── 15. Animated Crowd Particles ──
-    const crowdCount = 3600;
-    const crowdGeo = new THREE.BufferGeometry();
-    const crowdPos = new Float32Array(crowdCount * 3);
-    const crowdCols = new Float32Array(crowdCount * 3);
-    const palette = [
-      [1.0, 0.25, 0.5], [0.2, 0.6, 1.0], [1.0, 0.8, 0.1],
-      [0.3, 0.9, 0.4], [1.0, 1.0, 1.0], [0.9, 0.3, 0.9]
-    ];
-    for (let i = 0; i < crowdCount; i++) {
-      const ang = Math.random() * Math.PI * 2;
-      const rad = 53 + Math.random() * 13;
-      crowdPos[i * 3] = Math.sin(ang) * rad;
-      crowdPos[i * 3 + 1] = 2 + Math.random() * 11;
-      crowdPos[i * 3 + 2] = Math.cos(ang) * rad;
-      const c = palette[Math.floor(Math.random() * palette.length)];
-      crowdCols[i * 3] = c[0];
-      crowdCols[i * 3 + 1] = c[1];
-      crowdCols[i * 3 + 2] = c[2];
+    // ── 14. Modern Pavilion Building & Jumbotron ──────────────────────────────
+    // 3D Pavilion at North End
+    const pavilionGroup = new THREE.Group();
+    const pavBase = new THREE.Mesh(new THREE.BoxGeometry(32, 18, 12), new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.6 }));
+    pavBase.position.y = 9;
+    pavilionGroup.add(pavBase);
+
+    // Balconies & Glass Corporate Boxes
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.1, metalness: 0.9, transparent: true, opacity: 0.65 });
+    const glassBox = new THREE.Mesh(new THREE.BoxGeometry(28, 4.5, 1), glassMat);
+    glassBox.position.set(0, 13, 6.1);
+    pavilionGroup.add(glassBox);
+
+    pavilionGroup.position.set(0, 0, -68);
+    scene.add(pavilionGroup);
+
+    // Jumbotron Big Screen Display
+    const jumbotronGroup = new THREE.Group();
+    const frameMesh = new THREE.Mesh(new THREE.BoxGeometry(18, 9, 1), new THREE.MeshStandardMaterial({ color: 0x020617 }));
+    jumbotronGroup.add(frameMesh);
+
+    const screenCanvas = document.createElement('canvas');
+    screenCanvas.width = 512;
+    screenCanvas.height = 256;
+    const sCtx = screenCanvas.getContext('2d')!;
+    sCtx.fillStyle = '#090d16';
+    sCtx.fillRect(0, 0, 512, 256);
+    sCtx.fillStyle = '#06b6d4';
+    sCtx.font = 'bold 36px monospace';
+    sCtx.fillText('AURA LIVE TELEMETRY', 30, 60);
+    sCtx.fillStyle = '#f43f5e';
+    sCtx.font = 'bold 54px monospace';
+    sCtx.fillText('HAWK-EYE 3D', 30, 130);
+    sCtx.fillStyle = '#38bdf8';
+    sCtx.font = '24px monospace';
+    sCtx.fillText('BALL SPEED: 142 KM/H • 60 FPS', 30, 190);
+
+    const screenTex = new THREE.CanvasTexture(screenCanvas);
+    const screenFace = new THREE.Mesh(new THREE.PlaneGeometry(16.5, 7.8), new THREE.MeshBasicMaterial({ map: screenTex }));
+    screenFace.position.z = 0.55;
+    jumbotronGroup.add(screenFace);
+    jumbotronScreenRef.current = screenFace;
+
+    jumbotronGroup.position.set(0, 25, 68);
+    jumbotronGroup.lookAt(0, 10, 0);
+    scene.add(jumbotronGroup);
+
+    // ── 15. Dynamic City Skyline Background ──────────────────────────────────
+    const skylineGroup = new THREE.Group();
+    const buildingColors = [0x0f172a, 0x1e1b4b, 0x020617, 0x172554, 0x1e293b];
+    for (let b = 0; b < 75; b++) {
+      const bAngle = Math.random() * Math.PI * 2;
+      const bDist = 110 + Math.random() * 90;
+      const bW = 5 + Math.random() * 9;
+      const bH = 20 + Math.random() * 55;
+      const bD = 5 + Math.random() * 9;
+
+      const bGeo = new THREE.BoxGeometry(bW, bH, bD);
+      const bMat = new THREE.MeshStandardMaterial({
+        color: buildingColors[Math.floor(Math.random() * buildingColors.length)],
+        roughness: 0.5,
+      });
+      const building = new THREE.Mesh(bGeo, bMat);
+      building.position.set(Math.sin(bAngle) * bDist, bH / 2, Math.cos(bAngle) * bDist);
+      skylineGroup.add(building);
     }
-    crowdGeo.setAttribute('position', new THREE.BufferAttribute(crowdPos, 3));
-    crowdGeo.setAttribute('color', new THREE.BufferAttribute(crowdCols, 3));
-    const crowdMat = new THREE.PointsMaterial({ size: 0.55, vertexColors: true });
-    const crowdPoints = new THREE.Points(crowdGeo, crowdMat);
-    scene.add(crowdPoints);
+    scene.add(skylineGroup);
 
-    // ── 16. Fielders (with dynamic diving catch reference) ──
-    const fielderCoords = [
-      { key: 'cover', x: 26, z: 24, name: 'Deep Cover' },
-      { key: 'point', x: -28, z: 12, name: 'Deep Point' },
-      { key: 'midwicket', x: -22, z: 28, name: 'Deep Mid-Wicket' },
-      { key: 'longon', x: 14, z: 38, name: 'Long-On' },
-      { key: 'longoff', x: -14, z: 38, name: 'Long-Off' },
-      { key: 'thirdman', x: 28, z: -14, name: 'Third Man' },
-      { key: 'fineleg', x: -26, z: -14, name: 'Fine Leg' },
-      { key: 'slip', x: 3.5, z: 12.5, name: 'First Slip' }
-    ];
-
-    fielderCoords.forEach((fc) => {
-      const fGroup = new THREE.Group();
-      const fBody = new THREE.Mesh(
-        new THREE.CapsuleGeometry(0.26, 0.95, 6, 12),
-        new THREE.MeshStandardMaterial({ color: 0x2563eb })
-      );
-      fBody.position.y = 0.8;
-      fBody.castShadow = true;
-      fGroup.add(fBody);
-
-      const fHead = new THREE.Mesh(
-        new THREE.SphereGeometry(0.18, 12, 12),
-        new THREE.MeshStandardMaterial({ color: 0x8b5e3c })
-      );
-      fHead.position.y = 1.5;
-      fGroup.add(fHead);
-
-      fGroup.position.set(fc.x, 0, fc.z);
-      fGroup.lookAt(0, 0, 9);
-      scene.add(fGroup);
-
-      if (fc.key === 'cover') {
-        fielderDeepCoverRef.current = fGroup;
+    // Stars in Night & Twilight
+    if (timeOfDay !== 'day') {
+      const starGeo = new THREE.BufferGeometry();
+      const starCoords = new Float32Array(2500 * 3);
+      for (let i = 0; i < 2500; i++) {
+        starCoords[i * 3] = (Math.random() - 0.5) * 800;
+        starCoords[i * 3 + 1] = 50 + Math.random() * 320;
+        starCoords[i * 3 + 2] = (Math.random() - 0.5) * 800;
       }
-    });
+      starGeo.setAttribute('position', new THREE.BufferAttribute(starCoords, 3));
+      const starMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.65,
+        transparent: true,
+        opacity: timeOfDay === 'night' ? 0.85 : 0.45,
+      });
+      scene.add(new THREE.Points(starGeo, starMat));
+    }
 
-    // Wicketkeeper
-    const wkGroup = new THREE.Group();
-    const wkBody = new THREE.Mesh(
-      new THREE.CapsuleGeometry(0.28, 0.8, 6, 12),
-      new THREE.MeshStandardMaterial({ color: 0xfbbf24 })
-    );
-    wkBody.position.y = 0.6;
-    wkGroup.add(wkBody);
-    const wkHead = new THREE.Mesh(
-      new THREE.SphereGeometry(0.2, 12, 12),
-      new THREE.MeshStandardMaterial({ color: 0x8b5e3c })
-    );
-    wkHead.position.y = 1.25;
-    wkGroup.add(wkHead);
-    wkGroup.position.set(0, 0, 12.6);
-    wkGroup.rotation.y = Math.PI;
-    scene.add(wkGroup);
-
-    // ── 17. Cricket Ball Mesh & Glowing Trail ──
-    const ballGeo = new THREE.SphereGeometry(0.25, 32, 32);
+    // ── 16. Cricket Ball with Raised White Seam & Hawk-Eye Trail ─────────────
+    const ballGeo = new THREE.SphereGeometry(0.26, 32, 32);
     const ballMat = new THREE.MeshStandardMaterial({
-      color: 0xcc2222,
-      emissive: 0xef4444,
-      emissiveIntensity: 0.45,
-      roughness: 0.25
+      color: 0xef4444,
+      emissive: 0x991b1b,
+      emissiveIntensity: 0.35,
+      roughness: 0.25,
+      metalness: 0.15,
     });
     const ball = new THREE.Mesh(ballGeo, ballMat);
-    ball.position.set(0, 1.5, -10.06);
+    ball.position.set(0, 1.6, -9.8);
     ball.castShadow = true;
     scene.add(ball);
     ballRef.current = ball;
 
-    // Seam line
-    const seam = new THREE.Mesh(
-      new THREE.TorusGeometry(0.26, 0.015, 4, 32),
+    // Raised Seam
+    const seamMesh = new THREE.Mesh(
+      new THREE.TorusGeometry(0.27, 0.015, 6, 32),
       new THREE.MeshBasicMaterial({ color: 0xffffff })
     );
-    ball.add(seam);
+    ball.add(seamMesh);
 
-    // Glowing Trail
+    // Glowing 60-Point Hawk-Eye Trajectory Trail
     const trailPoints: THREE.Vector3[] = [];
     for (let i = 0; i < 60; i++) trailPoints.push(new THREE.Vector3(0, 0, 0));
     const trailGeo = new THREE.BufferGeometry().setFromPoints(trailPoints);
     const trailMat = new THREE.LineBasicMaterial({
-      color: 0x4cd7f6,
+      color: 0x38bdf8,
       linewidth: 2,
       transparent: true,
-      opacity: showTrajectory ? 0.85 : 0
+      opacity: showTrajectory ? 0.9 : 0,
     });
     const trajectoryLine = new THREE.Line(trailGeo, trailMat);
     scene.add(trajectoryLine);
     trajectoryLineRef.current = trajectoryLine;
 
-    // Pitch Bounce Spot Marker
-    const impactMarker = new THREE.Mesh(
-      new THREE.RingGeometry(0.1, 0.4, 32),
-      new THREE.MeshBasicMaterial({ color: 0xff3366, transparent: true, opacity: 0.0, side: THREE.DoubleSide })
+    // Pitch Bounce Impact Decal
+    const impactRing = new THREE.Mesh(
+      new THREE.RingGeometry(0.12, 0.45, 32),
+      new THREE.MeshBasicMaterial({ color: 0xf43f5e, side: THREE.DoubleSide, transparent: true, opacity: 0 })
     );
-    impactMarker.rotation.x = -Math.PI / 2;
-    impactMarker.position.set(0, 0.17, 0);
-    scene.add(impactMarker);
+    impactRing.rotation.x = -Math.PI / 2;
+    impactRing.position.set(0, 0.15, 0);
+    scene.add(impactRing);
 
-    // ── 18. Surrounding City Skyline with Lit Windows ──
-    const cityGroup = new THREE.Group();
-    for (let i = 0; i < 75; i++) {
-      const cAngle = Math.random() * Math.PI * 2;
-      const cDist = 95 + Math.random() * 110;
-      const bW = 4 + Math.random() * 8;
-      const bH = 20 + Math.random() * 65;
-      const bGeo = new THREE.BoxGeometry(bW, bH, bW);
-      const bMat = new THREE.MeshStandardMaterial({
-        color: timeOfDay === 'night' ? 0x0c0822 : 0x223344,
-        roughness: 0.6
-      });
-      const bldg = new THREE.Mesh(bGeo, bMat);
-      bldg.position.set(Math.sin(cAngle) * cDist, bH / 2, Math.cos(cAngle) * cDist);
-      cityGroup.add(bldg);
-    }
-    scene.add(cityGroup);
+    // ── 17. 9 Authentic Fielder Silhouettes ──────────────────────────────────
+    const fielderCoords = [
+      { x: 18, z: 32, name: 'Long-on' },
+      { x: -18, z: 32, name: 'Long-off' },
+      { x: 34, z: 12, name: 'Deep Square Leg' },
+      { x: -34, z: 12, name: 'Deep Cover' },
+      { x: 28, z: -14, name: 'Third Man' },
+      { x: -28, z: -14, name: 'Deep Fine Leg' },
+      { x: 9, z: 4, name: 'Mid-on' },
+      { x: -9, z: 4, name: 'Mid-off' },
+      { x: 4, z: 7, name: 'Short Midwicket' },
+    ];
 
-    // ── 19. ANIMATION LOOP & MULTIPLE SHOT/BALL DYNAMICS ──
+    fielderCoords.forEach((fc) => {
+      const fGroup = new THREE.Group();
+      const fBody = new THREE.Mesh(new THREE.CapsuleGeometry(0.26, 0.9, 6, 12), new THREE.MeshStandardMaterial({ color: 0x2563eb }));
+      fBody.position.y = 0.75;
+      fBody.castShadow = true;
+      fGroup.add(fBody);
+
+      const fHead = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), new THREE.MeshStandardMaterial({ color: 0x92400e }));
+      fHead.position.y = 1.48;
+      fGroup.add(fHead);
+
+      fGroup.position.set(fc.x, 0, fc.z);
+      fGroup.lookAt(0, 0, 9);
+      scene.add(fGroup);
+    });
+
+    // Wicketkeeper Crouched
+    const wkGroup = new THREE.Group();
+    const wkBody = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 0.75, 8, 12), new THREE.MeshStandardMaterial({ color: 0xfacc15 }));
+    wkBody.position.y = 0.55;
+    wkBody.castShadow = true;
+    wkGroup.add(wkBody);
+
+    const wkHead = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 12), new THREE.MeshStandardMaterial({ color: 0x92400e }));
+    wkHead.position.y = 1.25;
+    wkGroup.add(wkHead);
+
+    [-0.32, 0.32].forEach((xOff) => {
+      const glove = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), new THREE.MeshStandardMaterial({ color: 0xfacc15 }));
+      glove.position.set(xOff, 0.55, -0.2);
+      wkGroup.add(glove);
+    });
+    wkGroup.position.set(0, 0, 12.6);
+    wkGroup.rotation.y = Math.PI;
+    scene.add(wkGroup);
+
+    // ── 18. Main Animation & Physics Loop ────────────────────────────────────
     let running = true;
     const clock = clockRef.current;
     clock.start();
-
-    const selectedDelivery = STADIUM_BOWLING_STYLES.find((b) => b.key === bowlerStyleKey) || STADIUM_BOWLING_STYLES[0];
-    const selectedShot = STADIUM_SHOTS.find((s) => s.key === shotTypeKey) || STADIUM_SHOTS[0];
 
     const animate = () => {
       if (!running) return;
       animationIdRef.current = requestAnimationFrame(animate);
       const delta = clock.getDelta();
+      const elapsed = clock.getElapsedTime();
 
-      // Bowler arm action
-      if (bowlerGroupRef.current) {
-        const armMesh = bowlerGroupRef.current.children[2];
-        if (armMesh) {
-          armMesh.rotation.z = -0.8 + Math.sin(tRef.current * 3.2) * 0.7;
-        }
+      // Animate LED Sponsor Ribbon scrolling
+      ledTexture.offset.x -= 0.0015;
+
+      // Random Spectator Camera Flashes
+      if (crowdFlashes && Math.random() < 0.04) {
+        const flashAngle = Math.random() * Math.PI * 2;
+        const flashR = 56 + Math.random() * 5;
+        const flashY = 3 + Math.random() * 8;
+        // Temporary light flash
+        const flashLight = new THREE.PointLight(0xffffff, 4, 15);
+        flashLight.position.set(Math.sin(flashAngle) * flashR, flashY, Math.cos(flashAngle) * flashR);
+        scene.add(flashLight);
+        setTimeout(() => scene.remove(flashLight), 60);
       }
 
+      // Ball Trajectory & Physics
       if (isPlaying && ballRef.current) {
-        tRef.current += 0.016;
-        if (tRef.current > 2.5) {
-          tRef.current = 0;
-          setEventBanner(null);
-          // Reset batting stumps
-          if (battingStumpsRef.current) {
-            battingStumpsRef.current.position.set(0, 0, 0);
-            battingStumpsRef.current.rotation.set(0, 0, 0);
-          }
-          // Reset fielder position
-          if (fielderDeepCoverRef.current) {
-            fielderDeepCoverRef.current.position.set(26, 0, 24);
-            fielderDeepCoverRef.current.rotation.set(0, 0, 0);
-          }
-        }
+        tRef.current += bowlerType === 'spin' ? 0.014 : 0.021;
+        if (tRef.current > 2.4) tRef.current = 0;
 
         const t = tRef.current;
         let x = 0;
-        let y = 1.5;
-        let z = -10.06 + t * 14;
+        let y = 1.6;
+        let z = -9.8 + t * 14;
 
         if (t < 1.0) {
-          // PHASE 1: Bowling delivery
+          // Phase 1: Ball Bowled down pitch
           setBallPhase('bowled');
           const bounceT = t;
-          setBallSpeed(selectedDelivery.speed);
 
-          if (selectedDelivery.key === 'yorker') {
-            y = 1.5 - 1.45 * bounceT;
-            x = 0.08 * Math.sin(bounceT * 2);
-            z = -10.06 + bounceT * 19;
-          } else if (selectedDelivery.key === 'bouncer') {
-            y = 1.8 - 2.8 * bounceT + 4.2 * Math.sin(bounceT * Math.PI);
+          if (bowlerType === 'yorker') {
+            y = 1.6 - 1.55 * bounceT;
             x = 0.1 * Math.sin(bounceT * 2);
-            z = -10.06 + bounceT * 18;
-          } else if (selectedDelivery.key === 'outswinger') {
-            y = 1.9 - 2.5 * bounceT + 3.2 * Math.sin(bounceT * Math.PI);
-            x = bounceT * bounceT * 0.45; // late outward drift
-          } else if (selectedDelivery.key === 'inswinger') {
-            y = 1.9 - 2.5 * bounceT + 3.2 * Math.sin(bounceT * Math.PI);
-            x = -bounceT * bounceT * 0.42; // late inward swing
-          } else if (selectedDelivery.key === 'legspin') {
-            y = 2.1 - 2.8 * bounceT + 3.5 * Math.sin(bounceT * Math.PI);
-            x = bounceT < 0.5 ? -0.2 * bounceT : 0.6 * (bounceT - 0.5);
-          } else if (selectedDelivery.key === 'carrom') {
-            y = 2.0 - 2.6 * bounceT + 3.3 * Math.sin(bounceT * Math.PI);
-            x = bounceT < 0.5 ? 0.15 * bounceT : -0.55 * (bounceT - 0.5);
+            z = -9.8 + bounceT * 19.8;
           } else {
-            // knuckle slower
-            y = 2.2 - 3.2 * bounceT + 3.8 * Math.sin(bounceT * Math.PI);
-            x = 0.2 * Math.sin(bounceT * 4);
+            y = 2.0 - 2.8 * bounceT + 3.4 * Math.sin(bounceT * Math.PI);
+            x = bowlerType === 'spin' ? Math.sin(bounceT * 5) * 1.1 : 0.18 * Math.sin(bounceT * 2);
           }
 
-          // Pitch impact circle
-          if (bounceT > 0.42 && bounceT < 0.58) {
-            impactMarker.position.set(x, 0.17, z);
-            (impactMarker.material as THREE.MeshBasicMaterial).opacity = 0.8;
+          // Pitch impact splash
+          if (bounceT > 0.42 && bounceT < 0.6) {
+            impactRing.position.set(x, 0.16, z);
+            (impactRing.material as THREE.MeshBasicMaterial).opacity = 0.85;
           } else {
-            (impactMarker.material as THREE.MeshBasicMaterial).opacity = 0.0;
+            (impactRing.material as THREE.MeshBasicMaterial).opacity = 0;
           }
 
-          // Batsman stance adjustment
+          setBallSpeed(bowlerType === 'pace' ? 142 : bowlerType === 'spin' ? 86 : 148);
+
+          // Reset wickets tilt
+          if (stumpsGroupRef.current) {
+            stumpsGroupRef.current.rotation.x = 0;
+            stumpsGroupRef.current.position.y = 0;
+          }
+
+          // Batsman stance backlift
           if (batsmanGroupRef.current) {
-            batsmanGroupRef.current.rotation.y = Math.PI + Math.sin(bounceT * 3) * 0.06;
+            batsmanGroupRef.current.rotation.y = Math.PI + Math.sin(bounceT * 2) * 0.06;
           }
         } else {
-          // PHASE 2: Post-contact stroke or wicket
+          // Phase 2: Post-Bat Trajectory
+          setBallPhase('hit');
           const hitT = t - 1.0;
-          setBallSpeed(selectedShot.speed);
 
-          if (selectedShot.key === 'coverDrive') {
-            setBallPhase('hit');
-            x = 0.2 + hitT * 26;
-            y = Math.max(0.15, 1.1 + 9.5 * Math.sin(hitT * Math.PI * 0.85) - hitT * 1.8);
+          if (shotType === 'coverDrive') {
+            x = 0.3 + hitT * 25;
+            y = Math.max(0.12, 1.1 + 9.5 * Math.sin(hitT * Math.PI * 0.85) - hitT * 1.7);
             z = 3.5 + hitT * 22;
-            if (hitT > 0.3 && !eventBanner) {
-              setEventBanner(trans.bannerSix);
-            }
-          } else if (selectedShot.key === 'pullShot') {
-            setBallPhase('hit');
-            x = -hitT * 30;
-            y = Math.max(0.15, 1.0 + 7.2 * Math.sin(hitT * Math.PI * 0.85) - hitT * 1.5);
-            z = 3.5 + hitT * 14;
-            if (hitT > 0.3 && !eventBanner) {
-              setEventBanner(trans.bannerFour);
-            }
-          } else if (selectedShot.key === 'straightDrive') {
-            setBallPhase('hit');
-            x = 0.1;
-            y = Math.max(0.15, 0.8 + 4.2 * Math.sin(hitT * Math.PI * 0.9) - hitT);
-            z = -10.06 + hitT * -36;
-            if (hitT > 0.3 && !eventBanner) {
-              setEventBanner(trans.bannerFour);
-            }
-          } else if (selectedShot.key === 'upperCut') {
-            setBallPhase('hit');
-            x = hitT * 20;
-            y = Math.max(0.15, 1.1 + 12.5 * Math.sin(hitT * Math.PI * 0.72) - hitT * 2);
-            z = 3.5 - hitT * 22;
-            if (hitT > 0.3 && !eventBanner) {
-              setEventBanner(trans.bannerSix);
-            }
-          } else if (selectedShot.key === 'helicopter') {
-            setBallPhase('hit');
-            x = -hitT * 16;
-            y = Math.max(0.15, 1.2 + 14 * Math.sin(hitT * Math.PI * 0.75) - hitT * 2.2);
-            z = 3.5 + hitT * 30; // Towering over long-on
-            if (hitT > 0.3 && !eventBanner) {
-              setEventBanner(trans.bannerSix);
-            }
-          } else if (selectedShot.key === 'reverseSweep') {
-            setBallPhase('hit');
-            x = hitT * 28;
-            y = Math.max(0.15, 0.7 + 3.8 * Math.sin(hitT * Math.PI * 0.9) - hitT);
-            z = 8.5 - hitT * 18;
-            if (hitT > 0.3 && !eventBanner) {
-              setEventBanner(trans.bannerFour);
-            }
-          } else if (selectedShot.key === 'scoop') {
-            setBallPhase('hit');
-            x = -0.2;
-            y = Math.max(0.15, 1.0 + 13 * Math.sin(hitT * Math.PI * 0.7) - hitT * 2);
-            z = 10.06 + hitT * 28; // Over keeper
-            if (hitT > 0.3 && !eventBanner) {
-              setEventBanner(trans.bannerSix);
-            }
-          } else if (selectedShot.key === 'defense') {
-            setBallPhase('hit');
-            x = 0.1;
-            y = 0.2;
-            z = 8.5 + hitT * 0.4; // Drops softly
-            if (hitT > 0.2 && !eventBanner) {
-              setEventBanner(trans.bannerDefense);
-            }
-          } else if (selectedShot.key === 'boundaryCatch') {
-            // DIVING CATCH ACTION BY DEEP COVER FIELDER
-            setBallPhase('catch');
-            x = 0.2 + hitT * 24;
-            y = Math.max(0.8, 1.1 + 7.5 * Math.sin(hitT * Math.PI * 0.85) - hitT * 1.5);
-            z = 3.5 + hitT * 21;
-
-            // Fielder sprints and dives horizontally
-            if (fielderDeepCoverRef.current) {
-              const fX = 26 + (x - 26) * Math.min(hitT * 1.6, 1);
-              const fZ = 24 + (z - 24) * Math.min(hitT * 1.6, 1);
-              fielderDeepCoverRef.current.position.set(fX, hitT > 0.8 ? 0.3 : 0, fZ);
-              if (hitT > 0.8) {
-                // Horizontal dive rotation
-                fielderDeepCoverRef.current.rotation.x = Math.PI / 2.5;
-              }
-            }
-
-            if (hitT > 0.5 && !eventBanner) {
-              setEventBanner(trans.bannerCatch);
-            }
-          } else {
-            // WICKET DISMANTLED
-            setBallPhase('hit');
+          } else if (shotType === 'pullShot') {
+            x = -hitT * 29;
+            y = Math.max(0.12, 1.1 + 8.2 * Math.sin(hitT * Math.PI * 0.85) - hitT * 1.4);
+            z = 3.5 + hitT * 15;
+          } else if (shotType === 'straightDrive') {
             x = 0;
-            y = 0.4;
+            y = Math.max(0.12, 0.9 + 4.2 * Math.sin(hitT * Math.PI * 0.9) - hitT * 1.1);
+            z = -9.8 + hitT * -36;
+          } else if (shotType === 'upperCut') {
+            x = hitT * 19;
+            y = Math.max(0.12, 1.2 + 13.5 * Math.sin(hitT * Math.PI * 0.72) - hitT * 2.2);
+            z = 3.5 - hitT * 21;
+          } else {
+            // Wicket Dismantled!
+            x = 0;
+            y = 0.45;
             z = 10.06;
-
-            // Stumps cartwheel
-            if (battingStumpsRef.current) {
-              battingStumpsRef.current.position.z = 10.06 + hitT * 4;
-              battingStumpsRef.current.rotation.x = hitT * 3;
-            }
-
-            if (hitT > 0.2 && !eventBanner) {
-              setEventBanner(trans.bannerWicket);
+            if (stumpsGroupRef.current) {
+              stumpsGroupRef.current.rotation.x = -Math.min(hitT * 4, 1.2);
+              stumpsGroupRef.current.position.y = Math.sin(hitT * 3) * 0.4;
             }
           }
 
-          // Batsman swing animation matching shot
+          setBallSpeed(
+            shotType === 'coverDrive' ? 158 : shotType === 'pullShot' ? 152 :
+            shotType === 'straightDrive' ? 164 : shotType === 'upperCut' ? 144 : 0
+          );
+
+          // Batsman swing follow-through
           if (batsmanGroupRef.current) {
-            if (selectedShot.key === 'helicopter') {
-              batsmanGroupRef.current.rotation.y = Math.PI + hitT * 5; // Full whirl
-            } else if (selectedShot.key === 'reverseSweep') {
-              batsmanGroupRef.current.rotation.y = hitT * 2;
-            } else if (selectedShot.key === 'scoop') {
-              batsmanGroupRef.current.position.y = -0.3; // crouch
-            } else {
-              const swing = Math.min(hitT * 3, 1.3);
-              batsmanGroupRef.current.rotation.y = Math.PI - swing * 0.9;
-            }
+            const swing = Math.min(hitT * 3.5, 1.3);
+            batsmanGroupRef.current.rotation.y = Math.PI - swing * 0.85;
           }
         }
 
@@ -932,7 +891,7 @@ export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
         ballRef.current.rotation.x += delta * 18;
         ballRef.current.rotation.z += delta * 10;
 
-        // Glowing trajectory line update
+        // Update glowing trail line
         if (trajectoryLineRef.current && showTrajectory) {
           const positions = trajectoryLineRef.current.geometry.attributes.position.array as Float32Array;
           for (let i = positions.length - 3; i >= 3; i -= 3) {
@@ -947,24 +906,29 @@ export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
         }
       }
 
-      // Smooth camera interpolation
+      // Smooth Camera Transitions
       if (cameraRef.current) {
         const cam = cameraRef.current;
-        const targetCam = STADIUM_CAMERAS.find((c) => c.key === cameraViewKey) || STADIUM_CAMERAS[0];
-
-        if (targetCam.isDynamic) {
-          // Drone rotating 360 orbit
-          const droneAngle = clock.elapsedTime * 0.28;
-          const dronePos = new THREE.Vector3(
-            Math.sin(droneAngle) * 44,
-            32,
-            Math.cos(droneAngle) * 44
-          );
-          cam.position.lerp(dronePos, 0.04);
+        if (cameraView === 'broadcast') {
+          cam.position.lerp(new THREE.Vector3(0, 28, 56), 0.045);
           cam.lookAt(0, 2, 0);
-        } else {
-          cam.position.lerp(new THREE.Vector3(...targetCam.pos), 0.045);
-          cam.lookAt(...targetCam.lookAt);
+        } else if (cameraView === 'batsman') {
+          cam.position.lerp(new THREE.Vector3(1.6, 2.9, 12.5), 0.045);
+          cam.lookAt(0, 1.4, -8);
+        } else if (cameraView === 'hawkEye') {
+          cam.position.lerp(new THREE.Vector3(22, 14, 0), 0.045);
+          cam.lookAt(0, 1.2, 2);
+        } else if (cameraView === 'topDown') {
+          cam.position.lerp(new THREE.Vector3(0, 74, 0.1), 0.045);
+          cam.lookAt(0, 0, 0);
+        } else if (cameraView === 'stumpCam') {
+          cam.position.lerp(new THREE.Vector3(0, 0.45, 10.7), 0.045);
+          cam.lookAt(0, 1.6, -10);
+        } else if (cameraView === 'drone') {
+          const droneAngle = elapsed * 0.28;
+          const dronePos = new THREE.Vector3(Math.sin(droneAngle) * 44, 38, Math.cos(droneAngle) * 44);
+          cam.position.lerp(dronePos, 0.045);
+          cam.lookAt(0, 0, 0);
         }
       }
 
@@ -980,7 +944,6 @@ export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(w, height);
     };
-
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -989,122 +952,88 @@ export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
       if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
       renderer.dispose();
     };
-  }, [isPlaying, cameraViewKey, bowlerStyleKey, shotTypeKey, timeOfDay, showTrajectory, currentLang]);
+  }, [isPlaying, cameraView, bowlerType, shotType, timeOfDay, showTrajectory, crowdFlashes]);
 
   return (
-    <div className={`space-y-6 ${isRtl ? 'font-sans' : ''}`} dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-purple-950/60 via-cyan-950/40 to-slate-900 border border-purple-500/20 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-pink-500 opacity-70" />
-
-        <div className="space-y-1 z-10">
-          <div className="flex items-center space-x-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
+      <div className="bg-gradient-to-r from-purple-950/40 via-cyan-950/30 to-slate-900 border border-purple-500/20 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center space-x-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Box className="w-4 h-4" />
-            <span>{trans.headerTag}</span>
-            <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold animate-pulse">
-              {trans.liveTag}
-            </span>
+            <span>Hyper-Realistic 3D WebGL Cricket Stadium</span>
+            <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold animate-pulse">LIVE 60 FPS</span>
           </div>
-          <h2 className="text-2xl font-black text-white tracking-tight">
-            {trans.headerTitle}
+          <h2 className="text-2xl font-bold text-white tracking-tight">
+            Volumetric Lighting, Procedural Textures & Physics Engine
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-            {trans.headerSubtitle}
+          <p className="text-sm text-slate-300 max-w-2xl mt-1">
+            Featuring 4 floodlight volumetric beams, procedural mower turf, weathered clay pitch scuffs, animated LED sponsor hoardings, sight screens, and flying bails physics.
           </p>
         </div>
 
-        {/* Global Language Pill + Play Controls */}
-        <div className="flex items-center gap-3 z-10">
-          {/* Quick Language Dropdown Deck */}
-          <div className="flex items-center gap-1.5 bg-slate-900/90 border border-purple-500/30 px-2.5 py-1.5 rounded-xl text-xs">
-            <Globe2 className="w-3.5 h-3.5 text-purple-400" />
-            <select
-              value={currentLang}
-              onChange={(e) => handleLanguageSwitch(e.target.value)}
-              className="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer text-xs"
-            >
-              <option value="en" className="bg-slate-900 text-white">🇬🇧 English</option>
-              <option value="hi" className="bg-slate-900 text-white">🇮🇳 हिंदी (Hindi)</option>
-              <option value="es" className="bg-slate-900 text-white">🇪🇸 Español</option>
-              <option value="ar" className="bg-slate-900 text-white">🇸🇦 العربية (Arabic)</option>
-              <option value="ta" className="bg-slate-900 text-white">🇮🇳 தமிழ் (Tamil)</option>
-            </select>
-          </div>
-
-          <div className="flex items-center space-x-2 bg-slate-900 border border-slate-700 p-1.5 rounded-xl">
-            <button
-              onClick={() => {
-                soundFX.playClick();
-                setIsPlaying(!isPlaying);
-              }}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-md active:scale-95"
-            >
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white" />}
-              <span>{isPlaying ? trans.pauseLabel : trans.playLabel}</span>
-            </button>
-            <button
-              onClick={() => {
-                soundFX.playClick();
-                tRef.current = 0;
-                setEventBanner(null);
-              }}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              title={trans.resetLabel}
-            >
-              <RotateCcw className="w-4 h-4" />
-            </button>
-          </div>
+        {/* Play & Reset Controls */}
+        <div className="flex items-center space-x-2 bg-slate-900 border border-slate-700 p-1.5 rounded-xl">
+          <button
+            onClick={() => {
+              soundFX.playClick();
+              setIsPlaying(!isPlaying);
+            }}
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-md"
+          >
+            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white" />}
+            <span>{isPlaying ? 'Pause' : 'Play'}</span>
+          </button>
+          <button
+            onClick={() => {
+              soundFX.playClick();
+              tRef.current = 0;
+            }}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            title="Reset Ball Loop"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
       {/* 3D Viewport Container & Control HUD */}
-      <div className="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-[#0c0a1a]">
+      <div className="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-[#060414]">
         <div ref={containerRef} className="w-full h-[540px]" />
 
-        {/* Floating Holographic Event Banner (Six / Four / Catch / Wicket) */}
-        {eventBanner && (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30 animate-in zoom-in-75 duration-200">
-            <div className="bg-slate-950/90 border-2 border-pink-500 text-white px-6 py-3 rounded-2xl shadow-[0_0_40px_rgba(236,72,153,0.8)] backdrop-blur-xl flex items-center gap-3">
-              <Flame className="w-6 h-6 text-pink-400 animate-bounce" />
-              <span className="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-white via-pink-200 to-cyan-300 bg-clip-text text-transparent">
-                {eventBanner}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Floating Top Overlay HUD: 10 Cameras + Telemetry */}
-        <div className="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2.5 pointer-events-none z-20">
-          {/* Camera View Switcher (10 Views) */}
-          <div className="flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1.5 rounded-2xl border border-slate-800 pointer-events-auto shadow-xl max-w-full overflow-x-auto">
-            <span className="text-[10px] font-bold text-slate-400 px-2 uppercase font-mono whitespace-nowrap flex items-center gap-1">
-              <Camera className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{trans.cameraLabel}</span>
+        {/* Floating Top Overlay HUD */}
+        <div className="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
+          {/* Camera View Switcher */}
+          <div className="flex items-center gap-1 bg-slate-950/85 backdrop-blur-md p-1.5 rounded-xl border border-slate-800 pointer-events-auto shadow-lg flex-wrap">
+            <span className="text-[10px] font-bold text-slate-400 px-2 uppercase font-mono flex items-center gap-1">
+              <Camera className="w-3 h-3 text-cyan-400" />
+              Cam:
             </span>
-            {STADIUM_CAMERAS.map((cam) => {
-              const label = cam.labels[currentLang] || cam.labels.en;
-              const isSel = cameraViewKey === cam.key;
-              return (
-                <button
-                  key={cam.key}
-                  onClick={() => {
-                    soundFX.playClick();
-                    setCameraViewKey(cam.key);
-                  }}
-                  className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                    isSel
-                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+            {[
+              { key: 'broadcast' as const, label: 'Broadcast' },
+              { key: 'batsman' as const, label: 'Batter POV' },
+              { key: 'hawkEye' as const, label: 'Hawk-Eye' },
+              { key: 'topDown' as const, label: 'Top-Down' },
+              { key: 'stumpCam' as const, label: 'Stump Cam' },
+              { key: 'drone' as const, label: 'Drone Orbit' },
+            ].map((cam) => (
+              <button
+                key={cam.key}
+                onClick={() => {
+                  soundFX.playClick();
+                  setCameraView(cam.key);
+                }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  cameraView === cam.key ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {cam.label}
+              </button>
+            ))}
           </div>
 
-          {/* Telemetry Pill */}
-          <div className="flex items-center gap-3 bg-slate-950/90 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-slate-800 text-xs text-slate-300 font-mono shadow-xl pointer-events-auto">
+          {/* Telemetry HUD */}
+          <div className="flex items-center gap-3 bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono shadow-lg pointer-events-auto">
             <div className="flex items-center gap-1.5">
               <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
               <span>60 FPS</span>
@@ -1115,177 +1044,173 @@ export const CricketStadium3D: React.FC<CricketStadium3DProps> = ({
               <span>{ballSpeed} km/h</span>
             </div>
             <div className="w-px h-4 bg-slate-700" />
-            <span
-              className={`font-black ${
-                ballPhase === 'bowled'
-                  ? 'text-cyan-400'
-                  : ballPhase === 'catch'
-                  ? 'text-pink-400 animate-pulse'
-                  : ballPhase === 'hit'
-                  ? 'text-emerald-400'
-                  : 'text-slate-500'
-              }`}
-            >
-              {ballPhase === 'bowled'
-                ? trans.phaseBowling
-                : ballPhase === 'catch'
-                ? trans.phaseCatch
-                : ballPhase === 'hit'
-                ? trans.phaseShot
-                : trans.phaseIdle}
+            <span className={`font-bold ${
+              ballPhase === 'bowled' ? 'text-cyan-400' : ballPhase === 'hit' ? 'text-pink-400' : 'text-slate-500'
+            }`}>
+              {ballPhase === 'bowled' ? 'IN FLIGHT' : ballPhase === 'hit' ? 'CONTACT MADE' : 'READY'}
             </span>
           </div>
         </div>
 
-        {/* Floating Right Panel: Time of Day & Trajectory Trail */}
-        <div className="absolute top-18 right-4 flex flex-col gap-2 pointer-events-auto z-20">
-          <div className="bg-slate-950/90 backdrop-blur-md p-2 rounded-2xl border border-slate-800 space-y-1 shadow-lg text-xs">
-            <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block px-1">
-              {trans.timeLabel}
-            </span>
+        {/* Floating Bottom Delivery & Shot Selectors */}
+        <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
+          {/* Delivery Type */}
+          <div className="flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 pointer-events-auto">
+            <span className="text-[11px] font-bold text-slate-400 uppercase font-mono px-1">Delivery:</span>
             {[
-              { key: 'day' as const, label: '☀️ ' + (currentLang === 'hi' ? 'दिन' : currentLang === 'es' ? 'Día' : currentLang === 'ar' ? 'نهار' : currentLang === 'ta' ? 'பகல்' : 'Day') },
-              { key: 'twilight' as const, label: '🌅 ' + (currentLang === 'hi' ? 'गोधूलि' : currentLang === 'es' ? 'Crepúsculo' : currentLang === 'ar' ? 'غروب' : currentLang === 'ta' ? 'மாலை' : 'Twilight') },
-              { key: 'night' as const, label: '🌙 ' + (currentLang === 'hi' ? 'रात' : currentLang === 'es' ? 'Noche' : currentLang === 'ar' ? 'ليل' : currentLang === 'ta' ? 'இரவு' : 'Night') }
-            ].map((tod) => (
+              { key: 'pace' as const, label: '142 km/h Seam' },
+              { key: 'spin' as const, label: '86 km/h Spin' },
+              { key: 'yorker' as const, label: '148 km/h Yorker' },
+            ].map((d) => (
               <button
-                key={tod.key}
+                key={d.key}
                 onClick={() => {
                   soundFX.playClick();
-                  setTimeOfDay(tod.key);
+                  setBowlerType(d.key);
+                  tRef.current = 0;
                 }}
-                className={`block w-full text-left px-2 py-1 rounded-xl font-bold transition-all ${
-                  timeOfDay === tod.key ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  bowlerType === d.key ? 'bg-cyan-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {tod.label}
+                {d.label}
               </button>
             ))}
           </div>
 
+          {/* Shot Selection */}
+          <div className="flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 pointer-events-auto flex-wrap">
+            <span className="text-[11px] font-bold text-slate-400 uppercase font-mono px-1">Shot:</span>
+            {[
+              { key: 'coverDrive' as const, label: 'Cover Drive (6)' },
+              { key: 'pullShot' as const, label: 'Pull Shot (4)' },
+              { key: 'straightDrive' as const, label: 'Straight Drive (4)' },
+              { key: 'upperCut' as const, label: 'Upper Cut (6)' },
+              { key: 'wicket' as const, label: 'Wicket ⚡' },
+            ].map((s) => (
+              <button
+                key={s.key}
+                onClick={() => {
+                  if (s.key === 'wicket') {
+                    soundFX.playSecurityAlert();
+                  } else {
+                    soundFX.playSuccess();
+                  }
+                  setShotType(s.key);
+                  tRef.current = 0;
+                }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  shotType === s.key ? 'bg-pink-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Floating Right Control Deck (Time of Day, Trajectory, Flash) */}
+        <div className="absolute top-18 right-4 flex flex-col gap-2 pointer-events-auto">
+          {/* Time of Day */}
+          <div className="bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 space-y-1">
+            <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block px-1">Lighting:</span>
+            {[
+              { key: 'day' as const, label: 'Day', icon: Sun },
+              { key: 'twilight' as const, label: 'Sunset', icon: Sunset },
+              { key: 'night' as const, label: 'Night', icon: Moon },
+            ].map((tod) => {
+              const Icon = tod.icon;
+              return (
+                <button
+                  key={tod.key}
+                  onClick={() => {
+                    soundFX.playClick();
+                    setTimeOfDay(tod.key);
+                  }}
+                  className={`flex items-center gap-1.5 w-full text-left px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                    timeOfDay === tod.key ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{tod.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Trail Toggle */}
           <button
             onClick={() => {
               soundFX.playClick();
               setShowTrajectory(!showTrajectory);
             }}
-            className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all border shadow-lg backdrop-blur-md ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
               showTrajectory
-                ? 'bg-cyan-600/20 border-cyan-500/40 text-cyan-300'
-                : 'bg-slate-950/90 border-slate-800 text-slate-500'
-            }`}
+                ? 'bg-cyan-600/20 border-cyan-500/40 text-cyan-400'
+                : 'bg-slate-950/85 border-slate-800 text-slate-500'
+            } backdrop-blur-md`}
           >
             <Eye className="w-3.5 h-3.5" />
-            <span>{trans.trailLabel}</span>
+            Hawk-Eye Trail
           </button>
-        </div>
 
-        {/* Floating Bottom Controls: Bowling Styles + Shots/Catches */}
-        <div className="absolute bottom-4 left-4 right-4 flex flex-col gap-2 pointer-events-none z-20">
-          {/* Row 1: Bowling Styles (7 Styles) */}
-          <div className="flex items-center gap-2 bg-slate-950/90 backdrop-blur-md p-2 rounded-2xl border border-slate-800 pointer-events-auto overflow-x-auto shadow-xl">
-            <span className="text-[11px] font-black text-slate-400 uppercase font-mono whitespace-nowrap px-1 flex items-center gap-1">
-              <Zap className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{trans.deliveryLabel}</span>
-            </span>
-            {STADIUM_BOWLING_STYLES.map((b) => {
-              const bLabel = b.labels[currentLang] || b.labels.en;
-              const isSel = bowlerStyleKey === b.key;
-              return (
-                <button
-                  key={b.key}
-                  onClick={() => {
-                    soundFX.playClick();
-                    setBowlerStyleKey(b.key);
-                    tRef.current = 0;
-                    setEventBanner(null);
-                  }}
-                  className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                    isSel
-                      ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {bLabel}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Row 2: 10 Cricket Shots & Catching Actions */}
-          <div className="flex items-center gap-2 bg-slate-950/90 backdrop-blur-md p-2 rounded-2xl border border-slate-800 pointer-events-auto overflow-x-auto shadow-xl">
-            <span className="text-[11px] font-black text-slate-400 uppercase font-mono whitespace-nowrap px-1 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-pink-400" />
-              <span>{trans.shotLabel}</span>
-            </span>
-            {STADIUM_SHOTS.map((s) => {
-              const sLabel = s.labels[currentLang] || s.labels.en;
-              const isSel = shotTypeKey === s.key;
-              return (
-                <button
-                  key={s.key}
-                  onClick={() => {
-                    soundFX.playSuccess();
-                    setShotTypeKey(s.key);
-                    tRef.current = 0;
-                    setEventBanner(null);
-                  }}
-                  className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                    isSel
-                      ? s.actionType === 'catch'
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md ring-2 ring-emerald-400'
-                        : s.actionType === 'wicket'
-                        ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md ring-2 ring-red-400'
-                        : 'bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {sLabel}
-                </button>
-              );
-            })}
-          </div>
+          {/* Flash Toggle */}
+          <button
+            onClick={() => {
+              soundFX.playClick();
+              setCrowdFlashes(!crowdFlashes);
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+              crowdFlashes
+                ? 'bg-purple-600/20 border-purple-500/40 text-purple-300'
+                : 'bg-slate-950/85 border-slate-800 text-slate-500'
+            } backdrop-blur-md`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            Crowd Flashes
+          </button>
         </div>
       </div>
 
-      {/* Physics Spec Grid (Localized 4 Cards) */}
+      {/* Physics Spec Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 flex items-start gap-3 shadow-lg">
-          <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 flex-shrink-0">
+        <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400">
             <Compass className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-bold text-white block">{trans.card1Title}</span>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">{trans.card1Desc}</p>
+            <span className="text-xs font-bold text-white block">Magnus Aerodynamic Seam</span>
+            <p className="text-xs text-slate-400 mt-0.5">Calculates lateral seam swing and drift vectors based on air density and release RPM.</p>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 flex items-start gap-3 shadow-lg">
-          <div className="p-2.5 rounded-xl bg-pink-500/10 text-pink-400 flex-shrink-0">
+        <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-pink-500/10 text-pink-400">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-bold text-white block">{trans.card2Title}</span>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">{trans.card2Desc}</p>
+            <span className="text-xs font-bold text-white block">Procedural Turf & Pitch</span>
+            <p className="text-xs text-slate-400 mt-0.5">Dual 1024px canvas textures rendering lawn mower stripes, clay cracks, and spike scuffs.</p>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 flex items-start gap-3 shadow-lg">
-          <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 flex-shrink-0">
-            <Box className="w-5 h-5" />
+        <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
+            <Layers className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-bold text-white block">{trans.card3Title}</span>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">{trans.card3Desc}</p>
+            <span className="text-xs font-bold text-white block">Volumetric Floodlight Cones</span>
+            <p className="text-xs text-slate-400 mt-0.5">4 steel lattice pylons with additive blending volumetric cones illuminating the ground.</p>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 flex items-start gap-3 shadow-lg">
-          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 flex-shrink-0">
-            <ShieldAlert className="w-5 h-5" />
+        <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+            <Trophy className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-bold text-white block">{trans.card4Title}</span>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">{trans.card4Desc}</p>
+            <span className="text-xs font-bold text-white block">Flying Bails & Wickets Physics</span>
+            <p className="text-xs text-slate-400 mt-0.5">Dynamic rotational inertia and gravity equations on bails when wickets are dismantled.</p>
           </div>
         </div>
       </div>

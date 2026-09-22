@@ -1,0 +1,1014 @@
+{
+  "model_version": "4.9.2-AURA-ML",
+  "trained_samples": 295,
+  "accuracy": 0.8305,
+  "win_model": {
+    "coefficients": [
+      1.62877,
+      0.11109,
+      0.11109,
+      -1.5696,
+      -0.62213,
+      0.00493,
+      1.29309
+    ],
+    "intercept": -0.05778,
+    "scaler_mean": [
+      0.2078,
+      0.34915,
+      0.34915,
+      0.65085,
+      0.23729,
+      0.31186,
+      -0.95355
+    ],
+    "scaler_std": [
+      13.10245,
+      0.4767,
+      0.4767,
+      0.4767,
+      0.42542,
+      0.46326,
+      2.38458
+    ],
+    "feature_importances": [
+      {
+        "feature": "Team Power Rating Differential",
+        "weight": 1.6288,
+        "impact": "Favors Team 1",
+        "magnitude": 1.629
+      },
+      {
+        "feature": "Toss Advantage",
+        "weight": 0.1111,
+        "impact": "Favors Team 1",
+        "magnitude": 0.111
+      },
+      {
+        "feature": "Decision to Bat First",
+        "weight": 0.1111,
+        "impact": "Favors Team 1",
+        "magnitude": 0.111
+      },
+      {
+        "feature": "Format: T20 Match Dynamic",
+        "weight": -1.5696,
+        "impact": "Favors Team 2",
+        "magnitude": 1.57
+      },
+      {
+        "feature": "Format: 50-Over ODI Tempo",
+        "weight": -0.6221,
+        "impact": "Favors Team 2",
+        "magnitude": 0.622
+      },
+      {
+        "feature": "Women's Competition Variance",
+        "weight": 0.0049,
+        "impact": "Favors Team 1",
+        "magnitude": 0.005
+      },
+      {
+        "feature": "1st Innings Run-Rate Momentum",
+        "weight": 1.2931,
+        "impact": "Favors Team 1",
+        "magnitude": 1.293
+      }
+    ]
+  },
+  "score_model": {
+    "coefficients": [
+      3.282,
+      -80.047,
+      10.158,
+      -30.167,
+      0.231
+    ],
+    "intercept": -23.024,
+    "features": [
+      "batting_team_power",
+      "is_t20",
+      "is_odi",
+      "is_female",
+      "chose_bat"
+    ]
+  },
+  "team_ratings": {
+    "England": {
+      "power": 94.2,
+      "matches": 8,
+      "win_rate": 100.0,
+      "batting_rr": 6.14,
+      "bowling_rr": 4.47,
+      "nrr": 1.66
+    },
+    "Ireland": {
+      "power": 66.7,
+      "matches": 3,
+      "win_rate": 0.0,
+      "batting_rr": 4.59,
+      "bowling_rr": 5.93,
+      "nrr": -1.33
+    },
+    "Pakistan": {
+      "power": 76.9,
+      "matches": 8,
+      "win_rate": 37.5,
+      "batting_rr": 4.63,
+      "bowling_rr": 4.88,
+      "nrr": -0.25
+    },
+    "Sri Lanka": {
+      "power": 83.5,
+      "matches": 9,
+      "win_rate": 44.4,
+      "batting_rr": 6.71,
+      "bowling_rr": 4.86,
+      "nrr": 1.85
+    },
+    "Nottinghamshire": {
+      "power": 89.6,
+      "matches": 4,
+      "win_rate": 50.0,
+      "batting_rr": 3.84,
+      "bowling_rr": 0.0,
+      "nrr": 3.84
+    },
+    "Surrey": {
+      "power": 81.7,
+      "matches": 11,
+      "win_rate": 45.5,
+      "batting_rr": 5.06,
+      "bowling_rr": 4.03,
+      "nrr": 1.03
+    },
+    "Warwickshire": {
+      "power": 83.0,
+      "matches": 10,
+      "win_rate": 60.0,
+      "batting_rr": 4.26,
+      "bowling_rr": 3.85,
+      "nrr": 0.4
+    },
+    "Sussex": {
+      "power": 74.5,
+      "matches": 4,
+      "win_rate": 25.0,
+      "batting_rr": 3.28,
+      "bowling_rr": 3.48,
+      "nrr": -0.2
+    },
+    "Leicestershire": {
+      "power": 70.3,
+      "matches": 4,
+      "win_rate": 25.0,
+      "batting_rr": 2.39,
+      "bowling_rr": 4.26,
+      "nrr": -1.86
+    },
+    "Glamorgan": {
+      "power": 70.0,
+      "matches": 4,
+      "win_rate": 0.0,
+      "batting_rr": 3.02,
+      "bowling_rr": 3.01,
+      "nrr": 0.01
+    },
+    "Somerset": {
+      "power": 83.1,
+      "matches": 10,
+      "win_rate": 70.0,
+      "batting_rr": 4.15,
+      "bowling_rr": 4.51,
+      "nrr": -0.36
+    },
+    "Essex": {
+      "power": 73.4,
+      "matches": 10,
+      "win_rate": 10.0,
+      "batting_rr": 4.26,
+      "bowling_rr": 3.7,
+      "nrr": 0.56
+    },
+    "Yorkshire": {
+      "power": 71.1,
+      "matches": 10,
+      "win_rate": 20.0,
+      "batting_rr": 3.43,
+      "bowling_rr": 4.6,
+      "nrr": -1.17
+    },
+    "Hampshire": {
+      "power": 82.5,
+      "matches": 10,
+      "win_rate": 50.0,
+      "batting_rr": 4.91,
+      "bowling_rr": 3.93,
+      "nrr": 0.98
+    },
+    "Kent": {
+      "power": 83.5,
+      "matches": 5,
+      "win_rate": 60.0,
+      "batting_rr": 3.75,
+      "bowling_rr": 3.13,
+      "nrr": 0.61
+    },
+    "Middlesex": {
+      "power": 75.5,
+      "matches": 4,
+      "win_rate": 25.0,
+      "batting_rr": 3.57,
+      "bowling_rr": 3.39,
+      "nrr": 0.18
+    },
+    "Durham": {
+      "power": 77.2,
+      "matches": 9,
+      "win_rate": 55.6,
+      "batting_rr": 3.65,
+      "bowling_rr": 5.22,
+      "nrr": -1.57
+    },
+    "Derbyshire": {
+      "power": 75.4,
+      "matches": 4,
+      "win_rate": 25.0,
+      "batting_rr": 3.12,
+      "bowling_rr": 2.95,
+      "nrr": 0.17
+    },
+    "Northamptonshire": {
+      "power": 79.2,
+      "matches": 4,
+      "win_rate": 50.0,
+      "batting_rr": 3.15,
+      "bowling_rr": 3.45,
+      "nrr": -0.3
+    },
+    "Lancashire": {
+      "power": 78.7,
+      "matches": 10,
+      "win_rate": 40.0,
+      "batting_rr": 3.8,
+      "bowling_rr": 3.52,
+      "nrr": 0.28
+    },
+    "Worcestershire": {
+      "power": 74.8,
+      "matches": 4,
+      "win_rate": 25.0,
+      "batting_rr": 2.94,
+      "bowling_rr": 3.04,
+      "nrr": -0.1
+    },
+    "Gloucestershire": {
+      "power": 86.9,
+      "matches": 4,
+      "win_rate": 50.0,
+      "batting_rr": 2.78,
+      "bowling_rr": 0.0,
+      "nrr": 2.78
+    },
+    "The Blaze": {
+      "power": 91.3,
+      "matches": 5,
+      "win_rate": 80.0,
+      "batting_rr": 5.91,
+      "bowling_rr": 3.77,
+      "nrr": 2.14
+    },
+    "Bangladesh": {
+      "power": 70.4,
+      "matches": 5,
+      "win_rate": 40.0,
+      "batting_rr": 4.36,
+      "bowling_rr": 7.41,
+      "nrr": -3.06
+    },
+    "Zimbabwe": {
+      "power": 71.8,
+      "matches": 10,
+      "win_rate": 20.0,
+      "batting_rr": 7.57,
+      "bowling_rr": 8.45,
+      "nrr": -0.88
+    },
+    "Jamaica Kingsmen": {
+      "power": 82.2,
+      "matches": 7,
+      "win_rate": 57.1,
+      "batting_rr": 8.4,
+      "bowling_rr": 8.08,
+      "nrr": 0.32
+    },
+    "St Kitts and Nevis Patriots": {
+      "power": 72.4,
+      "matches": 7,
+      "win_rate": 28.6,
+      "batting_rr": 8.34,
+      "bowling_rr": 9.65,
+      "nrr": -1.31
+    },
+    "Guyana Amazon Warriors": {
+      "power": 85.4,
+      "matches": 14,
+      "win_rate": 78.6,
+      "batting_rr": 7.2,
+      "bowling_rr": 7.35,
+      "nrr": -0.15
+    },
+    "St Lucia Kings": {
+      "power": 71.0,
+      "matches": 6,
+      "win_rate": 33.3,
+      "batting_rr": 7.83,
+      "bowling_rr": 10.07,
+      "nrr": -2.25
+    },
+    "Antigua and Barbuda Falcons": {
+      "power": 85.3,
+      "matches": 6,
+      "win_rate": 83.3,
+      "batting_rr": 8.25,
+      "bowling_rr": 8.78,
+      "nrr": -0.53
+    },
+    "Trinbago Knight Riders": {
+      "power": 75.9,
+      "matches": 12,
+      "win_rate": 33.3,
+      "batting_rr": 7.64,
+      "bowling_rr": 7.97,
+      "nrr": -0.32
+    },
+    "Barbados Tridents": {
+      "power": 80.2,
+      "matches": 13,
+      "win_rate": 38.5,
+      "batting_rr": 7.91,
+      "bowling_rr": 6.92,
+      "nrr": 0.99
+    },
+    "Moors Sports Club": {
+      "power": 86.5,
+      "matches": 12,
+      "win_rate": 75.0,
+      "batting_rr": 6.62,
+      "bowling_rr": 6.02,
+      "nrr": 0.59
+    },
+    "Police Sports Club": {
+      "power": 78.6,
+      "matches": 11,
+      "win_rate": 36.4,
+      "batting_rr": 6.64,
+      "bowling_rr": 6.12,
+      "nrr": 0.51
+    },
+    "Sinhalese Sports Club": {
+      "power": 87.1,
+      "matches": 14,
+      "win_rate": 64.3,
+      "batting_rr": 7.77,
+      "bowling_rr": 6.09,
+      "nrr": 1.68
+    },
+    "Nondescripts Cricket Club": {
+      "power": 83.0,
+      "matches": 11,
+      "win_rate": 54.5,
+      "batting_rr": 7.29,
+      "bowling_rr": 6.46,
+      "nrr": 0.83
+    },
+    "Burgher Recreation Club": {
+      "power": 71.7,
+      "matches": 9,
+      "win_rate": 22.2,
+      "batting_rr": 4.85,
+      "bowling_rr": 5.93,
+      "nrr": -1.08
+    },
+    "Kurunegala Youth Cricket Club": {
+      "power": 65.0,
+      "matches": 8,
+      "win_rate": 0.0,
+      "batting_rr": 3.85,
+      "bowling_rr": 6.27,
+      "nrr": -2.43
+    },
+    "Colts Cricket Club": {
+      "power": 81.0,
+      "matches": 9,
+      "win_rate": 55.6,
+      "batting_rr": 5.68,
+      "bowling_rr": 5.73,
+      "nrr": -0.05
+    },
+    "Badureliya Sports Club": {
+      "power": 65.0,
+      "matches": 8,
+      "win_rate": 12.5,
+      "batting_rr": 3.78,
+      "bowling_rr": 7.43,
+      "nrr": -3.65
+    },
+    "Tamil Union Cricket and Athletic Club": {
+      "power": 86.1,
+      "matches": 11,
+      "win_rate": 63.6,
+      "batting_rr": 7.92,
+      "bowling_rr": 6.57,
+      "nrr": 1.35
+    },
+    "Nugegoda Sports Welfare Club": {
+      "power": 68.5,
+      "matches": 9,
+      "win_rate": 22.2,
+      "batting_rr": 5.39,
+      "bowling_rr": 7.79,
+      "nrr": -2.4
+    },
+    "Bloomfield Cricket and Athletic Club": {
+      "power": 79.8,
+      "matches": 8,
+      "win_rate": 50.0,
+      "batting_rr": 5.93,
+      "bowling_rr": 6.02,
+      "nrr": -0.09
+    },
+    "Ace Capital Cricket Club": {
+      "power": 84.5,
+      "matches": 9,
+      "win_rate": 55.6,
+      "batting_rr": 6.58,
+      "bowling_rr": 5.21,
+      "nrr": 1.37
+    },
+    "Panadura Sports Club": {
+      "power": 76.9,
+      "matches": 9,
+      "win_rate": 44.4,
+      "batting_rr": 6.31,
+      "bowling_rr": 7.1,
+      "nrr": -0.79
+    },
+    "Colombo Cricket Club": {
+      "power": 86.7,
+      "matches": 12,
+      "win_rate": 66.7,
+      "batting_rr": 7.31,
+      "bowling_rr": 5.96,
+      "nrr": 1.35
+    },
+    "Jamaica Empress": {
+      "power": 71.8,
+      "matches": 3,
+      "win_rate": 33.3,
+      "batting_rr": 4.98,
+      "bowling_rr": 6.93,
+      "nrr": -1.96
+    },
+    "South Africa": {
+      "power": 95.0,
+      "matches": 12,
+      "win_rate": 91.7,
+      "batting_rr": 8.63,
+      "bowling_rr": 5.96,
+      "nrr": 2.66
+    },
+    "India": {
+      "power": 92.2,
+      "matches": 7,
+      "win_rate": 85.7,
+      "batting_rr": 4.92,
+      "bowling_rr": 2.88,
+      "nrr": 2.04
+    },
+    "Germany": {
+      "power": 80.7,
+      "matches": 6,
+      "win_rate": 50.0,
+      "batting_rr": 6.54,
+      "bowling_rr": 6.24,
+      "nrr": 0.3
+    },
+    "Greece": {
+      "power": 65.0,
+      "matches": 5,
+      "win_rate": 0.0,
+      "batting_rr": 4.75,
+      "bowling_rr": 8.67,
+      "nrr": -3.92
+    },
+    "Luxembourg": {
+      "power": 84.0,
+      "matches": 6,
+      "win_rate": 50.0,
+      "batting_rr": 9.65,
+      "bowling_rr": 8.04,
+      "nrr": 1.61
+    },
+    "Israel": {
+      "power": 78.7,
+      "matches": 3,
+      "win_rate": 66.7,
+      "batting_rr": 5.79,
+      "bowling_rr": 7.66,
+      "nrr": -1.87
+    },
+    "Czech Republic": {
+      "power": 75.4,
+      "matches": 11,
+      "win_rate": 45.5,
+      "batting_rr": 5.72,
+      "bowling_rr": 7.19,
+      "nrr": -1.47
+    },
+    "Bulgaria": {
+      "power": 70.5,
+      "matches": 6,
+      "win_rate": 16.7,
+      "batting_rr": 6.49,
+      "bowling_rr": 7.61,
+      "nrr": -1.12
+    },
+    "Portugal": {
+      "power": 90.3,
+      "matches": 8,
+      "win_rate": 75.0,
+      "batting_rr": 7.86,
+      "bowling_rr": 5.75,
+      "nrr": 2.11
+    },
+    "Isle of Man": {
+      "power": 91.0,
+      "matches": 5,
+      "win_rate": 80.0,
+      "batting_rr": 6.93,
+      "bowling_rr": 4.94,
+      "nrr": 2.0
+    },
+    "Uganda": {
+      "power": 93.1,
+      "matches": 8,
+      "win_rate": 75.0,
+      "batting_rr": 7.97,
+      "bowling_rr": 4.73,
+      "nrr": 3.24
+    },
+    "Rotterdam Dockers": {
+      "power": 85.1,
+      "matches": 10,
+      "win_rate": 60.0,
+      "batting_rr": 9.06,
+      "bowling_rr": 7.83,
+      "nrr": 1.24
+    },
+    "Amsterdam Flames": {
+      "power": 86.3,
+      "matches": 9,
+      "win_rate": 66.7,
+      "batting_rr": 8.66,
+      "bowling_rr": 7.47,
+      "nrr": 1.19
+    },
+    "Belfast Wolves": {
+      "power": 82.0,
+      "matches": 10,
+      "win_rate": 60.0,
+      "batting_rr": 8.56,
+      "bowling_rr": 8.56,
+      "nrr": 0.0
+    },
+    "Dublin Guardians": {
+      "power": 71.4,
+      "matches": 10,
+      "win_rate": 20.0,
+      "batting_rr": 7.68,
+      "bowling_rr": 8.7,
+      "nrr": -1.02
+    },
+    "Edinburgh Castle Rockers": {
+      "power": 84.0,
+      "matches": 9,
+      "win_rate": 66.7,
+      "batting_rr": 7.95,
+      "bowling_rr": 7.69,
+      "nrr": 0.27
+    },
+    "Glasgow Cosmic": {
+      "power": 69.3,
+      "matches": 10,
+      "win_rate": 20.0,
+      "batting_rr": 7.44,
+      "bowling_rr": 9.34,
+      "nrr": -1.9
+    },
+    "Belgium": {
+      "power": 68.8,
+      "matches": 9,
+      "win_rate": 11.1,
+      "batting_rr": 6.78,
+      "bowling_rr": 8.17,
+      "nrr": -1.39
+    },
+    "Sweden": {
+      "power": 81.6,
+      "matches": 3,
+      "win_rate": 66.7,
+      "batting_rr": 7.69,
+      "bowling_rr": 8.38,
+      "nrr": -0.69
+    },
+    "Denmark": {
+      "power": 65.0,
+      "matches": 3,
+      "win_rate": 33.3,
+      "batting_rr": 0.0,
+      "bowling_rr": 6.42,
+      "nrr": -6.42
+    },
+    "Thailand": {
+      "power": 74.6,
+      "matches": 4,
+      "win_rate": 25.0,
+      "batting_rr": 6.78,
+      "bowling_rr": 6.93,
+      "nrr": -0.15
+    },
+    "Hong Kong": {
+      "power": 65.0,
+      "matches": 3,
+      "win_rate": 0.0,
+      "batting_rr": 0.0,
+      "bowling_rr": 7.59,
+      "nrr": -7.59
+    },
+    "United Arab Emirates": {
+      "power": 81.0,
+      "matches": 8,
+      "win_rate": 62.5,
+      "batting_rr": 5.47,
+      "bowling_rr": 6.06,
+      "nrr": -0.6
+    },
+    "Indonesia": {
+      "power": 65.0,
+      "matches": 3,
+      "win_rate": 0.0,
+      "batting_rr": 3.63,
+      "bowling_rr": 6.31,
+      "nrr": -2.68
+    },
+    "Turkey": {
+      "power": 93.1,
+      "matches": 4,
+      "win_rate": 100.0,
+      "batting_rr": 6.27,
+      "bowling_rr": 5.01,
+      "nrr": 1.26
+    },
+    "Austria": {
+      "power": 86.8,
+      "matches": 4,
+      "win_rate": 75.0,
+      "batting_rr": 4.78,
+      "bowling_rr": 4.04,
+      "nrr": 0.73
+    },
+    "Guernsey": {
+      "power": 65.0,
+      "matches": 3,
+      "win_rate": 33.3,
+      "batting_rr": 0.0,
+      "bowling_rr": 5.87,
+      "nrr": -5.87
+    },
+    "Norway": {
+      "power": 71.0,
+      "matches": 3,
+      "win_rate": 33.3,
+      "batting_rr": 4.48,
+      "bowling_rr": 6.73,
+      "nrr": -2.26
+    },
+    "Namibia": {
+      "power": 68.5,
+      "matches": 7,
+      "win_rate": 14.3,
+      "batting_rr": 6.16,
+      "bowling_rr": 7.89,
+      "nrr": -1.73
+    },
+    "Croatia": {
+      "power": 95.1,
+      "matches": 3,
+      "win_rate": 100.0,
+      "batting_rr": 6.28,
+      "bowling_rr": 4.23,
+      "nrr": 2.06
+    },
+    "Serbia": {
+      "power": 76.3,
+      "matches": 4,
+      "win_rate": 50.0,
+      "batting_rr": 4.23,
+      "bowling_rr": 5.71,
+      "nrr": -1.48
+    },
+    "Malaysia": {
+      "power": 70.6,
+      "matches": 5,
+      "win_rate": 20.0,
+      "batting_rr": 6.66,
+      "bowling_rr": 8.0,
+      "nrr": -1.35
+    },
+    "Rwanda": {
+      "power": 81.3,
+      "matches": 8,
+      "win_rate": 50.0,
+      "batting_rr": 8.8,
+      "bowling_rr": 8.26,
+      "nrr": 0.54
+    },
+    "Botswana": {
+      "power": 65.0,
+      "matches": 7,
+      "win_rate": 14.3,
+      "batting_rr": 6.15,
+      "bowling_rr": 9.83,
+      "nrr": -3.68
+    },
+    "Kenya": {
+      "power": 97.5,
+      "matches": 7,
+      "win_rate": 100.0,
+      "batting_rr": 10.13,
+      "bowling_rr": 6.84,
+      "nrr": 3.29
+    },
+    "Sierra Leone": {
+      "power": 65.0,
+      "matches": 7,
+      "win_rate": 0.0,
+      "batting_rr": 4.37,
+      "bowling_rr": 10.11,
+      "nrr": -5.74
+    }
+  },
+  "venue_averages": {
+    "Sportpark Westvliet, The Hague": {
+      "matches": 16,
+      "avg_score": 152.2,
+      "bat_first_win_pct": 37.5
+    },
+    "Dubai International Cricket Stadium": {
+      "matches": 15,
+      "avg_score": 124.9,
+      "bat_first_win_pct": 66.7
+    },
+    "Kensington Oval, Bridgetown, Barbados": {
+      "matches": 14,
+      "avg_score": 130.0,
+      "bat_first_win_pct": 28.6
+    },
+    "P Sara Oval, Colombo": {
+      "matches": 14,
+      "avg_score": 193.0,
+      "bat_first_win_pct": 57.1
+    },
+    "The Village, Malahide, Dublin": {
+      "matches": 13,
+      "avg_score": 162.9,
+      "bat_first_win_pct": 46.2
+    },
+    "Nondescripts Cricket Club Ground, Colombo": {
+      "matches": 12,
+      "avg_score": 212.8,
+      "bat_first_win_pct": 75.0
+    },
+    "Moara Vlasiei Cricket Ground, Ilfov County": {
+      "matches": 12,
+      "avg_score": 102.1,
+      "bat_first_win_pct": 33.3
+    },
+    "Gahanga B Ground, Rwanda": {
+      "matches": 12,
+      "avg_score": 169.3,
+      "bat_first_win_pct": 58.3
+    },
+    "Colts Cricket Club Ground, Colombo": {
+      "matches": 11,
+      "avg_score": 168.2,
+      "bat_first_win_pct": 36.4
+    },
+    "Namibia Cricket Ground, Windhoek": {
+      "matches": 10,
+      "avg_score": 211.5,
+      "bat_first_win_pct": 70.0
+    },
+    "Scott Page Field, Vinor": {
+      "matches": 8,
+      "avg_score": 109.8,
+      "bat_first_win_pct": 25.0
+    },
+    "The Rose Bowl, Southampton": {
+      "matches": 7,
+      "avg_score": 252.3,
+      "bat_first_win_pct": 57.1
+    },
+    "Edgbaston, Birmingham": {
+      "matches": 6,
+      "avg_score": 227.8,
+      "bat_first_win_pct": 33.3
+    },
+    "County Ground, Chelmsford": {
+      "matches": 6,
+      "avg_score": 240.5,
+      "bat_first_win_pct": 50.0
+    },
+    "Sinhalese Sports Club Ground, Colombo": {
+      "matches": 6,
+      "avg_score": 222.7,
+      "bat_first_win_pct": 16.7
+    },
+    "R Premadasa Stadium, Colombo": {
+      "matches": 6,
+      "avg_score": 183.5,
+      "bat_first_win_pct": 50.0
+    },
+    "Tikkurila Cricket Ground": {
+      "matches": 6,
+      "avg_score": 125.5,
+      "bat_first_win_pct": 50.0
+    },
+    "Gahanga International Cricket Stadium, Rwanda": {
+      "matches": 6,
+      "avg_score": 142.3,
+      "bat_first_win_pct": 50.0
+    },
+    "Queen's Park Oval, Port of Spain, Trinidad": {
+      "matches": 5,
+      "avg_score": 177.2,
+      "bat_first_win_pct": 60.0
+    },
+    "Providence Stadium, Guyana": {
+      "matches": 5,
+      "avg_score": 142.8,
+      "bat_first_win_pct": 20.0
+    },
+    "Kerava National Cricket Ground": {
+      "matches": 5,
+      "avg_score": 142.0,
+      "bat_first_win_pct": 60.0
+    },
+    "GelsenTrabPark, Gelsenkirchen": {
+      "matches": 5,
+      "avg_score": 122.8,
+      "bat_first_win_pct": 40.0
+    },
+    "Bayuemas Oval, Kuala Lumpur": {
+      "matches": 5,
+      "avg_score": 195.2,
+      "bat_first_win_pct": 60.0
+    },
+    "Lisicji Jarak Cricket Ground": {
+      "matches": 5,
+      "avg_score": 116.2,
+      "bat_first_win_pct": 40.0
+    },
+    "County Ground, Derby": {
+      "matches": 4,
+      "avg_score": 219.8,
+      "bat_first_win_pct": 50.0
+    },
+    "Headingley, Leeds": {
+      "matches": 4,
+      "avg_score": 225.2,
+      "bat_first_win_pct": 50.0
+    },
+    "Kennington Oval, London": {
+      "matches": 4,
+      "avg_score": 179.8,
+      "bat_first_win_pct": 25.0
+    },
+    "The Cooper Associates County Ground, Taunton": {
+      "matches": 4,
+      "avg_score": 287.8,
+      "bat_first_win_pct": 25.0
+    },
+    "Trent Bridge, Nottingham": {
+      "matches": 4,
+      "avg_score": 344.0,
+      "bat_first_win_pct": 50.0
+    },
+    "Riverside Ground, Chester-le-Street": {
+      "matches": 4,
+      "avg_score": 217.0,
+      "bat_first_win_pct": 25.0
+    },
+    "Sir Vivian Richards Stadium, North Sound, Antigua": {
+      "matches": 4,
+      "avg_score": 155.8,
+      "bat_first_win_pct": 25.0
+    },
+    "Queens Sports Club, Bulawayo": {
+      "matches": 4,
+      "avg_score": 178.5,
+      "bat_first_win_pct": 75.0
+    },
+    "Police Park Ground, Colombo": {
+      "matches": 4,
+      "avg_score": 221.2,
+      "bat_first_win_pct": 0.0
+    },
+    "Moors Sports Club Ground, Colombo": {
+      "matches": 4,
+      "avg_score": 228.0,
+      "bat_first_win_pct": 75.0
+    },
+    "Pierre Werner Cricket Ground": {
+      "matches": 4,
+      "avg_score": 158.8,
+      "bat_first_win_pct": 50.0
+    },
+    "Grace Road, Leicester": {
+      "matches": 3,
+      "avg_score": 265.0,
+      "bat_first_win_pct": 66.7
+    },
+    "County Ground, New Road, Worcester": {
+      "matches": 3,
+      "avg_score": 223.7,
+      "bat_first_win_pct": 33.3
+    },
+    "Sophia Gardens, Cardiff": {
+      "matches": 3,
+      "avg_score": 125.3,
+      "bat_first_win_pct": 0.0
+    },
+    "Old Trafford, Manchester": {
+      "matches": 3,
+      "avg_score": 243.3,
+      "bat_first_win_pct": 100.0
+    },
+    "Warner Park, Basseterre, St Kitts": {
+      "matches": 3,
+      "avg_score": 211.3,
+      "bat_first_win_pct": 66.7
+    },
+    "Bloomfield Cricket and Athletic Club Ground, Colombo": {
+      "matches": 3,
+      "avg_score": 172.7,
+      "bat_first_win_pct": 0.0
+    },
+    "County Ground, Hove": {
+      "matches": 2,
+      "avg_score": 297.5,
+      "bat_first_win_pct": 0.0
+    },
+    "Merchant Taylors' School Ground, Northwood": {
+      "matches": 2,
+      "avg_score": 298.5,
+      "bat_first_win_pct": 100.0
+    },
+    "County Ground, Northampton": {
+      "matches": 2,
+      "avg_score": 275.0,
+      "bat_first_win_pct": 50.0
+    },
+    "St Lawrence Ground, Canterbury": {
+      "matches": 2,
+      "avg_score": 199.5,
+      "bat_first_win_pct": 50.0
+    },
+    "Daren Sammy National Cricket Stadium, Gros Islet, St Lucia": {
+      "matches": 2,
+      "avg_score": 160.0,
+      "bat_first_win_pct": 0.0
+    },
+    "De Zoysa Stadium, Moratuwa": {
+      "matches": 2,
+      "avg_score": 196.0,
+      "bat_first_win_pct": 50.0
+    },
+    "Thurstan College Ground, Colombo": {
+      "matches": 2,
+      "avg_score": 264.5,
+      "bat_first_win_pct": 100.0
+    },
+    "Surrey Village, Maggona": {
+      "matches": 2,
+      "avg_score": 239.5,
+      "bat_first_win_pct": 100.0
+    },
+    "Panadura Esplanade": {
+      "matches": 2,
+      "avg_score": 202.0,
+      "bat_first_win_pct": 50.0
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "total_matches_analyzed": 1761,
+  "total_players_indexed": 400,
+  "female_matches_count": 92,
+  "male_matches_count": 203,
+  "t20_avg_runs": 147.5,
+  "odi_avg_runs": 241.0,
+  "highest_rated_teams": [
+    {
+      "team": "Kenya",
+      "power": 97.5,
+      "matches": 7,
+      "win_rate": 100.0,
+      "batting_rr": 10.13,
+      "bowling_rr": 6.84,
+      "nrr": 3.29
+    },
+    {
+      "team": "Croatia",
+      "power": 95.1,
+      "matches": 3,
+      "win_rate": 100.0,
+      "batting_rr": 6.28,
+      "bowling_rr": 4.23,
+      "nrr": 2.06
+    },
+    {
+      "team": "South Africa",
+      "power": 95.0,
+      "matches": 12,
+      "win_rate": 91.7,
+      "batting_rr": 8.63,
+      "bowling_rr": 5.96,
+      "nrr": 2.66
+    },
+    {
+      "team": "England",
+      "power": 94.2,
+      "matches": 8,
+      "win_rate": 100.0,
+      "batting_rr": 6.14,
+      "bowling_rr": 4.47,
+      "nrr": 1.66
+    },
+    {
+      "team": "Uganda",
+      "power": 93.1,
+      "matches": 8,
+      "win_rate": 75.0,
+      "batting_rr": 7.97,
+      "bowling_rr": 4.73,
+      "nrr": 3.24
+    },
+    {
+      "team": "Turkey",
+      "power": 93.1,
+      "matches": 4,
+      "win_rate": 100.0,
+      "batting_rr": 6.27,
+      "bowling_rr": 5.01,
+      "nrr": 1.26
+    },
+    {
+      "team": "India",
+      "power": 92.2,
+      "matches": 7,
+      "win_rate": 85.7,
+      "batting_rr": 4.92,
+      "bowling_rr": 2.88,
+      "nrr": 2.04
+    },
+    {
+      "team": "The Blaze",
+      "power": 91.3,
+      "matches": 5,
+      "win_rate": 80.0,
+      "batting_rr": 5.91,
+      "bowling_rr": 3.77,
+      "nrr": 2.14
+    },
+    {
+      "team": "Isle of Man",
+      "power": 91.0,
+      "matches": 5,
+      "win_rate": 80.0,
+      "batting_rr": 6.93,
+      "bowling_rr": 4.94,
+      "nrr": 2.0
+    },
+    {
+      "team": "Portugal",
+      "power": 90.3,
+      "matches": 8,
+      "win_rate": 75.0,
+      "batting_rr": 7.86,
+      "bowling_rr": 5.75,
+      "nrr": 2.11
+    },
+    {
+      "team": "Nottinghamshire",
+      "power": 89.6,
+      "matches": 4,
+      "win_rate": 50.0,
+      "batting_rr": 3.84,
+      "bowling_rr": 0.0,
+      "nrr": 3.84
+    },
+    {
+      "team": "Sinhalese Sports Club",
+      "power": 87.1,
+      "matches": 14,
+      "win_rate": 64.3,
+      "batting_rr": 7.77,
+      "bowling_rr": 6.09,
+      "nrr": 1.68
+    },
+    {
+      "team": "Gloucestershire",
+      "power": 86.9,
+      "matches": 4,
+      "win_rate": 50.0,
+      "batting_rr": 2.78,
+      "bowling_rr": 0.0,
+      "nrr": 2.78
+    },
+    {
+      "team": "Austria",
+      "power": 86.8,
+      "matches": 4,
+      "win_rate": 75.0,
+      "batting_rr": 4.78,
+      "bowling_rr": 4.04,
+      "nrr": 0.73
+    },
+    {
+      "team": "Colombo Cricket Club",
+      "power": 86.7,
+      "matches": 12,
+      "win_rate": 66.7,
+      "batting_rr": 7.31,
+      "bowling_rr": 5.96,
+      "nrr": 1.35
+    }
+  ]
+}

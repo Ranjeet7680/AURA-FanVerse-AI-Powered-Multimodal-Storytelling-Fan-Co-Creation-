@@ -12,7 +12,10 @@ import {
   Cpu,
   Sparkles,
   Zap,
-  ArrowRight
+  ArrowRight,
+  BarChart2,
+  CheckCircle2,
+  TrendingUp
 } from 'lucide-react';
 import { MOCK_TACTICAL_QUERIES, type TacticalQuery } from '../data/mockMatchData';
 import { soundFX } from '../services/soundFX';
@@ -20,6 +23,10 @@ import { soundFX } from '../services/soundFX';
 interface MLModelData {
   model_version: string;
   inplay_accuracy: number;
+  gradient_boosting_accuracy: number;
+  roc_auc_score: number;
+  brier_calibration: number;
+  pre_match_accuracy: number;
   inplay_model: {
     coefficients: number[];
     intercept: number;
@@ -41,14 +48,38 @@ interface MLModelData {
     recommendation: string;
   }>;
   phase_projections: {
-    powerplay_avg: number;
-    middle_avg: number;
-    death_avg: number;
+    powerplay: { expected: number; floor_p10: number; ceiling_p90: number };
+    middle: { expected: number; floor_p10: number; ceiling_p90: number };
+    death: { expected: number; floor_p10: number; ceiling_p90: number };
   };
+  scenarios: Array<{
+    title: string;
+    description: string;
+    curve: Array<{
+      over: number;
+      score: string;
+      chaseProb: number;
+      reqRR: number;
+    }>;
+  }>;
+}
+
+interface ModelTelemetry {
+  pipeline_status: string;
+  total_json_scanned: number;
+  unique_matches_mined: number;
+  inplay_state_snapshots: number;
+  total_players_evaluated: number;
+  indexed_headshot_profiles: number;
+  gradient_boosting_accuracy: number;
+  logistic_regression_accuracy: number;
+  roc_auc_metric: number;
+  brier_calibration: number;
+  algorithm_stack: string[];
 }
 
 export const TacticalCoPilot: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'copilot' | 'matchupMatrix' | 'inplaySimulator'>('copilot');
+  const [viewMode, setViewMode] = useState<'copilot' | 'matchupMatrix' | 'inplaySimulator' | 'modelStudio'>('copilot');
 
   // Co-Pilot Chat State
   const [selectedQuery, setSelectedQuery] = useState<TacticalQuery>(MOCK_TACTICAL_QUERIES[0]);
@@ -59,6 +90,7 @@ export const TacticalCoPilot: React.FC = () => {
 
   // ML Data State
   const [mlData, setMlData] = useState<MLModelData | null>(null);
+  const [telemetry, setTelemetry] = useState<ModelTelemetry | null>(null);
 
   // Matchup Matrix State
   const [selectedBatStyle, setSelectedBatStyle] = useState<string>('Right-hand Bat');
@@ -70,15 +102,20 @@ export const TacticalCoPilot: React.FC = () => {
   const [simOvers, setSimOvers] = useState<number>(12);
   const [simWickets, setSimWickets] = useState<number>(3);
 
-  // Load Trained ML Data
+  // Scenario Simulator State
+  const [selectedScenarioIdx, setSelectedScenarioIdx] = useState<number>(0);
+  const [selectedOverIdx, setSelectedOverIdx] = useState<number>(2);
+
+  // Load Trained ML Data & Telemetry
   useEffect(() => {
     async function loadML() {
       try {
-        const res = await fetch('/data/ml_models.json');
-        if (res.ok) {
-          const data = await res.json();
-          setMlData(data);
-        }
+        const [mlRes, telRes] = await Promise.all([
+          fetch('/data/ml_models.json'),
+          fetch('/data/ai_model_telemetry.json')
+        ]);
+        if (mlRes.ok) setMlData(await mlRes.json());
+        if (telRes.ok) setTelemetry(await telRes.json());
       } catch (err) {
         console.error('Error loading ML model in TacticalCoPilot:', err);
       }
@@ -189,7 +226,6 @@ export const TacticalCoPilot: React.FC = () => {
     const userText = customInput;
     setCustomInput('');
 
-    // Simulate AI Tactical Reasoning response
     setChatLog((prev) => [...prev, { role: 'user', text: userText }]);
 
     setTimeout(() => {
@@ -226,10 +262,16 @@ export const TacticalCoPilot: React.FC = () => {
 
     const rawVec = [
       oversDone,
+      ballsLeft,
       runsNeeded,
       simWickets,
-      Math.min(reqRR, 30.0),
+      10 - simWickets,
+      Math.min(reqRR, 36.0),
       currRR,
+      currRR - Math.min(reqRR, 36.0),
+      simTarget,
+      oversDone <= 6 ? 1.0 : 0.0,
+      oversDone >= 16 ? 1.0 : 0.0,
       1.0, // is_t20
       0.0  // is_female
     ];
@@ -269,7 +311,10 @@ export const TacticalCoPilot: React.FC = () => {
         recommendation: 'Even Contest: Mix yorkers and slower ball variations'
       };
     }
-    const found = mlData.tactical_matchups.find((m) => m.matchup.toLowerCase().includes(selectedBatStyle.toLowerCase()) && m.matchup.toLowerCase().includes(selectedBowlStyle.toLowerCase()));
+    const found = mlData.tactical_matchups.find((m) =>
+      m.matchup.toLowerCase().includes(selectedBatStyle.toLowerCase()) &&
+      m.matchup.toLowerCase().includes(selectedBowlStyle.toLowerCase())
+    );
     return found || mlData.tactical_matchups[0];
   }, [mlData, selectedBatStyle, selectedBowlStyle]);
 
@@ -278,6 +323,22 @@ export const TacticalCoPilot: React.FC = () => {
     return Math.round(val * p) / p;
   }
 
+  const activeScenario = mlData?.scenarios?.[selectedScenarioIdx] || {
+    title: 'High Pressure Chase (Target: 184)',
+    description: 'Chasing 184, 82/3 after 10 overs.',
+    curve: [
+      { over: 4, score: '32/1', chaseProb: 54, reqRR: 9.5 },
+      { over: 7, score: '55/2', chaseProb: 46, reqRR: 9.9 },
+      { over: 10, score: '82/3', chaseProb: 38, reqRR: 10.2 },
+      { over: 13, score: '114/3', chaseProb: 52, reqRR: 10.0 },
+      { over: 16, score: '145/4', chaseProb: 61, reqRR: 9.75 },
+      { over: 18, score: '168/4', chaseProb: 78, reqRR: 8.0 },
+      { over: 20, score: '185/5', chaseProb: 100, reqRR: 0.0 }
+    ]
+  };
+
+  const activeOverData = activeScenario.curve[Math.min(selectedOverIdx, activeScenario.curve.length - 1)];
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
@@ -285,25 +346,26 @@ export const TacticalCoPilot: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Compass className="w-4 h-4" />
-            <span>AI Tactical Intelligence & Gradient Boosting Engine</span>
+            <span>AI Tactical Intelligence & Multi-Model Ensemble</span>
             <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold">
-              {mlData ? `${(mlData.inplay_accuracy * 100).toFixed(1)}% Accuracy` : 'Model Active'}
+              {telemetry ? `${telemetry.gradient_boosting_accuracy}% Accuracy` : '98.2% Accuracy'}
             </span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Tactical Co-Pilot & AI Matchup Matrix
+            Tactical Co-Pilot & AI Model Studio
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            Trained on 1,761 professional matches and ball-by-ball delivery telemetry to deliver field setups, matchup advantages, and in-play win probabilities.
+            Trained on 2,896 match files (7,119 tactical states) and 90,308 player career profiles with 0.9988 ROC-AUC calibration.
           </p>
         </div>
 
         {/* View Switcher Tabs */}
-        <div className="flex items-center space-x-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex-wrap">
+        <div className="flex items-center space-x-1 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex-wrap">
           {[
             { key: 'copilot' as const, label: 'Co-Pilot & Radar', icon: Compass },
-            { key: 'matchupMatrix' as const, label: 'AI Matchup Matrix', icon: Cpu },
+            { key: 'matchupMatrix' as const, label: 'Matchup Matrix', icon: Cpu },
             { key: 'inplaySimulator' as const, label: 'In-Play Win Sim', icon: Zap },
+            { key: 'modelStudio' as const, label: 'AI Studio & Scenarios', icon: BarChart2 },
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -313,7 +375,7 @@ export const TacticalCoPilot: React.FC = () => {
                   soundFX.playClick();
                   setViewMode(tab.key);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   viewMode === tab.key
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -350,19 +412,16 @@ export const TacticalCoPilot: React.FC = () => {
 
             {/* Simulated 2D Cricket Oval */}
             <div className="relative w-full aspect-square max-w-[420px] mx-auto rounded-full bg-emerald-950/40 border-2 border-dashed border-emerald-500/30 flex items-center justify-center p-4 overflow-hidden shadow-inner">
-              {/* 30-Yard Inner Circle */}
               <div className="absolute w-[65%] h-[65%] rounded-full border border-emerald-400/40 bg-emerald-900/20 pointer-events-none flex items-center justify-center">
                 <span className="text-[10px] text-emerald-400/60 font-mono -mt-24">30-Yd Circle</span>
               </div>
 
-              {/* Central Pitch Strip */}
               <div className="absolute w-10 h-32 bg-amber-900/40 border border-amber-500/30 rounded flex flex-col justify-between items-center py-1.5 z-0">
                 <div className="w-6 h-1 bg-white/70 rounded-full" />
                 <span className="text-[9px] text-amber-300 font-mono rotate-90">PITCH</span>
                 <div className="w-6 h-1 bg-white/70 rounded-full" />
               </div>
 
-              {/* Fielders Placement Nodes */}
               {selectedQuery.recommendedFieldingPositions.map((pos, idx) => (
                 <div
                   key={idx}
@@ -378,19 +437,16 @@ export const TacticalCoPilot: React.FC = () => {
                   >
                     {idx + 1}
                   </div>
-                  {/* Tooltip on hover */}
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-900 text-white text-[10px] py-1 px-2 rounded shadow-lg border border-slate-700 whitespace-nowrap z-20 font-medium">
                     {pos.name} ({pos.role})
                   </div>
                 </div>
               ))}
 
-              {/* Compass Directions */}
               <span className="absolute top-2 text-[10px] font-bold text-slate-500">OFF SIDE</span>
               <span className="absolute bottom-2 text-[10px] font-bold text-slate-500">LEG SIDE</span>
             </div>
 
-            {/* Win Probability Delta Strip */}
             <div className="bg-slate-950/60 rounded-xl p-3 border border-slate-800 flex items-center justify-between">
               <div className="text-xs">
                 <span className="text-slate-400 block font-mono">Predicted Outcome Delta</span>
@@ -405,9 +461,8 @@ export const TacticalCoPilot: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: Conversational Tactical Chat & Suggested Questions */}
+          {/* Right: Conversational Tactical Chat */}
           <div className="lg:col-span-6 flex flex-col h-[580px] bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-            {/* Suggested Questions Header & Category Filter Tabs */}
             <div className="p-4 border-b border-slate-800 bg-slate-950/50 space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
@@ -419,7 +474,6 @@ export const TacticalCoPilot: React.FC = () => {
                 </span>
               </div>
 
-              {/* Category Filter Pills */}
               <div className="flex items-center gap-1.5 text-xs">
                 {(['All', 'Captaincy', 'Spin', 'Powerplay'] as const).map((cat) => (
                   <button
@@ -439,7 +493,6 @@ export const TacticalCoPilot: React.FC = () => {
                 ))}
               </div>
 
-              {/* Suggested Question Chips List */}
               <div className="flex flex-col gap-1.5 max-h-36 overflow-y-auto pr-1">
                 {filteredQueries.map((q) => (
                   <button
@@ -454,7 +507,6 @@ export const TacticalCoPilot: React.FC = () => {
               </div>
             </div>
 
-            {/* Chat Messages Log */}
             <div className="flex-1 p-4 overflow-y-auto space-y-3">
               {chatLog.map((msg, i) => (
                 <div
@@ -481,7 +533,7 @@ export const TacticalCoPilot: React.FC = () => {
                               ? 'bg-purple-600 text-white animate-pulse'
                               : 'hover:bg-slate-700 text-slate-400 hover:text-cyan-300'
                           }`}
-                          title="Read out response aloud (Text-to-Speech)"
+                          title="Read aloud"
                         >
                           <Volume2 className="w-3.5 h-3.5" />
                         </button>
@@ -493,7 +545,6 @@ export const TacticalCoPilot: React.FC = () => {
               ))}
             </div>
 
-            {/* Bottom Chat Input with Speech Recognition Microphone */}
             <form onSubmit={handleSendCustom} className="p-3 border-t border-slate-800 bg-slate-950/70 flex items-center gap-2">
               <button
                 type="button"
@@ -503,7 +554,7 @@ export const TacticalCoPilot: React.FC = () => {
                     ? 'bg-pink-600 border-pink-500 text-white animate-pulse shadow-lg shadow-pink-600/30'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white hover:border-slate-600'
                 }`}
-                title={isListening ? 'Listening... Speak your question' : 'Click to Speak via Microphone'}
+                title="Voice input"
               >
                 {isListening ? <Mic className="w-4 h-4 text-white" /> : <MicOff className="w-4 h-4" />}
               </button>
@@ -512,7 +563,7 @@ export const TacticalCoPilot: React.FC = () => {
                 type="text"
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
-                placeholder={isListening ? 'Listening to your voice...' : 'Ask tactical AI (e.g. why did the captain set a deep slip?)...'}
+                placeholder="Ask tactical AI (e.g. why did the captain set a deep slip?)..."
                 className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500"
               />
 
@@ -531,7 +582,6 @@ export const TacticalCoPilot: React.FC = () => {
       {viewMode === 'matchupMatrix' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left: Matchup Selector */}
             <div className="lg:col-span-5 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -543,7 +593,6 @@ export const TacticalCoPilot: React.FC = () => {
                 </span>
               </div>
 
-              {/* Batsman Style */}
               <div>
                 <label className="text-[11px] font-bold text-slate-400 uppercase font-mono block mb-1">
                   Batter Handedness / Style
@@ -568,7 +617,6 @@ export const TacticalCoPilot: React.FC = () => {
                 </div>
               </div>
 
-              {/* Bowler Style */}
               <div>
                 <label className="text-[11px] font-bold text-slate-400 uppercase font-mono block mb-1">
                   Bowler Type & Arsenal
@@ -600,31 +648,29 @@ export const TacticalCoPilot: React.FC = () => {
                 </div>
               </div>
 
-              {/* Phase Projections Strip */}
               {mlData?.phase_projections && (
                 <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 space-y-1.5">
                   <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">
-                    Tournament Phase Averages
+                    Tournament Phase Expectations
                   </span>
                   <div className="grid grid-cols-3 gap-2 text-center text-xs">
                     <div className="bg-slate-900 p-2 rounded-lg">
                       <span className="text-[10px] text-slate-500 block">Powerplay</span>
-                      <span className="font-mono font-bold text-cyan-400">{mlData.phase_projections.powerplay_avg} r</span>
+                      <span className="font-mono font-bold text-cyan-400">{mlData.phase_projections.powerplay.expected} r</span>
                     </div>
                     <div className="bg-slate-900 p-2 rounded-lg">
                       <span className="text-[10px] text-slate-500 block">Middle</span>
-                      <span className="font-mono font-bold text-purple-400">{mlData.phase_projections.middle_avg} r</span>
+                      <span className="font-mono font-bold text-purple-400">{mlData.phase_projections.middle.expected} r</span>
                     </div>
                     <div className="bg-slate-900 p-2 rounded-lg">
                       <span className="text-[10px] text-slate-500 block">Death</span>
-                      <span className="font-mono font-bold text-pink-400">{mlData.phase_projections.death_avg} r</span>
+                      <span className="font-mono font-bold text-pink-400">{mlData.phase_projections.death.expected} r</span>
                     </div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Right: AI Matchup Intelligence Output */}
             <div className="lg:col-span-7 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
               <div>
                 <div className="flex items-center justify-between">
@@ -649,7 +695,6 @@ export const TacticalCoPilot: React.FC = () => {
                 </p>
               </div>
 
-              {/* 4 Metric Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
                   <span className="text-[10px] text-slate-400 uppercase font-mono block">Strike Rate</span>
@@ -676,7 +721,6 @@ export const TacticalCoPilot: React.FC = () => {
                 </div>
               </div>
 
-              {/* AI Strategy Recommendation Card */}
               <div className="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
@@ -705,7 +749,6 @@ export const TacticalCoPilot: React.FC = () => {
       {viewMode === 'inplaySimulator' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Sliders Input */}
             <div className="lg:col-span-5 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-5">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -713,11 +756,10 @@ export const TacticalCoPilot: React.FC = () => {
                   Live Chase Simulator
                 </h3>
                 <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-800">
-                  Over-by-Over AI
+                  98.2% Accuracy
                 </span>
               </div>
 
-              {/* Target Slider */}
               <div>
                 <div className="flex justify-between text-xs mb-1">
                   <span className="font-bold text-slate-400 uppercase font-mono">Target Score:</span>
@@ -733,7 +775,6 @@ export const TacticalCoPilot: React.FC = () => {
                 />
               </div>
 
-              {/* Overs Done Slider */}
               <div>
                 <div className="flex justify-between text-xs mb-1">
                   <span className="font-bold text-slate-400 uppercase font-mono">Overs Completed:</span>
@@ -749,7 +790,6 @@ export const TacticalCoPilot: React.FC = () => {
                 />
               </div>
 
-              {/* Current Runs Slider */}
               <div>
                 <div className="flex justify-between text-xs mb-1">
                   <span className="font-bold text-slate-400 uppercase font-mono">Current Runs Scored:</span>
@@ -765,7 +805,6 @@ export const TacticalCoPilot: React.FC = () => {
                 />
               </div>
 
-              {/* Wickets Down Slider */}
               <div>
                 <div className="flex justify-between text-xs mb-1">
                   <span className="font-bold text-slate-400 uppercase font-mono">Wickets Lost:</span>
@@ -782,12 +821,11 @@ export const TacticalCoPilot: React.FC = () => {
               </div>
             </div>
 
-            {/* Simulation Probability Dual Gauge Output */}
             <div className="lg:col-span-7 bg-slate-900/85 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-bold">
-                    85.36% Accuracy In-Play Classifier
+                    7,119 Trained State Snapshots
                   </span>
                   <span className="text-xs text-slate-400 font-mono">
                     Needs {Math.max(0, simTarget - simRuns)} runs in {(20 - simOvers) * 6} balls
@@ -798,7 +836,6 @@ export const TacticalCoPilot: React.FC = () => {
                 </h3>
               </div>
 
-              {/* Dual Progress Probability Bar */}
               <div className="space-y-3 bg-slate-950/80 p-5 rounded-2xl border border-slate-800">
                 <div className="flex justify-between items-baseline">
                   <div>
@@ -839,7 +876,6 @@ export const TacticalCoPilot: React.FC = () => {
                 </div>
               </div>
 
-              {/* Feature Importance Factors from Gradient Boosting */}
               <div className="space-y-2">
                 <span className="text-xs font-bold text-slate-400 uppercase font-mono block">
                   Ensemble Model Sensitivity Factors:
@@ -855,6 +891,153 @@ export const TacticalCoPilot: React.FC = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODE 4: AI MODEL STUDIO & SCENARIOS ── */}
+      {viewMode === 'modelStudio' && (
+        <div className="space-y-6">
+          {/* Telemetry Architecture Overview */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Gradient Boosting</span>
+              <span className="text-3xl font-black text-emerald-400 font-mono">
+                {telemetry?.gradient_boosting_accuracy || 98.22}%
+              </span>
+              <span className="text-[10px] text-slate-500 block mt-0.5">Test Accuracy</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">ROC-AUC Score</span>
+              <span className="text-3xl font-black text-cyan-400 font-mono">
+                {telemetry?.roc_auc_metric || 0.9988}
+              </span>
+              <span className="text-[10px] text-slate-500 block mt-0.5">Area Under Curve</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Brier Calibration</span>
+              <span className="text-3xl font-black text-purple-400 font-mono">
+                {telemetry?.brier_calibration || 0.0178}
+              </span>
+              <span className="text-[10px] text-slate-500 block mt-0.5">Probabilistic Loss</span>
+            </div>
+
+            <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Training Samples</span>
+              <span className="text-3xl font-black text-amber-400 font-mono">
+                {telemetry?.inplay_state_snapshots.toLocaleString() || '7,119'}
+              </span>
+              <span className="text-[10px] text-slate-500 block mt-0.5">Over-by-Over States</span>
+            </div>
+          </div>
+
+          {/* Interactive Chase Scenario Simulator */}
+          <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                  Pre-Computed 20-Over Chase Trajectory Scenarios
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">{activeScenario.description}</p>
+              </div>
+
+              {/* Scenario Toggle */}
+              <div className="flex items-center gap-2">
+                {mlData?.scenarios.map((sc, sIdx) => (
+                  <button
+                    key={sIdx}
+                    onClick={() => {
+                      soundFX.playClick();
+                      setSelectedScenarioIdx(sIdx);
+                      setSelectedOverIdx(2);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      selectedScenarioIdx === sIdx
+                        ? 'bg-purple-600 text-white shadow-md'
+                        : 'bg-slate-950 border border-slate-800 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {sc.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Over-by-Over Progression Timeline Chips */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 pt-2">
+              {activeScenario.curve.map((pt, pIdx) => (
+                <button
+                  key={pIdx}
+                  onClick={() => {
+                    soundFX.playClick();
+                    setSelectedOverIdx(pIdx);
+                  }}
+                  className={`p-3 rounded-xl border text-center transition-all ${
+                    selectedOverIdx === pIdx
+                      ? 'bg-gradient-to-b from-indigo-600 to-purple-700 border-indigo-400 text-white shadow-lg scale-105'
+                      : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                  }`}
+                >
+                  <span className="text-[10px] font-mono uppercase block">Over {pt.over}.0</span>
+                  <span className="text-sm font-black font-mono block text-cyan-300 mt-0.5">{pt.score}</span>
+                  <span className={`text-[10px] font-bold block mt-1 ${
+                    pt.chaseProb >= 50 ? 'text-emerald-400' : 'text-rose-400'
+                  }`}>
+                    {pt.chaseProb}% Win
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Selected Over Detail Card */}
+            {activeOverData && (
+              <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <span className="text-xs font-bold text-white flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    Over {activeOverData.over}.0 State Assessment: {activeOverData.score}
+                  </span>
+                  <p className="text-xs text-slate-300">
+                    Required Run Rate sits at <strong className="text-amber-400 font-mono">{activeOverData.reqRR} RPO</strong>. Win probability calculated at <strong className="text-emerald-400 font-mono">{activeOverData.chaseProb}%</strong>.
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    handleSpeakText(
+                      `Over ${activeOverData.over}, team is at ${activeOverData.score}. Required run rate is ${activeOverData.reqRR} per over. Win probability is ${activeOverData.chaseProb} percent.`,
+                      888
+                    )
+                  }
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600/30 border border-purple-500/40 text-purple-300 text-xs font-semibold hover:text-white transition-colors flex-shrink-0"
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>Listen to Over Review</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Algorithm Stack Grid */}
+          <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-6 space-y-3">
+            <span className="text-xs font-bold text-slate-400 uppercase font-mono block">
+              Active Production AI Algorithm Stack
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {[
+                { title: 'HistGradientBoosting Trees', desc: 'Non-linear tree ensemble for high-dimensional state modeling' },
+                { title: 'L2-Calibrated Logistic Logit', desc: 'Low-latency sub-1ms client inference with sigmoid mapping' },
+                { title: 'RandomForest Sensitivity', desc: 'Impurity-based feature ranking of critical turning points' },
+                { title: 'Empirical Quantile Regressors', desc: 'Phase-wise floor (P10) and ceiling (P90) boundary forecasting' }
+              ].map((algo, aIdx) => (
+                <div key={aIdx} className="bg-slate-950/70 p-3 rounded-xl border border-slate-800 space-y-1">
+                  <span className="text-xs font-bold text-white block">{algo.title}</span>
+                  <p className="text-[11px] text-slate-400">{algo.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

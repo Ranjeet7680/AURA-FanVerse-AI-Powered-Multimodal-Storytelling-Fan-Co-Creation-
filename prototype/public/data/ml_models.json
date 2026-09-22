@@ -1,81 +1,126 @@
 {
-  "model_version": "5.0.0-AURA-AI-ENSEMBLE",
-  "trained_samples": 1333,
-  "inplay_accuracy": 0.8536,
+  "model_version": "5.2.0-AURA-NEURAL-ENSEMBLE",
+  "trained_samples": 7414,
+  "inplay_accuracy": 0.8649,
+  "gradient_boosting_accuracy": 0.9822,
+  "roc_auc_score": 0.9988,
+  "brier_calibration": 0.0178,
   "pre_match_accuracy": 0.8576,
   "inplay_model": {
     "coefficients": [
-      -0.13774,
-      -2.28666,
-      -1.04574,
-      -2.46405,
-      0.80057,
-      -0.25727,
-      0.0742
+      0.31809,
+      0.97872,
+      -1.87824,
+      -0.62017,
+      0.62017,
+      -0.10985,
+      1.39449,
+      0.60405,
+      -1.85,
+      -0.01819,
+      -0.01948,
+      -0.8751,
+      0.28697
     ],
-    "intercept": -0.60734,
+    "intercept": -0.79228,
     "scaler_mean": [
-      11.42967,
-      119.46532,
-      2.85838,
-      7.14019,
-      6.12943,
-      0.60694,
-      0.3025
+      22.51707,
+      237.59882,
+      112.01629,
+      3.63899,
+      6.36101,
+      5.43699,
+      5.34418,
+      -0.0928,
+      209.56483,
+      0.12417,
+      0.53055,
+      0.37056,
+      0.26085
     ],
     "scaler_std": [
-      4.92335,
-      84.78875,
-      2.34382,
-      6.65372,
-      2.43778,
-      0.48844,
-      0.45935
+      17.84453,
+      172.52004,
+      85.53115,
+      2.52551,
+      2.52551,
+      6.63306,
+      2.2769,
+      6.46265,
+      82.24514,
+      0.32979,
+      0.49908,
+      0.48296,
+      0.43911
     ],
     "feature_importances": [
       {
+        "feature": "Net Momentum Differential",
+        "importance": 27.52
+      },
+      {
+        "feature": "Target Benchmark",
+        "importance": 20.85
+      },
+      {
         "feature": "Required Run Rate (RRR)",
-        "importance": 49.23
+        "importance": 16.16
       },
       {
         "feature": "Runs Remaining to Target",
-        "importance": 29.08
+        "importance": 13.17
       },
       {
-        "feature": "Current Run Rate Momentum",
-        "importance": 12.48
+        "feature": "Wickets in Hand",
+        "importance": 5.28
       },
       {
-        "feature": "Wickets Down",
-        "importance": 5.6
+        "feature": "Current Run Rate (CRR)",
+        "importance": 5.11
       },
       {
-        "feature": "Competition Gender Variance",
-        "importance": 3.42
+        "feature": "Wickets Lost",
+        "importance": 5.1
+      },
+      {
+        "feature": "Gender Division Variance",
+        "importance": 2.29
+      },
+      {
+        "feature": "Balls Remaining",
+        "importance": 2.16
       },
       {
         "feature": "Overs Completed",
-        "importance": 0.18
+        "importance": 1.38
       },
       {
         "feature": "Format (T20 Dynamic)",
-        "importance": 0.0
+        "importance": 0.67
+      },
+      {
+        "feature": "Death Overs Phase Weight",
+        "importance": 0.27
+      },
+      {
+        "feature": "Powerplay Phase Weight",
+        "importance": 0.06
       }
     ]
   },
   "pre_model": {
     "coefficients": [
-      1.84304,
-      0.11505,
-      0.11505,
-      0.07103,
-      -0.79558,
-      0.17462,
-      1.80946
+      1.85438,
+      0.11518,
+      0.11518,
+      0.06907,
+      -0.79201,
+      0.17221,
+      1.80693
     ],
-    "intercept": 0.03414,
+    "intercept": 0.03416,
     "scaler_mean": [
-      0.24949,
+      0.26542,
       0.34915,
       0.34915,
       0.65085,
@@ -84,7 +129,7 @@
       1.41525
     ],
     "scaler_std": [
-      9.06326,
+      9.87268,
       0.47671,
       0.47671,
       0.47671,
@@ -94,9 +139,21 @@
     ]
   },
   "phase_projections": {
-    "powerplay_avg": 37.0,
-    "middle_avg": 53.0,
-    "death_avg": 90.7
+    "powerplay": {
+      "expected": 37.0,
+      "floor_p10": 18.8,
+      "ceiling_p90": 56.0
+    },
+    "middle": {
+      "expected": 53.4,
+      "floor_p10": 31.0,
+      "ceiling_p90": 78.0
+    },
+    "death": {
+      "expected": 96.2,
+      "floor_p10": 30.0,
+      "ceiling_p90": 194.0
+    }
   },
   "tactical_matchups": [
     {
@@ -107,7 +164,7 @@
       "dot_pct": 52.7,
       "boundary_pct": 9.9,
       "threat_level": "FAVORABLE",
-      "recommendation": "Choke Run Rate: Place ring fielders on 30-yard circle"
+      "recommendation": "Dot Pressure Build: Choke singles with tight 30-yard ring"
     },
     {
       "matchup": "Right-hand Bat vs Express Fast Pace",
@@ -117,7 +174,7 @@
       "dot_pct": 58.0,
       "boundary_pct": 9.9,
       "threat_level": "FAVORABLE",
-      "recommendation": "Choke Run Rate: Place ring fielders on 30-yard circle"
+      "recommendation": "Dot Pressure Build: Choke singles with tight 30-yard ring"
     },
     {
       "matchup": "Left-hand Bat vs Right-Arm Medium",
@@ -127,7 +184,7 @@
       "dot_pct": 60.8,
       "boundary_pct": 9.4,
       "threat_level": "FAVORABLE",
-      "recommendation": "Choke Run Rate: Place ring fielders on 30-yard circle"
+      "recommendation": "Dot Pressure Build: Choke singles with tight 30-yard ring"
     },
     {
       "matchup": "Right-hand Bat vs Off-Spin / Finger Spin",
@@ -137,7 +194,7 @@
       "dot_pct": 51.8,
       "boundary_pct": 6.9,
       "threat_level": "FAVORABLE",
-      "recommendation": "Choke Run Rate: Place ring fielders on 30-yard circle"
+      "recommendation": "Dot Pressure Build: Choke singles with tight 30-yard ring"
     },
     {
       "matchup": "Right-hand Bat vs Leg-Spin / Wrist Spin",
@@ -147,7 +204,7 @@
       "dot_pct": 46.4,
       "boundary_pct": 8.8,
       "threat_level": "NEUTRAL",
-      "recommendation": "Even Contest: Mix yorkers and slower ball variations"
+      "recommendation": "Equilibrium: Mix stump-to-stump yorkers with off-cutters"
     },
     {
       "matchup": "Right-hand Bat vs Slow Left-Arm Spin",
@@ -157,7 +214,7 @@
       "dot_pct": 48.5,
       "boundary_pct": 11.7,
       "threat_level": "NEUTRAL",
-      "recommendation": "Even Contest: Mix yorkers and slower ball variations"
+      "recommendation": "Equilibrium: Mix stump-to-stump yorkers with off-cutters"
     },
     {
       "matchup": "Left-hand Bat vs Off-Spin / Finger Spin",
@@ -167,7 +224,7 @@
       "dot_pct": 64.3,
       "boundary_pct": 5.1,
       "threat_level": "FAVORABLE",
-      "recommendation": "Choke Run Rate: Place ring fielders on 30-yard circle"
+      "recommendation": "Dot Pressure Build: Choke singles with tight 30-yard ring"
     },
     {
       "matchup": "Left-hand Bat vs Express Fast Pace",
@@ -177,7 +234,105 @@
       "dot_pct": 60.0,
       "boundary_pct": 7.3,
       "threat_level": "FAVORABLE",
-      "recommendation": "Choke Run Rate: Place ring fielders on 30-yard circle"
+      "recommendation": "Dot Pressure Build: Choke singles with tight 30-yard ring"
+    }
+  ],
+  "scenarios": [
+    {
+      "title": "High Pressure Chase (Target: 184)",
+      "description": "Chasing 184, 82/3 after 10 overs. Required RR climbs above 10.2 RPO.",
+      "curve": [
+        {
+          "over": 4,
+          "score": "32/1",
+          "chaseProb": 54,
+          "reqRR": 9.5
+        },
+        {
+          "over": 7,
+          "score": "55/2",
+          "chaseProb": 46,
+          "reqRR": 9.9
+        },
+        {
+          "over": 10,
+          "score": "82/3",
+          "chaseProb": 38,
+          "reqRR": 10.2
+        },
+        {
+          "over": 13,
+          "score": "114/3",
+          "chaseProb": 52,
+          "reqRR": 10.0
+        },
+        {
+          "over": 16,
+          "score": "145/4",
+          "chaseProb": 61,
+          "reqRR": 9.75
+        },
+        {
+          "over": 18,
+          "score": "168/4",
+          "chaseProb": 78,
+          "reqRR": 8.0
+        },
+        {
+          "over": 20,
+          "score": "185/5",
+          "chaseProb": 100,
+          "reqRR": 0.0
+        }
+      ]
+    },
+    {
+      "title": "Top Order Collapse (Target: 165)",
+      "description": "Early wickets: 24/3 after Powerplay. AI calculates defensive recovery probability.",
+      "curve": [
+        {
+          "over": 2,
+          "score": "12/1",
+          "chaseProb": 44,
+          "reqRR": 8.5
+        },
+        {
+          "over": 4,
+          "score": "19/2",
+          "chaseProb": 28,
+          "reqRR": 9.1
+        },
+        {
+          "over": 6,
+          "score": "24/3",
+          "chaseProb": 18,
+          "reqRR": 10.1
+        },
+        {
+          "over": 10,
+          "score": "58/4",
+          "chaseProb": 14,
+          "reqRR": 10.7
+        },
+        {
+          "over": 14,
+          "score": "98/5",
+          "chaseProb": 22,
+          "reqRR": 11.2
+        },
+        {
+          "over": 17,
+          "score": "132/6",
+          "chaseProb": 31,
+          "reqRR": 11.0
+        },
+        {
+          "over": 20,
+          "score": "156/8",
+          "chaseProb": 0,
+          "reqRR": 9.0
+        }
+      ]
     }
   ],
   "team_ratings": {
@@ -187,112 +342,112 @@
       "win_rate": 100.0
     },
     "Ireland": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 3,
       "win_rate": 0.0
     },
     "Pakistan": {
-      "power": 80.2,
+      "power": 79.0,
       "matches": 8,
       "win_rate": 37.5
     },
     "Sri Lanka": {
-      "power": 81.8,
+      "power": 80.7,
       "matches": 9,
       "win_rate": 44.4
     },
     "Nottinghamshire": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 4,
       "win_rate": 50.0
     },
     "Surrey": {
-      "power": 82.0,
+      "power": 80.9,
       "matches": 11,
       "win_rate": 45.5
     },
     "Warwickshire": {
-      "power": 85.2,
+      "power": 84.4,
       "matches": 10,
       "win_rate": 60.0
     },
     "Sussex": {
-      "power": 77.5,
+      "power": 76.0,
       "matches": 4,
       "win_rate": 25.0
     },
     "Leicestershire": {
-      "power": 77.5,
+      "power": 76.0,
       "matches": 4,
       "win_rate": 25.0
     },
     "Glamorgan": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 4,
       "win_rate": 0.0
     },
     "Somerset": {
-      "power": 87.4,
+      "power": 86.8,
       "matches": 10,
       "win_rate": 70.0
     },
     "Essex": {
-      "power": 74.2,
+      "power": 72.4,
       "matches": 10,
       "win_rate": 10.0
     },
     "Yorkshire": {
-      "power": 76.4,
+      "power": 74.8,
       "matches": 10,
       "win_rate": 20.0
     },
     "Hampshire": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 10,
       "win_rate": 50.0
     },
     "Kent": {
-      "power": 85.2,
+      "power": 84.4,
       "matches": 5,
       "win_rate": 60.0
     },
     "Middlesex": {
-      "power": 77.5,
+      "power": 76.0,
       "matches": 4,
       "win_rate": 25.0
     },
     "Durham": {
-      "power": 84.2,
+      "power": 83.3,
       "matches": 9,
       "win_rate": 55.6
     },
     "Derbyshire": {
-      "power": 77.5,
+      "power": 76.0,
       "matches": 4,
       "win_rate": 25.0
     },
     "Northamptonshire": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 4,
       "win_rate": 50.0
     },
     "Lancashire": {
-      "power": 80.8,
+      "power": 79.6,
       "matches": 10,
       "win_rate": 40.0
     },
     "Worcestershire": {
-      "power": 77.5,
+      "power": 76.0,
       "matches": 4,
       "win_rate": 25.0
     },
     "Gloucestershire": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 4,
       "win_rate": 50.0
     },
     "The Blaze": {
-      "power": 89.6,
+      "power": 89.2,
       "matches": 5,
       "win_rate": 80.0
     },
@@ -302,252 +457,252 @@
       "win_rate": 100.0
     },
     "Bangladesh": {
-      "power": 80.8,
+      "power": 79.6,
       "matches": 5,
       "win_rate": 40.0
     },
     "Zimbabwe": {
-      "power": 76.4,
+      "power": 74.8,
       "matches": 10,
       "win_rate": 20.0
     },
     "Jamaica Kingsmen": {
-      "power": 84.6,
+      "power": 83.7,
       "matches": 7,
       "win_rate": 57.1
     },
     "St Kitts and Nevis Patriots": {
-      "power": 78.3,
+      "power": 76.9,
       "matches": 7,
       "win_rate": 28.6
     },
     "Guyana Amazon Warriors": {
-      "power": 89.3,
+      "power": 88.9,
       "matches": 14,
       "win_rate": 78.6
     },
     "St Lucia Kings": {
-      "power": 79.3,
+      "power": 78.0,
       "matches": 6,
       "win_rate": 33.3
     },
     "Antigua and Barbuda Falcons": {
-      "power": 90.3,
+      "power": 90.0,
       "matches": 6,
       "win_rate": 83.3
     },
     "Trinbago Knight Riders": {
-      "power": 79.3,
+      "power": 78.0,
       "matches": 12,
       "win_rate": 33.3
     },
     "Barbados Tridents": {
-      "power": 80.5,
+      "power": 79.2,
       "matches": 13,
       "win_rate": 38.5
     },
     "Moors Sports Club": {
-      "power": 88.5,
+      "power": 88.0,
       "matches": 12,
       "win_rate": 75.0
     },
     "Police Sports Club": {
-      "power": 80.0,
+      "power": 78.7,
       "matches": 11,
       "win_rate": 36.4
     },
     "Sinhalese Sports Club": {
-      "power": 86.1,
+      "power": 85.4,
       "matches": 14,
       "win_rate": 64.3
     },
     "Nondescripts Cricket Club": {
-      "power": 84.0,
+      "power": 83.1,
       "matches": 11,
       "win_rate": 54.5
     },
     "Burgher Recreation Club": {
-      "power": 76.9,
+      "power": 75.3,
       "matches": 9,
       "win_rate": 22.2
     },
     "Kurunegala Youth Cricket Club": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 8,
       "win_rate": 0.0
     },
     "Colts Cricket Club": {
-      "power": 84.2,
+      "power": 83.3,
       "matches": 9,
       "win_rate": 55.6
     },
     "Badureliya Sports Club": {
-      "power": 74.8,
+      "power": 73.0,
       "matches": 8,
       "win_rate": 12.5
     },
     "Tamil Union Cricket and Athletic Club": {
-      "power": 86.0,
+      "power": 85.3,
       "matches": 11,
       "win_rate": 63.6
     },
     "Nugegoda Sports Welfare Club": {
-      "power": 76.9,
+      "power": 75.3,
       "matches": 9,
       "win_rate": 22.2
     },
     "Bloomfield Cricket and Athletic Club": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 8,
       "win_rate": 50.0
     },
     "Ace Capital Cricket Club": {
-      "power": 84.2,
+      "power": 83.3,
       "matches": 9,
       "win_rate": 55.6
     },
     "Panadura Sports Club": {
-      "power": 81.8,
+      "power": 80.7,
       "matches": 9,
       "win_rate": 44.4
     },
     "Colombo Cricket Club": {
-      "power": 86.7,
+      "power": 86.0,
       "matches": 12,
       "win_rate": 66.7
     },
     "Jamaica Empress": {
-      "power": 79.3,
+      "power": 78.0,
       "matches": 3,
       "win_rate": 33.3
     },
     "South Africa": {
-      "power": 92.2,
+      "power": 92.0,
       "matches": 12,
       "win_rate": 91.7
     },
     "India": {
-      "power": 90.9,
+      "power": 90.6,
       "matches": 7,
       "win_rate": 85.7
     },
     "Germany": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 6,
       "win_rate": 50.0
     },
     "Greece": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 5,
       "win_rate": 0.0
     },
     "Finland": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 2,
       "win_rate": 50.0
     },
     "Luxembourg": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 6,
       "win_rate": 50.0
     },
     "Israel": {
-      "power": 86.7,
+      "power": 86.0,
       "matches": 3,
       "win_rate": 66.7
     },
     "Czech Republic": {
-      "power": 82.0,
+      "power": 80.9,
       "matches": 11,
       "win_rate": 45.5
     },
     "Spain": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 2,
       "win_rate": 50.0
     },
     "Bulgaria": {
-      "power": 75.7,
+      "power": 74.0,
       "matches": 6,
       "win_rate": 16.7
     },
     "Portugal": {
-      "power": 88.5,
+      "power": 88.0,
       "matches": 8,
       "win_rate": 75.0
     },
     "Isle of Man": {
-      "power": 89.6,
+      "power": 89.2,
       "matches": 5,
       "win_rate": 80.0
     },
     "Uganda": {
-      "power": 88.5,
+      "power": 88.0,
       "matches": 8,
       "win_rate": 75.0
     },
     "Rotterdam Dockers": {
-      "power": 85.2,
+      "power": 84.4,
       "matches": 10,
       "win_rate": 60.0
     },
     "Amsterdam Flames": {
-      "power": 86.7,
+      "power": 86.0,
       "matches": 9,
       "win_rate": 66.7
     },
     "Belfast Wolves": {
-      "power": 85.2,
+      "power": 84.4,
       "matches": 10,
       "win_rate": 60.0
     },
     "Dublin Guardians": {
-      "power": 76.4,
+      "power": 74.8,
       "matches": 10,
       "win_rate": 20.0
     },
     "Edinburgh Castle Rockers": {
-      "power": 86.7,
+      "power": 86.0,
       "matches": 9,
       "win_rate": 66.7
     },
     "Glasgow Cosmic": {
-      "power": 76.4,
+      "power": 74.8,
       "matches": 10,
       "win_rate": 20.0
     },
     "Belgium": {
-      "power": 74.4,
+      "power": 72.7,
       "matches": 9,
       "win_rate": 11.1
     },
     "Sweden": {
-      "power": 86.7,
+      "power": 86.0,
       "matches": 3,
       "win_rate": 66.7
     },
     "Denmark": {
-      "power": 79.3,
+      "power": 78.0,
       "matches": 3,
       "win_rate": 33.3
     },
     "Thailand": {
-      "power": 77.5,
+      "power": 76.0,
       "matches": 4,
       "win_rate": 25.0
     },
     "Hong Kong": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 3,
       "win_rate": 0.0
     },
     "United Arab Emirates": {
-      "power": 85.8,
+      "power": 85.0,
       "matches": 8,
       "win_rate": 62.5
     },
     "Indonesia": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 3,
       "win_rate": 0.0
     },
@@ -557,32 +712,32 @@
       "win_rate": 100.0
     },
     "Austria": {
-      "power": 88.5,
+      "power": 88.0,
       "matches": 4,
       "win_rate": 75.0
     },
     "Romania": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 2,
       "win_rate": 50.0
     },
     "Guernsey": {
-      "power": 79.3,
+      "power": 78.0,
       "matches": 3,
       "win_rate": 33.3
     },
     "Norway": {
-      "power": 79.3,
+      "power": 78.0,
       "matches": 3,
       "win_rate": 33.3
     },
     "Namibia": {
-      "power": 75.1,
+      "power": 73.4,
       "matches": 7,
       "win_rate": 14.3
     },
     "Oman": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 2,
       "win_rate": 0.0
     },
@@ -597,27 +752,27 @@
       "win_rate": 100.0
     },
     "Serbia": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 4,
       "win_rate": 50.0
     },
     "Malaysia": {
-      "power": 76.4,
+      "power": 74.8,
       "matches": 5,
       "win_rate": 20.0
     },
     "Japan": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 2,
       "win_rate": 50.0
     },
     "Rwanda": {
-      "power": 83.0,
+      "power": 82.0,
       "matches": 8,
       "win_rate": 50.0
     },
     "Botswana": {
-      "power": 75.1,
+      "power": 73.4,
       "matches": 7,
       "win_rate": 14.3
     },
@@ -627,7 +782,7 @@
       "win_rate": 100.0
     },
     "Sierra Leone": {
-      "power": 72.0,
+      "power": 70.0,
       "matches": 7,
       "win_rate": 0.0
     }

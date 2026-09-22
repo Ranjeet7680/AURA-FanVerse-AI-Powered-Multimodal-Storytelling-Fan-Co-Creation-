@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { MOCK_TACTICAL_QUERIES, type TacticalQuery } from '../data/mockMatchData';
 import { soundFX } from '../services/soundFX';
+import { useLanguage } from '../context/LanguageContext';
 
 interface MLModelData {
   model_version: string;
@@ -79,6 +80,7 @@ interface ModelTelemetry {
 }
 
 export const TacticalCoPilot: React.FC = () => {
+  const { t, getSpeechLangCode } = useLanguage();
   const [viewMode, setViewMode] = useState<'copilot' | 'matchupMatrix' | 'inplaySimulator' | 'modelStudio'>('copilot');
 
   // Co-Pilot Chat State
@@ -150,6 +152,7 @@ export const TacticalCoPilot: React.FC = () => {
       }
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = getSpeechLangCode();
       utterance.rate = 1.05;
       utterance.pitch = 1.02;
       utterance.onend = () => setSpeakingIndex(null);
@@ -180,7 +183,7 @@ export const TacticalCoPilot: React.FC = () => {
       const recognition = new SpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = 'en-US';
+      recognition.lang = getSpeechLangCode();
 
       recognition.onstart = () => {
         setIsListening(true);
@@ -346,26 +349,26 @@ export const TacticalCoPilot: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Compass className="w-4 h-4" />
-            <span>AI Tactical Intelligence & Multi-Model Ensemble</span>
+            <span>{t('tactical.badge')}</span>
             <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold">
-              {telemetry ? `${telemetry.gradient_boosting_accuracy}% Accuracy` : '98.2% Accuracy'}
+              {telemetry ? `${telemetry.gradient_boosting_accuracy}% ${t('common.accuracy', 'Accuracy')}` : `98.2% ${t('common.accuracy', 'Accuracy')}`}
             </span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Tactical Co-Pilot & AI Model Studio
+            {t('tactical.title')}
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            Trained on 2,896 match files (7,119 tactical states) and 90,308 player career profiles with 0.9988 ROC-AUC calibration.
+            {t('tactical.subtitle')}
           </p>
         </div>
 
         {/* View Switcher Tabs */}
         <div className="flex items-center space-x-1 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex-wrap">
           {[
-            { key: 'copilot' as const, label: 'Co-Pilot & Radar', icon: Compass },
-            { key: 'matchupMatrix' as const, label: 'Matchup Matrix', icon: Cpu },
-            { key: 'inplaySimulator' as const, label: 'In-Play Win Sim', icon: Zap },
-            { key: 'modelStudio' as const, label: 'AI Studio & Scenarios', icon: BarChart2 },
+            { key: 'copilot' as const, label: t('tactical.tab_copilot'), icon: Compass },
+            { key: 'matchupMatrix' as const, label: t('tactical.tab_matchup'), icon: Cpu },
+            { key: 'inplaySimulator' as const, label: t('tactical.tab_inplay'), icon: Zap },
+            { key: 'modelStudio' as const, label: t('tactical.tab_studio'), icon: BarChart2 },
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -398,7 +401,7 @@ export const TacticalCoPilot: React.FC = () => {
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
                   <Target className="w-4 h-4 text-purple-400" />
-                  Dynamic Field Placement Visualizer
+                  {t('tactical.field_radar')}
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   Bowler: <span className="text-purple-300 font-semibold">{selectedQuery.bowler}</span> vs{' '}
@@ -438,7 +441,7 @@ export const TacticalCoPilot: React.FC = () => {
                     {idx + 1}
                   </div>
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-900 text-white text-[10px] py-1 px-2 rounded shadow-lg border border-slate-700 whitespace-nowrap z-20 font-medium">
-                    {pos.name} ({pos.role})
+                    {pos.role}
                   </div>
                 </div>
               ))}
@@ -467,10 +470,10 @@ export const TacticalCoPilot: React.FC = () => {
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
                   <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
-                  <span>AI Suggested Tactical Questions ({filteredQueries.length})</span>
+                  <span>{t('tactical.suggested_questions')} ({filteredQueries.length})</span>
                 </span>
                 <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
-                  Click to Analyze
+                  {t('tactical.click_analyze')}
                 </span>
               </div>
 
@@ -563,7 +566,7 @@ export const TacticalCoPilot: React.FC = () => {
                 type="text"
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
-                placeholder="Ask tactical AI (e.g. why did the captain set a deep slip?)..."
+                placeholder={t('tactical.ask_placeholder')}
                 className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500"
               />
 
@@ -1015,7 +1018,7 @@ export const TacticalCoPilot: React.FC = () => {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600/30 border border-purple-500/40 text-purple-300 text-xs font-semibold hover:text-white transition-colors flex-shrink-0"
                 >
                   <Volume2 className="w-3.5 h-3.5" />
-                  <span>Listen to Over Review</span>
+                  <span>{t('tactical.listen_review')}</span>
                 </button>
               </div>
             )}

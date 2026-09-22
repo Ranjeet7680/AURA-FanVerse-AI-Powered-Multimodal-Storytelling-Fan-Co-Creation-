@@ -13,6 +13,7 @@ import { RLSimulator } from './components/RLSimulator';
 import { CyberSecurityCenter } from './components/CyberSecurityCenter';
 import { soundFX } from './services/soundFX';
 import { Trophy, Globe, Flame } from 'lucide-react';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 
 // Unique AI-generated aesthetic background wallpapers per page
 const PAGE_BACKGROUNDS: Record<ActiveTabType, { bgImage: string; glowFrom: string; glowTo: string }> = {
@@ -63,10 +64,10 @@ const PAGE_BACKGROUNDS: Record<ActiveTabType, { bgImage: string; glowFrom: strin
   },
 };
 
-export function App() {
+function AppContent() {
+  const { language, t } = useLanguage();
   const [showLoadingSplash, setShowLoadingSplash] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<ActiveTabType>('discover');
-  const [selectedLang, setSelectedLang] = useState<string>('en');
   const [isAuthOpen, setIsAuthOpen] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{
     name: string;
@@ -99,65 +100,52 @@ export function App() {
   const currentBg = PAGE_BACKGROUNDS[activeTab] || PAGE_BACKGROUNDS.discover;
 
   return (
-    <div className="min-h-screen bg-[#151026] text-slate-100 flex flex-col selection:bg-purple-500 selection:text-white relative overflow-x-hidden">
-      {/* Dynamic AI Background Wallpaper (Custom Per Page) */}
+    <div className="min-h-screen bg-[#090514] text-slate-100 flex flex-col font-sans selection:bg-purple-500 selection:text-white relative overflow-x-hidden">
+      {/* Dynamic Per-Page AI Generated Background Wallpaper */}
       <div
-        className="fixed inset-0 pointer-events-none transition-all duration-700 bg-cover bg-center opacity-15 mix-blend-screen"
+        className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-1000 bg-cover bg-center bg-no-repeat opacity-15"
         style={{ backgroundImage: `url(${currentBg.bgImage})` }}
       />
 
-      {/* Dynamic Ambient Color Radial Glow Orbs */}
+      {/* Cyber Glow Orbs matching page theme */}
       <div
-        className="fixed top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px] pointer-events-none transition-all duration-1000"
-        style={{ background: currentBg.glowFrom }}
+        className="fixed -top-32 -left-32 w-96 h-96 rounded-full blur-[128px] pointer-events-none z-0 transition-all duration-1000"
+        style={{ backgroundColor: currentBg.glowFrom }}
       />
       <div
-        className="fixed bottom-0 right-1/4 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none transition-all duration-1000"
-        style={{ background: currentBg.glowTo }}
+        className="fixed -bottom-32 -right-32 w-96 h-96 rounded-full blur-[128px] pointer-events-none z-0 transition-all duration-1000"
+        style={{ backgroundColor: currentBg.glowTo }}
       />
 
-      {/* Top Navigation */}
+      {/* 3D Header Console (Navbar) */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        selectedLang={selectedLang}
-        setSelectedLang={setSelectedLang}
         user={currentUser}
         onOpenAuth={() => setIsAuthOpen(true)}
       />
 
-      {/* Auth Modal (Sign In + OTP + Biometrics) */}
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-        onLoginSuccess={(user) => {
-          soundFX.playSuccessChime();
-          setCurrentUser(user);
-          setActiveTab('profile');
-        }}
-      />
-
-      {/* Live Match 3D Ribbon Sub-Bar */}
-      <div className="border-b border-purple-500/20 bg-gradient-to-r from-[#170e30]/90 via-[#100824]/90 to-[#170e30]/90 backdrop-blur-xl py-2 z-10 relative shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center space-x-3">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold shadow-[0_2px_8px_rgba(245,158,11,0.2)]">
-              <Trophy className="w-3.5 h-3.5 text-amber-400 drop-shadow animate-bounce" />
-              ICC Women's T20 World Cup Final
+      {/* Live Match Sub-Bar / Tournament Ribbon */}
+      <div className="bg-gradient-to-r from-purple-950/60 via-[#100b21]/90 to-indigo-950/60 border-b border-purple-500/20 py-2 px-4 relative z-10 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center space-x-2 text-xs text-slate-300 font-mono">
+            <span className="flex items-center space-x-1 text-emerald-400 font-semibold">
+              <Globe className="w-3.5 h-3.5" />
+              <span>{t('nav.live_mesh')}</span>
             </span>
-            <span className="text-slate-600 hidden sm:inline">•</span>
-            <span className="text-slate-300 font-mono hidden sm:inline">Dubai International Stadium</span>
-            <span className="text-slate-600 hidden sm:inline">•</span>
-            <span className="px-2.5 py-1 rounded-xl bg-pink-500/10 border border-pink-500/30 text-pink-300 font-bold flex items-center gap-1.5 shadow-[0_2px_8px_rgba(236,72,153,0.2)]">
-              <Flame className="w-3.5 h-3.5 text-pink-400 fill-pink-400 animate-pulse" />
-              8.4M Fans Synced Live
+            <span>•</span>
+            <span className="text-purple-300">IND-W vs AUS-W (Dubai)</span>
+            <span>•</span>
+            <span className="text-amber-400 flex items-center space-x-1">
+              <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+              <span>{t('nav.over_live')}</span>
             </span>
           </div>
 
-          <div className="flex items-center space-x-3 text-slate-300 font-mono text-[11px]">
-            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">
-              <Globe className="w-3.5 h-3.5 text-cyan-400" />
-              12 Regional AI Streams
+          <div className="flex items-center space-x-3 text-[11px] font-mono">
+            <span className="flex items-center space-x-1 text-cyan-300">
+              <Trophy className="w-3.5 h-3.5 text-cyan-400" />
+              <span>5 Languages Synchronized</span>
             </span>
             <span className="text-slate-600">|</span>
             <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1">
@@ -182,7 +170,7 @@ export function App() {
             }}
           />
         )}
-        {activeTab === 'reels' && <MicroNarratives selectedLang={selectedLang} />}
+        {activeTab === 'reels' && <MicroNarratives selectedLang={language} />}
         {activeTab === 'tactical' && <TacticalCoPilot />}
         {activeTab === 'stadium3d' && <CricketStadium3D />}
         {activeTab === 'analytics' && <MatchAnalytics />}
@@ -207,7 +195,27 @@ export function App() {
           </div>
         </div>
       </footer>
+
+      {/* Authentication Modal */}
+      {isAuthOpen && (
+        <AuthModal
+          isOpen={isAuthOpen}
+          onClose={() => setIsAuthOpen(false)}
+          onLoginSuccess={(user) => {
+            setCurrentUser(user);
+            setIsAuthOpen(false);
+          }}
+        />
+      )}
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 

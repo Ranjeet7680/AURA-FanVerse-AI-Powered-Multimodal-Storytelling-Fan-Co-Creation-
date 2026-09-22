@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { LIVE_OVER_METRICS } from '../data/mockMatchData';
 import { soundFX } from '../services/soundFX';
+import { useLanguage } from '../context/LanguageContext';
 
 interface AnalyticsSummary {
   total_matches_analyzed: number;
@@ -150,6 +151,7 @@ interface RecentMatch {
 }
 
 export const MatchAnalytics: React.FC = () => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'dataAnalysis' | 'mlPredictor' | 'playerDatabase' | 'matchExplorer' | 'liveTelemetry'>('dataAnalysis');
 
   // Datasets State
@@ -308,27 +310,27 @@ export const MatchAnalytics: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <TrendingUp className="w-4 h-4" />
-            <span>Big Data Cricket Analytics & Intelligence Platform</span>
+            <span>{t('analytics.badge')}</span>
             <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 rounded-full text-[10px] font-bold">
               v5.2 AI Dataset
             </span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Data Analysis, Match Statistics & ML Telemetry
+            {t('analytics.title')}
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            Grounded in 2,896 match files (7,119 over snapshots), 90,308 player career records, and 16,666 demographic profiles.
+            {t('analytics.subtitle')}
           </p>
         </div>
 
         {/* Navigation Tabs */}
         <div className="flex items-center space-x-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex-wrap">
           {[
-            { key: 'dataAnalysis' as const, label: 'Data Analysis', icon: Database },
-            { key: 'mlPredictor' as const, label: 'ML Predictor', icon: Cpu },
-            { key: 'playerDatabase' as const, label: 'Top Players (500)', icon: Users },
-            { key: 'matchExplorer' as const, label: 'Recent Matches', icon: Calendar },
-            { key: 'liveTelemetry' as const, label: 'Live Charts', icon: BarChart3 },
+            { key: 'dataAnalysis' as const, label: t('analytics.tab_data'), icon: Database },
+            { key: 'mlPredictor' as const, label: t('analytics.tab_ml'), icon: Cpu },
+            { key: 'playerDatabase' as const, label: t('analytics.tab_players'), icon: Users },
+            { key: 'matchExplorer' as const, label: t('analytics.tab_matches'), icon: Calendar },
+            { key: 'liveTelemetry' as const, label: t('analytics.tab_charts'), icon: BarChart3 },
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -358,7 +360,7 @@ export const MatchAnalytics: React.FC = () => {
           {/* Top 6 KPI Metric Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
             <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Matches Mined</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">{t('analytics.kpi_matches')}</span>
               <span className="text-2xl sm:text-3xl font-black text-cyan-400 font-mono">
                 {telemetry?.total_json_scanned.toLocaleString() || '2,896'}
               </span>
@@ -366,7 +368,7 @@ export const MatchAnalytics: React.FC = () => {
             </div>
 
             <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Tactical States</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">{t('analytics.kpi_states')}</span>
               <span className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">
                 {telemetry?.inplay_state_snapshots.toLocaleString() || '7,119'}
               </span>
@@ -374,7 +376,7 @@ export const MatchAnalytics: React.FC = () => {
             </div>
 
             <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Player Records</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">{t('analytics.kpi_players')}</span>
               <span className="text-2xl sm:text-3xl font-black text-purple-400 font-mono">
                 {telemetry?.total_players_evaluated.toLocaleString() || '90,308'}
               </span>
@@ -382,7 +384,7 @@ export const MatchAnalytics: React.FC = () => {
             </div>
 
             <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">GB Accuracy</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">{t('analytics.kpi_accuracy')}</span>
               <span className="text-2xl sm:text-3xl font-black text-amber-400 font-mono">
                 {telemetry?.gradient_boosting_accuracy || 98.22}%
               </span>
@@ -390,7 +392,7 @@ export const MatchAnalytics: React.FC = () => {
             </div>
 
             <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">T20 Avg 1st Inns</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">{t('analytics.kpi_t20_par')}</span>
               <span className="text-2xl sm:text-3xl font-black text-pink-400 font-mono">
                 {analytics?.t20_avg_runs || 147.5}
               </span>
@@ -398,7 +400,7 @@ export const MatchAnalytics: React.FC = () => {
             </div>
 
             <div className="bg-slate-900/85 border border-slate-800 rounded-2xl p-4 text-center space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">ODI Avg 1st Inns</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">{t('analytics.kpi_odi_par')}</span>
               <span className="text-2xl sm:text-3xl font-black text-teal-400 font-mono">
                 {analytics?.odi_avg_runs || 241.0}
               </span>
@@ -414,7 +416,7 @@ export const MatchAnalytics: React.FC = () => {
                 <div>
                   <h3 className="text-base font-bold text-white flex items-center gap-2">
                     <BarChart3 className="w-4 h-4 text-emerald-400" />
-                    Highest-Rated International & Franchise Teams
+                    {t('analytics.team_power_title')}
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
                     Team Power Rating vs Batting Run Rate (RPO)
@@ -453,7 +455,7 @@ export const MatchAnalytics: React.FC = () => {
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
                   <Layers className="w-4 h-4 text-purple-400" />
-                  Phase Scoring Quantiles (Floor vs Ceiling)
+                  {t('analytics.phase_quantiles_title')}
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   15th percentile floor vs 85th percentile ceiling
@@ -541,7 +543,7 @@ export const MatchAnalytics: React.FC = () => {
                 <div>
                   <h3 className="text-base font-bold text-white flex items-center gap-2">
                     <Award className="w-4 h-4 text-amber-400" />
-                    Composite Player Impact (CPI) Leaderboard (from 90,308 Career Dataset)
+                    {t('analytics.leaderboard_title')}
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
                     Multi-attribute statistical evaluation scoring runs, wickets, strike rate, and bowling economy.
@@ -748,7 +750,7 @@ export const MatchAnalytics: React.FC = () => {
                       {prediction.team1Prob}%
                     </span>
                   </div>
-                  <span className="text-xs font-mono text-slate-500 uppercase">Win Probability</span>
+                  <span className="text-xs font-mono text-slate-500 uppercase">{t('analytics.predict_win')}</span>
                   <div className="text-right">
                     <span className="text-xs text-slate-400 block">{team2}</span>
                     <span className="text-3xl font-black text-amber-400 font-mono">
@@ -788,7 +790,7 @@ export const MatchAnalytics: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by player or country..."
+                placeholder={t('analytics.search_player')}
                 className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
               />
             </div>

@@ -18,6 +18,7 @@ import {
   Layers
 } from 'lucide-react';
 import { soundFX } from '../services/soundFX';
+import { useLanguage } from '../context/LanguageContext';
 
 // ─── PROCEDURAL CANVAS TEXTURE GENERATORS ──────────────────────────────────
 function createTurfTexture(): THREE.CanvasTexture {
@@ -188,6 +189,7 @@ function createLedBoardTexture(): THREE.CanvasTexture {
 }
 
 export const CricketStadium3D: React.FC = () => {
+  const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [cameraView, setCameraView] = useState<'broadcast' | 'batsman' | 'hawkEye' | 'topDown' | 'stumpCam' | 'drone'>('broadcast');
@@ -961,14 +963,14 @@ export const CricketStadium3D: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Box className="w-4 h-4" />
-            <span>Hyper-Realistic 3D WebGL Cricket Stadium</span>
+            <span>{t('stadium.title')}</span>
             <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold animate-pulse">LIVE 60 FPS</span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Volumetric Lighting, Procedural Textures & Physics Engine
+            {t('stadium.subtitle')}
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            Featuring 4 floodlight volumetric beams, procedural mower turf, weathered clay pitch scuffs, animated LED sponsor hoardings, sight screens, and flying bails physics.
+            {t('stadium.desc')}
           </p>
         </div>
 
@@ -982,7 +984,7 @@ export const CricketStadium3D: React.FC = () => {
             className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-md"
           >
             {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white" />}
-            <span>{isPlaying ? 'Pause' : 'Play'}</span>
+            <span>{isPlaying ? t('stadium.pause') : t('stadium.play')}</span>
           </button>
           <button
             onClick={() => {
@@ -1010,12 +1012,12 @@ export const CricketStadium3D: React.FC = () => {
               Cam:
             </span>
             {[
-              { key: 'broadcast' as const, label: 'Broadcast' },
-              { key: 'batsman' as const, label: 'Batter POV' },
-              { key: 'hawkEye' as const, label: 'Hawk-Eye' },
-              { key: 'topDown' as const, label: 'Top-Down' },
-              { key: 'stumpCam' as const, label: 'Stump Cam' },
-              { key: 'drone' as const, label: 'Drone Orbit' },
+              { key: 'broadcast' as const, label: t('stadium.cam_broadcast') },
+              { key: 'batsman' as const, label: t('stadium.cam_batter') },
+              { key: 'hawkEye' as const, label: t('stadium.cam_hawkeye') },
+              { key: 'topDown' as const, label: t('stadium.cam_topdown') },
+              { key: 'stumpCam' as const, label: t('stadium.cam_stump') },
+              { key: 'drone' as const, label: t('stadium.cam_drone') },
             ].map((cam) => (
               <button
                 key={cam.key}
@@ -1047,7 +1049,7 @@ export const CricketStadium3D: React.FC = () => {
             <span className={`font-bold ${
               ballPhase === 'bowled' ? 'text-cyan-400' : ballPhase === 'hit' ? 'text-pink-400' : 'text-slate-500'
             }`}>
-              {ballPhase === 'bowled' ? 'IN FLIGHT' : ballPhase === 'hit' ? 'CONTACT MADE' : 'READY'}
+              {ballPhase === 'bowled' ? t('stadium.in_flight') : ballPhase === 'hit' ? t('stadium.contact_made') : t('stadium.ready')}
             </span>
           </div>
         </div>
@@ -1056,11 +1058,11 @@ export const CricketStadium3D: React.FC = () => {
         <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
           {/* Delivery Type */}
           <div className="flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 pointer-events-auto">
-            <span className="text-[11px] font-bold text-slate-400 uppercase font-mono px-1">Delivery:</span>
+            <span className="text-[11px] font-bold text-slate-400 uppercase font-mono px-1">{t('stadium.delivery')}</span>
             {[
-              { key: 'pace' as const, label: '142 km/h Seam' },
-              { key: 'spin' as const, label: '86 km/h Spin' },
-              { key: 'yorker' as const, label: '148 km/h Yorker' },
+              { key: 'pace' as const, label: t('stadium.del_seam') },
+              { key: 'spin' as const, label: t('stadium.del_spin') },
+              { key: 'yorker' as const, label: t('stadium.del_yorker') },
             ].map((d) => (
               <button
                 key={d.key}
@@ -1080,13 +1082,13 @@ export const CricketStadium3D: React.FC = () => {
 
           {/* Shot Selection */}
           <div className="flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 pointer-events-auto flex-wrap">
-            <span className="text-[11px] font-bold text-slate-400 uppercase font-mono px-1">Shot:</span>
+            <span className="text-[11px] font-bold text-slate-400 uppercase font-mono px-1">{t('stadium.shot')}</span>
             {[
-              { key: 'coverDrive' as const, label: 'Cover Drive (6)' },
-              { key: 'pullShot' as const, label: 'Pull Shot (4)' },
-              { key: 'straightDrive' as const, label: 'Straight Drive (4)' },
-              { key: 'upperCut' as const, label: 'Upper Cut (6)' },
-              { key: 'wicket' as const, label: 'Wicket ⚡' },
+              { key: 'coverDrive' as const, label: t('stadium.shot_cover') },
+              { key: 'pullShot' as const, label: t('stadium.shot_pull') },
+              { key: 'straightDrive' as const, label: t('stadium.shot_straight') },
+              { key: 'upperCut' as const, label: t('stadium.shot_upper') },
+              { key: 'wicket' as const, label: t('stadium.shot_wicket') },
             ].map((s) => (
               <button
                 key={s.key}
@@ -1113,11 +1115,11 @@ export const CricketStadium3D: React.FC = () => {
         <div className="absolute top-18 right-4 flex flex-col gap-2 pointer-events-auto">
           {/* Time of Day */}
           <div className="bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block px-1">Lighting:</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block px-1">{t('stadium.lighting')}</span>
             {[
-              { key: 'day' as const, label: 'Day', icon: Sun },
-              { key: 'twilight' as const, label: 'Sunset', icon: Sunset },
-              { key: 'night' as const, label: 'Night', icon: Moon },
+              { key: 'day' as const, label: t('stadium.light_day'), icon: Sun },
+              { key: 'twilight' as const, label: t('stadium.light_sunset'), icon: Sunset },
+              { key: 'night' as const, label: t('stadium.light_night'), icon: Moon },
             ].map((tod) => {
               const Icon = tod.icon;
               return (
@@ -1151,7 +1153,7 @@ export const CricketStadium3D: React.FC = () => {
             } backdrop-blur-md`}
           >
             <Eye className="w-3.5 h-3.5" />
-            Hawk-Eye Trail
+            {t('stadium.trail')}
           </button>
 
           {/* Flash Toggle */}
@@ -1167,7 +1169,7 @@ export const CricketStadium3D: React.FC = () => {
             } backdrop-blur-md`}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            Crowd Flashes
+            {t('stadium.flashes')}
           </button>
         </div>
       </div>

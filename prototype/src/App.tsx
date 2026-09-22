@@ -183,12 +183,8 @@ export function App() {
           />
         )}
         {activeTab === 'reels' && <MicroNarratives selectedLang={selectedLang} />}
-        {activeTab === 'tactical' && (
-          <TacticalCoPilot selectedLang={selectedLang} onSelectLang={setSelectedLang} />
-        )}
-        {activeTab === 'stadium3d' && (
-          <CricketStadium3D selectedLang={selectedLang} onSelectLang={setSelectedLang} />
-        )}
+        {activeTab === 'tactical' && <TacticalCoPilot />}
+        {activeTab === 'stadium3d' && <CricketStadium3D />}
         {activeTab === 'analytics' && <MatchAnalytics />}
         {activeTab === 'rl' && <RLSimulator />}
         {activeTab === 'cybersecurity' && <CyberSecurityCenter />}

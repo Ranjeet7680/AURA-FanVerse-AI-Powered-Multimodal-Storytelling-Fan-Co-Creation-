@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Sparkles,
   Activity,
@@ -15,10 +15,13 @@ import {
   Volume2,
   VolumeX,
   Menu,
-  X
+  X,
+  ChevronDown,
+  Check,
+  CheckCircle2
 } from 'lucide-react';
 import { soundFX } from '../services/soundFX';
-import { useLanguage, SUPPORTED_LANGUAGES, type LanguageCode } from '../context/LanguageContext';
+import { useLanguage, SUPPORTED_LANGUAGES } from '../context/LanguageContext';
 
 export type ActiveTabType = 'discover' | 'reels' | 'tactical' | 'stadium3d' | 'analytics' | 'rl' | 'cybersecurity' | 'athletes' | 'profile';
 
@@ -37,9 +40,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   user,
   onOpenAuth,
 }) => {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t, currentOption } = useLanguage();
   const [isMuted, setIsMuted] = useState<boolean>(soundFX.getMuted());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState<boolean>(false);
+  const [langToast, setLangToast] = useState<string | null>(null);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+        setIsLangMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleTabChange = (tab: ActiveTabType) => {
     soundFX.playClick();
@@ -84,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
               </div>
               <p className="text-[10px] text-slate-400 tracking-wide font-medium hidden sm:block whitespace-nowrap leading-tight">
-                Multimodal Canon • 3D Stadium • Live Fandom
+                {t('brand.tagline', 'Multimodal Canon • 3D Stadium • Live Fandom')}
               </p>
             </div>
           </div>
@@ -217,23 +233,89 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
 
-            {/* 3D Beveled Multi-Language Selector with Flags */}
-            <div className="flex items-center space-x-1 bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] px-2 py-1.5 rounded-2xl text-xs">
-              <Globe2 className="w-3.5 h-3.5 text-purple-400 drop-shadow" />
-              <select
-                value={language}
-                onChange={(e) => {
+            {/* 3D Beveled Multi-Language Popover Button */}
+            <div className="relative" ref={langDropdownRef}>
+              <button
+                type="button"
+                onClick={() => {
                   soundFX.playClick();
-                  setLanguage(e.target.value as LanguageCode);
+                  setIsLangMenuOpen((prev) => !prev);
                 }}
-                className="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer text-xs"
+                className={`flex items-center space-x-1.5 bg-gradient-to-b from-[#241a45] to-[#120b29] border-t border-purple-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] px-2.5 py-1.5 rounded-2xl text-xs transition-all active:translate-y-0.5 hover:border-cyan-400/60 ${
+                  isLangMenuOpen ? 'ring-2 ring-purple-500/50 border-cyan-400' : ''
+                }`}
+                title="Choose Language"
               >
-                {SUPPORTED_LANGUAGES.map((lang) => (
-                  <option key={lang.code} value={lang.code} className="bg-slate-900 text-slate-200">
-                    {lang.flag} {lang.nativeName}
-                  </option>
-                ))}
-              </select>
+                <span className="text-sm leading-none select-none">{currentOption?.flag || '🌐'}</span>
+                <span className="font-bold text-slate-200 hidden sm:inline-block text-xs">
+                  {currentOption?.nativeName || 'English'}
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-purple-300 transition-transform duration-200 ${
+                    isLangMenuOpen ? 'rotate-180 text-cyan-400' : ''
+                  }`}
+                />
+              </button>
+
+              {/* Language Popover Menu */}
+              {isLangMenuOpen && (
+                <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#140c2b]/95 border border-purple-500/40 shadow-[0_16px_36px_rgba(0,0,0,0.85),0_0_20px_rgba(168,85,247,0.25)] backdrop-blur-2xl p-2 z-50">
+                  <div className="px-3 py-2 border-b border-purple-500/20 flex items-center justify-between text-[11px] font-mono text-purple-300">
+                    <span className="font-semibold flex items-center gap-1.5">
+                      <Globe2 className="w-3.5 h-3.5 text-cyan-400" />
+                      ICC Mesh Languages
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-200 font-bold">
+                      5 Sync
+                    </span>
+                  </div>
+
+                  <div className="py-1 space-y-1">
+                    {SUPPORTED_LANGUAGES.map((lang) => {
+                      const isActive = language === lang.code;
+                      return (
+                        <button
+                          key={lang.code}
+                          type="button"
+                          onClick={() => {
+                            soundFX.playClick();
+                            setLanguage(lang.code);
+                            setIsLangMenuOpen(false);
+                            setLangToast(`${lang.nativeName} (${lang.label})`);
+                            setTimeout(() => setLangToast(null), 3000);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left transition-all ${
+                            isActive
+                              ? 'bg-gradient-to-r from-purple-600/40 to-pink-600/30 border border-purple-400/50 text-white shadow-[0_2px_8px_rgba(168,85,247,0.3)]'
+                              : 'hover:bg-white/5 text-slate-300 hover:text-white border border-transparent'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2.5">
+                            <span className="text-lg leading-none">{lang.flag}</span>
+                            <div>
+                              <div className="text-xs font-bold leading-tight flex items-center gap-1.5">
+                                <span>{lang.nativeName}</span>
+                                {lang.dir === 'rtl' && (
+                                  <span className="text-[9px] uppercase px-1 rounded bg-amber-500/20 text-amber-300 font-mono">
+                                    RTL
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-[10px] text-slate-400 font-mono leading-tight">{lang.label}</div>
+                            </div>
+                          </div>
+
+                          {isActive && (
+                            <div className="w-5 h-5 rounded-full bg-cyan-400/20 text-cyan-300 flex items-center justify-center">
+                              <Check className="w-3 h-3" />
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 3D Profile Avatar or 3D Beveled Sign In Button */}
@@ -285,34 +367,82 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-[#100924]/95 border-b border-purple-500/30 p-4 space-y-2 backdrop-blur-xl">
-          {[
-            { key: 'discover' as const, label: t('nav.discover'), icon: Compass },
-            { key: 'reels' as const, label: t('nav.shorts'), icon: Radio },
-            { key: 'tactical' as const, label: t('nav.tactical'), icon: Activity },
-            { key: 'stadium3d' as const, label: t('nav.stadium3d'), icon: Box },
-            { key: 'analytics' as const, label: t('nav.analytics'), icon: Shield },
-            { key: 'rl' as const, label: t('nav.rl'), icon: Cpu },
-            { key: 'cybersecurity' as const, label: t('nav.cybersecurity'), icon: Lock },
-            { key: 'athletes' as const, label: t('nav.athletes'), icon: Users },
-            ...(user ? [{ key: 'profile' as const, label: t('nav.profile'), icon: User }] : []),
-          ].map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.key}
-                onClick={() => handleTabChange(tab.key)}
-                className={`flex items-center space-x-3 w-full p-2.5 rounded-xl font-bold text-sm transition-all ${
-                  activeTab === tab.key
-                    ? 'bg-purple-600 text-white'
-                    : 'text-slate-300 hover:bg-white/5'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
+        <div className="lg:hidden bg-[#100924]/95 border-b border-purple-500/30 p-4 space-y-3 backdrop-blur-xl">
+          <div className="space-y-1">
+            {[
+              { key: 'discover' as const, label: t('nav.discover'), icon: Compass },
+              { key: 'reels' as const, label: t('nav.shorts'), icon: Radio },
+              { key: 'tactical' as const, label: t('nav.tactical'), icon: Activity },
+              { key: 'stadium3d' as const, label: t('nav.stadium3d'), icon: Box },
+              { key: 'analytics' as const, label: t('nav.analytics'), icon: Shield },
+              { key: 'rl' as const, label: t('nav.rl'), icon: Cpu },
+              { key: 'cybersecurity' as const, label: t('nav.cybersecurity'), icon: Lock },
+              { key: 'athletes' as const, label: t('nav.athletes'), icon: Users },
+              ...(user ? [{ key: 'profile' as const, label: t('nav.profile'), icon: User }] : []),
+            ].map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => handleTabChange(tab.key)}
+                  className={`flex items-center space-x-3 w-full p-2.5 rounded-xl font-bold text-sm transition-all ${
+                    activeTab === tab.key
+                      ? 'bg-purple-600 text-white'
+                      : 'text-slate-300 hover:bg-white/5'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Mobile Language Switcher Row */}
+          <div className="pt-3 border-t border-purple-500/20">
+            <div className="text-[11px] font-mono text-purple-300 mb-2 px-1 flex items-center justify-between">
+              <span className="flex items-center gap-1.5 font-bold">
+                <Globe2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>ICC Mesh Language</span>
+              </span>
+              <span className="text-[10px] text-slate-400">5 Synchronized</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {SUPPORTED_LANGUAGES.map((lang) => {
+                const isActive = language === lang.code;
+                return (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      soundFX.playClick();
+                      setLanguage(lang.code);
+                      setLangToast(`${lang.nativeName} (${lang.label})`);
+                      setTimeout(() => setLangToast(null), 3000);
+                    }}
+                    className={`flex items-center space-x-2 px-2.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+                      isActive
+                        ? 'bg-purple-600 text-white shadow-md border border-purple-400/50'
+                        : 'bg-white/5 text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    <span>{lang.flag}</span>
+                    <span className="truncate">{lang.nativeName}</span>
+                    {isActive && <Check className="w-3 h-3 ml-auto text-cyan-300" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Language Switch Toast Confirmation */}
+      {langToast && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e1338]/95 border border-cyan-400/60 text-cyan-300 text-xs font-mono font-bold shadow-[0_8px_24px_rgba(0,0,0,0.7),0_0_15px_rgba(6,182,212,0.4)] backdrop-blur-xl animate-bounce">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>Language Synced: {langToast}</span>
+          </div>
         </div>
       )}
     </header>

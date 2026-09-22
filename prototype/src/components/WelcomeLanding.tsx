@@ -20,6 +20,7 @@ import {
   Play
 } from 'lucide-react';
 import { soundFX } from '../services/soundFX';
+import { useLanguage } from '../context/LanguageContext';
 
 interface WelcomeLandingProps {
   onEnterDashboard: () => void;
@@ -27,6 +28,14 @@ interface WelcomeLandingProps {
 }
 
 export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard, onOpenAuth }) => {
+  const { t } = useLanguage();
+
+  const getPollOptionText = (id: number) => {
+    if (id === 1) return t('poll.opt1');
+    if (id === 2) return t('poll.opt2');
+    return t('poll.opt3');
+  };
+
   // Interactive poll state
   const [selectedVote, setSelectedVote] = useState<number | null>(null);
   const [voted, setVoted] = useState(false);
@@ -74,16 +83,20 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2c273e]/80 border border-cyan-500/30 backdrop-blur-md shadow-inner">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
             <span className="text-xs font-extrabold text-cyan-300 uppercase tracking-widest font-mono">
-              GENESIS V2.4 CANON PROTOCOL &bull; DUBAI AI SHOWCASE
+              {t('hero.badge')}
             </span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Co-Create <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Infinite Canon</span> With AI & Your Fandom
+            {t('hero.title_pre')}{' '}
+            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              {t('hero.title_gradient')}
+            </span>{' '}
+            {t('hero.title_post')}
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-            Step into an ethereal collaborative realm where live women's cricket telemetry ignites autonomous vertical micro-stories, 3D stadium physics, and conversational tactical co-piloting.
+            {t('hero.desc')}
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-4">
@@ -94,7 +107,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               }}
               className="px-6 py-3.5 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-purple-600/25 active:scale-95 transition-all flex items-center gap-2 hover:opacity-95"
             >
-              <span>Launch Live Dashboard</span>
+              <span>{t('hero.cta_dashboard')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
@@ -106,7 +119,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               className="px-6 py-3.5 rounded-full bg-[#211c33] hover:bg-[#2c273e] text-slate-200 font-bold text-xs sm:text-sm border border-slate-700 shadow-md transition-all active:scale-95 flex items-center gap-2"
             >
               <Cpu className="w-4 h-4 text-purple-400" />
-              <span>Sign In / Lorekeeper Access</span>
+              <span>{t('hero.cta_auth')}</span>
             </button>
           </div>
         </div>
@@ -118,8 +131,8 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
           <div className="flex items-center gap-2.5">
             <Flame className="w-5 h-5 text-pink-400 animate-pulse" />
             <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">Featured Multimodal Storyboards</h2>
-              <p className="text-xs text-slate-400">Autonomous video-to-manga adaptations generated in real-time</p>
+              <h2 className="text-lg font-bold text-white tracking-tight">{t('featured.title')}</h2>
+              <p className="text-xs text-slate-400">{t('featured.subtitle')}</p>
             </div>
           </div>
           <button
@@ -129,7 +142,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             }}
             className="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-semibold"
           >
-            <span>View All (28)</span>
+            <span>{t('featured.view_all')}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -157,10 +170,10 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             </div>
             <div className="p-4 space-y-2.5">
               <h3 className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">
-                The Sharjah Mirage: Smriti's 140km/h Counter-Assault
+                {t('featured.card1_title')}
               </h3>
               <p className="text-xs text-slate-400 line-clamp-2">
-                Reconstructed from over 18 ball telemetry. Shonen manga aesthetic generated with Stable Diffusion XL LoRA and Hindi commentary synthesis.
+                {t('featured.card1_desc')}
               </p>
               <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-[11px] text-slate-400">
                 <span className="font-mono text-cyan-400">Co-Authored: @AeroNova</span>
@@ -171,7 +184,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                   }}
                   className="hover:text-white flex items-center gap-1 text-purple-400 font-semibold"
                 >
-                  <Play className="w-3 h-3" /> Watch Story
+                  <Play className="w-3 h-3" /> {t('featured.card1_watch')}
                 </button>
               </div>
             </div>
@@ -199,10 +212,10 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             </div>
             <div className="p-4 space-y-2.5">
               <h3 className="text-sm font-bold text-white group-hover:text-pink-300 transition-colors">
-                Harmanpreet's Leg-Side Trap: Probability Breakdown
+                {t('featured.card2_title')}
               </h3>
               <p className="text-xs text-slate-400 line-clamp-2">
-                Deep Q-Learning MDP analysis explaining the placement of backward square leg and deep mid-wicket against Sophie Ecclestone.
+                {t('featured.card2_desc')}
               </p>
               <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-[11px] text-slate-400">
                 <span className="font-mono text-cyan-400">Co-Authored: @StrategistX</span>
@@ -213,7 +226,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                   }}
                   className="hover:text-white flex items-center gap-1 text-pink-400 font-semibold"
                 >
-                  <Play className="w-3 h-3" /> Inspect Replay
+                  <Play className="w-3 h-3" /> {t('featured.card2_inspect')}
                 </button>
               </div>
             </div>
@@ -241,10 +254,10 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             </div>
             <div className="p-4 space-y-2.5">
               <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
-                Kathmandu to Lord's: Puja Mahato's 5-Wicket Odyssey
+                {t('featured.card3_title')}
               </h3>
               <p className="text-xs text-slate-400 line-clamp-2">
-                Community-funded story highlighting Nepal U-19 fast bowler with direct micro-tipping passport integration.
+                {t('featured.card3_desc')}
               </p>
               <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-[11px] text-slate-400">
                 <span className="font-mono text-cyan-400">Co-Authored: @HimalayanLore</span>
@@ -255,7 +268,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                   }}
                   className="hover:text-white flex items-center gap-1 text-cyan-400 font-semibold"
                 >
-                  <Play className="w-3 h-3" /> Tip Athlete
+                  <Play className="w-3 h-3" /> {t('featured.card3_tip')}
                 </button>
               </div>
             </div>
@@ -269,13 +282,13 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
           <div className="flex items-center gap-2.5">
             <Radio className="w-5 h-5 text-cyan-400 animate-pulse" />
             <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">Live Co-Creation Arenas</h2>
-              <p className="text-xs text-slate-400">Real-time multiplayer rooms synthesizing match narratives</p>
+              <h2 className="text-lg font-bold text-white tracking-tight">{t('arenas.title')}</h2>
+              <p className="text-xs text-slate-400">{t('arenas.subtitle')}</p>
             </div>
           </div>
           <span className="text-[11px] font-mono text-green-400 bg-green-500/10 px-2.5 py-1 rounded-full border border-green-500/30 flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping" />
-            3 ARENAS ACTIVE
+            {t('arenas.active_badge')}
           </span>
         </div>
 
@@ -287,17 +300,17 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                   #1
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Cyber-Valkyrie Writers</h4>
-                  <span className="text-[11px] text-slate-400">Match: IND-W vs AUS-W (Finals)</span>
+                  <h4 className="text-sm font-bold text-white">{t('arenas.room1_title')}</h4>
+                  <span className="text-[11px] text-slate-400">{t('arenas.room1_sub')}</span>
                 </div>
               </div>
               <span className="text-xs font-mono text-purple-300 font-bold bg-purple-500/10 px-2 py-0.5 rounded">
-                84 Creators
+                {t('arenas.room1_creators')}
               </span>
             </div>
             <div className="space-y-1.5">
               <div className="text-[11px] text-slate-300 font-mono flex items-center gap-1.5">
-                <span className="text-cyan-400">Current Scene:</span> Harmanpreet's reverse-sweep in 19th over
+                {t('arenas.room1_scene')}
               </div>
               <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
                 <div className="bg-gradient-to-r from-purple-500 to-cyan-400 h-full w-[78%]" />
@@ -310,7 +323,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               }}
               className="w-full py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600 text-purple-300 hover:text-white font-bold text-xs transition-all border border-purple-500/30"
             >
-              Join Co-Creation Session
+              {t('arenas.join_btn')}
             </button>
           </div>
 
@@ -321,17 +334,17 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                   #2
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Tactical Analysis Guild</h4>
-                  <span className="text-[11px] text-slate-400">Field Geometry & Spin Trajectories</span>
+                  <h4 className="text-sm font-bold text-white">{t('arenas.room2_title')}</h4>
+                  <span className="text-[11px] text-slate-400">{t('arenas.room2_sub')}</span>
                 </div>
               </div>
               <span className="text-xs font-mono text-pink-300 font-bold bg-pink-500/10 px-2 py-0.5 rounded">
-                126 Creators
+                {t('arenas.room2_creators')}
               </span>
             </div>
             <div className="space-y-1.5">
               <div className="text-[11px] text-slate-300 font-mono flex items-center gap-1.5">
-                <span className="text-pink-400">Current Scene:</span> PINN aerodynamic drift on 62km/h leg break
+                {t('arenas.room2_scene')}
               </div>
               <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
                 <div className="bg-gradient-to-r from-pink-500 to-amber-400 h-full w-[92%]" />
@@ -344,7 +357,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               }}
               className="w-full py-2 rounded-xl bg-pink-600/20 hover:bg-pink-600 text-pink-300 hover:text-white font-bold text-xs transition-all border border-pink-500/30"
             >
-              Join Co-Creation Session
+              {t('arenas.join_btn')}
             </button>
           </div>
 
@@ -355,17 +368,17 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                   #3
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Grassroots Spotlight Studio</h4>
-                  <span className="text-[11px] text-slate-400">Nepal, Thailand & Scotland Stars</span>
+                  <h4 className="text-sm font-bold text-white">{t('arenas.room3_title')}</h4>
+                  <span className="text-[11px] text-slate-400">{t('arenas.room3_sub')}</span>
                 </div>
               </div>
               <span className="text-xs font-mono text-cyan-300 font-bold bg-cyan-500/10 px-2 py-0.5 rounded">
-                62 Creators
+                {t('arenas.room3_creators')}
               </span>
             </div>
             <div className="space-y-1.5">
               <div className="text-[11px] text-slate-300 font-mono flex items-center gap-1.5">
-                <span className="text-cyan-400">Current Scene:</span> Crowdsourced grant milestone 5,000 Sparks
+                {t('arenas.room3_scene')}
               </div>
               <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
                 <div className="bg-gradient-to-r from-cyan-500 to-green-400 h-full w-[65%]" />
@@ -378,7 +391,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               }}
               className="w-full py-2 rounded-xl bg-cyan-600/20 hover:bg-cyan-600 text-cyan-300 hover:text-white font-bold text-xs transition-all border border-cyan-500/30"
             >
-              Join Co-Creation Session
+              {t('arenas.join_btn')}
             </button>
           </div>
         </div>
@@ -391,17 +404,17 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-purple-400 flex items-center gap-1.5">
-                <Vote className="w-4 h-4" /> CANON GOVERNANCE PROPOSAL #88
+                <Vote className="w-4 h-4" /> {t('poll.badge')}
               </span>
               <span className="text-[10px] font-mono text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                CLOSES IN 04:18:22
+                {t('poll.closes')}
               </span>
             </div>
             <h3 className="text-lg font-extrabold text-white">
-              Tactical Dilemma: What should captain Harmanpreet bowl in Over 19.4?
+              {t('poll.title')}
             </h3>
             <p className="text-xs text-slate-400">
-              The winning choice determines the generated shonen anime climax and unlocks double fan Sparks for tactical voters.
+              {t('poll.desc')}
             </p>
           </div>
 
@@ -433,7 +446,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                   >
                     {selectedVote === opt.id && <CheckCircle2 className="w-3 h-3 text-white" />}
                   </div>
-                  <span className="text-xs font-semibold">{opt.text}</span>
+                  <span className="text-xs font-semibold">{getPollOptionText(opt.id)}</span>
                 </div>
                 <div className="relative z-10 flex items-center gap-2 font-mono text-xs font-bold text-purple-300">
                   <span>{opt.pct}%</span>
@@ -443,8 +456,8 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
           </div>
 
           <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800">
-            <span>Total community votes: 3,489</span>
-            <span className="text-cyan-400 font-mono font-bold">+50 Sparks Upon Voting</span>
+            <span>{t('poll.total_votes')}</span>
+            <span className="text-cyan-400 font-mono font-bold">{t('poll.sparks_reward')}</span>
           </div>
         </div>
 
@@ -453,17 +466,17 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
-                <Volume2 className="w-4 h-4" /> MULTILINGUAL AI COMMENTARY SYNTH
+                <Volume2 className="w-4 h-4" /> {t('audio.badge')}
               </span>
               <span className="text-[10px] font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
-                12 DIALECTS READY
+                {t('audio.dialects')}
               </span>
             </div>
             <h3 className="text-lg font-extrabold text-white">
-              Bengali & Tamil Voice Synthesis: "The Six That Shook Sharjah"
+              {t('audio.title')}
             </h3>
             <p className="text-xs text-slate-400">
-              Listen to the neural voice clone adapting intensity, crowd roar acoustics, and pitch cadence dynamically based on win probability shifts.
+              {t('audio.desc')}
             </p>
           </div>
 
@@ -503,12 +516,12 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
                 {isPlayingLoreAudio ? (
                   <>
                     <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-                    <span>Pause Stream</span>
+                    <span>{t('audio.pause')}</span>
                   </>
                 ) : (
                   <>
                     <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>Preview Neural Voice</span>
+                    <span>{t('audio.preview')}</span>
                   </>
                 )}
               </button>
@@ -534,7 +547,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
 
           <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800">
             <span>Model: ElevenLabs Multilingual V2 + Gemini Flash</span>
-            <span className="text-cyan-400 font-mono font-bold">Latency: 280ms</span>
+            <span className="text-cyan-400 font-mono font-bold">{t('audio.latency')}</span>
           </div>
         </div>
       </div>
@@ -543,9 +556,9 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
       <div className="space-y-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-widest text-cyan-400 font-mono">
-            Pillars of Creation
+            {t('pillars.tag')}
           </span>
-          <h2 className="text-2xl font-bold text-white mt-1">Multi-Threaded AI Architecture</h2>
+          <h2 className="text-2xl font-bold text-white mt-1">{t('pillars.title')}</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -554,9 +567,9 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Multimodal Story Engine</h3>
+              <h3 className="text-base font-bold text-white">{t('pillars.p1_title')}</h3>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Text, voice commentary, vertical video reframing & live HUD telemetry synthesized synchronously in under 45 seconds.
+                {t('pillars.p1_desc')}
               </p>
             </div>
             <span className="text-[11px] font-bold text-purple-300 font-mono">Sub-45s Latency</span>
@@ -567,9 +580,9 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Collaborative Tactical Co-Pilot</h3>
+              <h3 className="text-base font-bold text-white">{t('pillars.p2_title')}</h3>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Demystifies captaincy field placements with conversational AI, dynamic 2D field radar, and 3D WebGL physics.
+                {t('pillars.p2_desc')}
               </p>
             </div>
             <span className="text-[11px] font-bold text-pink-300 font-mono">Real-Time Coordinate Radar</span>
@@ -580,9 +593,9 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
               <Heart className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Grassroots Future Stars Fund</h3>
+              <h3 className="text-base font-bold text-white">{t('pillars.p3_title')}</h3>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Fans pledge micro-tokens to female athletes with 15% ring-fenced to provide kits and travel for associate nation academies.
+                {t('pillars.p3_desc')}
               </p>
             </div>
             <span className="text-[11px] font-bold text-cyan-300 font-mono">Direct Athlete Passports</span>
@@ -595,11 +608,11 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
         <div className="flex items-center justify-between">
           <div>
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-pink-400">
-              ARCHIVES & RELIC NODES
+              {t('codex.tag')}
             </span>
-            <h2 className="text-xl font-bold text-white mt-0.5">Canonical Sport Artefacts & Timeline Trees</h2>
+            <h2 className="text-xl font-bold text-white mt-0.5">{t('codex.title')}</h2>
           </div>
-          <span className="text-xs font-mono text-slate-400">Total Artifacts: 1,420</span>
+          <span className="text-xs font-mono text-slate-400">{t('codex.total')}</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -607,8 +620,8 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold">
               <Layers className="w-5 h-5" />
             </div>
-            <h4 className="text-sm font-bold text-white">What-If Branch #44</h4>
-            <p className="text-xs text-slate-400">Alternative history where Sophie Devine opened the bowling with leg-spin.</p>
+            <h4 className="text-sm font-bold text-white">{t('codex.card1_title')}</h4>
+            <p className="text-xs text-slate-400">{t('codex.card1_desc')}</p>
             <span className="text-[10px] font-mono text-purple-300 block">34 Branching Stories</span>
           </div>
 
@@ -616,8 +629,8 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             <div className="w-9 h-9 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center font-bold">
               <TrendingUp className="w-5 h-5" />
             </div>
-            <h4 className="text-sm font-bold text-white">Hawk-Eye Spin Relic</h4>
-            <p className="text-xs text-slate-400">3D mathematical trajectory token signed by ICC telemetric feed.</p>
+            <h4 className="text-sm font-bold text-white">{t('codex.card2_title')}</h4>
+            <p className="text-xs text-slate-400">{t('codex.card2_desc')}</p>
             <span className="text-[10px] font-mono text-pink-300 block">Rare NFT Artifact</span>
           </div>
 
@@ -625,8 +638,8 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             <div className="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-bold">
               <Zap className="w-5 h-5" />
             </div>
-            <h4 className="text-sm font-bold text-white">Clutch Over Master</h4>
-            <p className="text-xs text-slate-400">Fan badge minted for correctly forecasting the penultimate over yorker.</p>
+            <h4 className="text-sm font-bold text-white">{t('codex.card3_title')}</h4>
+            <p className="text-xs text-slate-400">{t('codex.card3_desc')}</p>
             <span className="text-[10px] font-mono text-cyan-300 block">Awarded to 418 Fans</span>
           </div>
 
@@ -634,8 +647,8 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
               <Cpu className="w-5 h-5" />
             </div>
-            <h4 className="text-sm font-bold text-white">Quantum Physics Node</h4>
-            <p className="text-xs text-slate-400">Run physics-informed neural network tests on any historical delivery.</p>
+            <h4 className="text-sm font-bold text-white">{t('codex.card4_title')}</h4>
+            <p className="text-xs text-slate-400">{t('codex.card4_desc')}</p>
             <span className="text-[10px] font-mono text-amber-300 block">Interactive Simulator</span>
           </div>
         </div>
@@ -659,15 +672,15 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             </div>
           </div>
           <div>
-            <span className="text-sm font-bold text-white block">140,000+ Fan Co-Creators Globally</span>
-            <span className="text-xs text-slate-400">Active across 850+ canonical women's cricket tournaments & story arcs</span>
+            <span className="text-sm font-bold text-white block">{t('community.creators')}</span>
+            <span className="text-xs text-slate-400">{t('community.active_desc')}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-500/10 px-3.5 py-2 rounded-full border border-cyan-500/20">
             <ShieldCheck className="w-4 h-4" />
-            <span>Verified ICC Canon Ledger #8802</span>
+            <span>{t('community.verified')}</span>
           </div>
           <button
             onClick={() => {
@@ -676,7 +689,7 @@ export const WelcomeLanding: React.FC<WelcomeLandingProps> = ({ onEnterDashboard
             }}
             className="px-4 py-2 rounded-full bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-all shadow-md active:scale-95"
           >
-            Enter Now
+            {t('community.enter')}
           </button>
         </div>
       </div>

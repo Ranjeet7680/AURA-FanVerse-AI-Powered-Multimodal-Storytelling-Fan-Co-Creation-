@@ -131,26 +131,26 @@ function AppContent() {
           <div className="flex items-center space-x-2 text-xs text-slate-300 font-mono">
             <span className="flex items-center space-x-1 text-emerald-400 font-semibold">
               <Globe className="w-3.5 h-3.5" />
-              <span>{t('nav.live_mesh')}</span>
+              <span>{t('nav.live_mesh', 'ICC LIVE TOURNAMENT MESH')}</span>
             </span>
             <span>•</span>
-            <span className="text-purple-300">IND-W vs AUS-W (Dubai)</span>
+            <span className="text-purple-300">{t('ribbon.tournament', "ICC Women's T20 World Cup Final")} • {t('ribbon.venue', 'Dubai International Stadium')}</span>
             <span>•</span>
             <span className="text-amber-400 flex items-center space-x-1">
               <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-              <span>{t('nav.over_live')}</span>
+              <span>{t('nav.over_live', 'OVER 14.3 LIVE')}</span>
             </span>
           </div>
 
           <div className="flex items-center space-x-3 text-[11px] font-mono">
             <span className="flex items-center space-x-1 text-cyan-300">
               <Trophy className="w-3.5 h-3.5 text-cyan-400" />
-              <span>5 Languages Synchronized</span>
+              <span>{t('ribbon.sync_langs', '5 Languages Synchronized')}</span>
             </span>
             <span className="text-slate-600">|</span>
             <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              Zero-Trust Guard: Active
+              {t('ribbon.zerotrust', 'Zero-Trust Guard: Active')}
             </span>
           </div>
         </div>

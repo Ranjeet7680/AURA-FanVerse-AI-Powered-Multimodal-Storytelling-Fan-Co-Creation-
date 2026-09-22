@@ -186,7 +186,9 @@ export function App() {
         {activeTab === 'tactical' && (
           <TacticalCoPilot selectedLang={selectedLang} onSelectLang={setSelectedLang} />
         )}
-        {activeTab === 'stadium3d' && <CricketStadium3D />}
+        {activeTab === 'stadium3d' && (
+          <CricketStadium3D selectedLang={selectedLang} onSelectLang={setSelectedLang} />
+        )}
         {activeTab === 'analytics' && <MatchAnalytics />}
         {activeTab === 'rl' && <RLSimulator />}
         {activeTab === 'cybersecurity' && <CyberSecurityCenter />}

@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Telugu-Native_Localization-FF8C00?style=for-the-badge" alt="Telugu" />
   <img src="https://img.shields.io/badge/Security-Zero_Trust_HMAC_SHA256-EF4444?style=for-the-badge&logo=security" alt="Cybersecurity" />
   <img src="https://img.shields.io/badge/AI_Engine-Ensemble_ML_(98.2%25_Acc)-F59E0B?style=for-the-badge&logo=python" alt="AI Engine" />
-  <img src="https://img.shields.io/badge/Architecture-22_System_&_Animation_Diagrams-10B981?style=for-the-badge" alt="Diagrams" />
+  <img src="https://img.shields.io/badge/Architecture-20_System_&_Animation_Diagrams-10B981?style=for-the-badge" alt="Diagrams" />
 </p>
 
 > **AURA FanVerse** is a next-generation sports-tech platform combining **Three.js WebGL 3D Stadium Visualization**, **Autonomous 9:16 Multimodal Vertical Storytelling**, **Conversational AI Tactical Co-Piloting**, **Big Data Match Analytics (trained on 2,896 matches & 90k players)**, **6-Language Synchronized Internationalization (with Telugu, Tamil, Hindi, English, Spanish, Arabic)**, and **Direct Female Athlete Micro-Sponsorship** built for the **ICC Global Hackathon 2026 (Dubai AI Festival Showcase)**.
@@ -18,7 +18,7 @@
 ---
 
 ## 📑 Table of Contents
-1. [Architectural & Animation Flow Diagrams (22 Exhaustive System Diagrams)](#-22-architectural--animation-flow-diagrams)
+1. [Architectural & Animation Flow Diagrams (20 Exhaustive System Diagrams)](#-20-architectural--animation-flow-diagrams)
    - [Diagram 1: 3D System Topology & Ingestion Pipeline](#diagram-1-high-level-3d-system-topology--ingestion-pipeline)
    - [Diagram 2: Multimodal Real-Time Play-by-Play Sequence](#diagram-2-multimodal-real-time-play-by-play-sequence)
    - [Diagram 3: Reinforcement Learning Bellman Optimization Loop](#diagram-3-reinforcement-learning-bellman-optimization-loop)
@@ -39,21 +39,13 @@
    - [Diagram 18: 3D Camera Projection & Frustum Transform Animation Pipeline](#diagram-18-3d-camera-projection--frustum-transform-animation-pipeline)
    - [Diagram 19: 3D Biomechanical Skeletal Animation & Bowler Run-Up Rig](#diagram-19-3d-biomechanical-skeletal-animation--bowler-run-up-rig)
    - [Diagram 20: 3D WebGL Shader Pipeline & Multi-Tier Stadium Lighting Architecture](#diagram-20-3d-webgl-shader-pipeline--multi-tier-stadium-lighting-architecture)
-   - [Diagram 21: Real-Time Multilingual Synapse & RTL Layout Flipping Flow](#diagram-21-real-time-multilingual-synapse--rtl-layout-flipping-flow)
-   - [Diagram 22: Complete 60 FPS Visual Animation Choreography & Keyframe Timeline](#diagram-22-complete-60-fps-visual-animation-choreography--keyframe-timeline)
 2. [🌟 Key Platform Modules & Innovations](#-key-platform-modules--innovations)
 3. [🌐 6-Language Synchronized Internationalization (i18n & RTL)](#-6-language-synchronized-internationalization-i18n--rtl)
 4. [🤖 Machine Learning & Data Studio Telemetry](#-machine-learning--data-studio-telemetry)
 5. [📂 Repository Contents & Documentation](#-repository-contents--documentation)
 6. [🚀 Quickstart Guide](#-quickstart-guide)
 
-# 📐 22 Architectural & Animation Flow Diagrams
-
-<p align="center">
-  <img src="docs/aura_animation_diagram.svg" alt="AURA FanVerse Live System & Animation Architecture" width="100%" />
-</p>
-
-> ⚡ **Live Interactive 60 FPS Engine**: In addition to the visual animated SVG circuit above and the 22 exhaustive architectural diagrams below, fans and judges can launch the interactive 60 FPS animation diagram directly inside the live client by clicking the **`Diagram ⚡`** button in the header console or opening `http://localhost:5173/animation_diagram.html`.
+# 📐 20 Architectural & Animation Flow Diagrams
 
 ---
 
@@ -619,80 +611,6 @@ flowchart LR
     GeometryStage --> RasterizationStage
     LightingComponents --> FragmentShader
     FragmentShader --> ScreenBuffer["🖥️ 60 FPS WebGL Framebuffer Output"]
-```
-
----
-
-### Diagram 21: Real-Time Multilingual Synapse & RTL Layout Flipping Flow
-```mermaid
-flowchart TD
-    subgraph UserAction["👤 Language Selection Trigger"]
-        HeaderDropdown["Navbar 3D Beveled Language Popover"]
-        FloatingSwitch["Floating Quick-Switch Glassmorphic Pill (Bottom-Right)"]
-        MobileDrawer["Mobile Drawer 6-Language Grid"]
-    end
-
-    UserAction --> ActionDispatcher["soundFX.playClick() + setLanguage(code)"]
-    
-    subgraph SynapseCore["⚡ LanguageContext Reactive State Engine"]
-        ActionDispatcher --> LocalStorageSave["localStorage.setItem('aura_fanverse_lang', code)"]
-        ActionDispatcher --> DOMSync["DOM Attribute Updates:<br/>• document.documentElement.lang = code<br/>• document.documentElement.dir = dir ('ltr' | 'rtl')"]
-        ActionDispatcher --> StateBroadcast["React 19 Context Value Dispatch { language, dir, t, currentOption }"]
-    end
-
-    subgraph ResponsiveHeader["🧭 Adaptive Navbar & Overflow Shield"]
-        StateBroadcast --> NavWidthRecompute["Nav Flex Container (min-w-0 flex-1 max-w-full)"]
-        NavWidthRecompute --> HorizontalScroll["Auto-Scroll Buffer: Never pushes Right Controls off-screen"]
-        NavWidthRecompute --> PinnedControls["Right Controls Pinned (flex-shrink-0 ml-auto z-20)"]
-    end
-
-    subgraph MultimodalConsumers["🌐 Synchronized UI Consumers"]
-        StateBroadcast --> TransKeys["All 150+ Translation Keys Recomputed Instantly"]
-        StateBroadcast --> SpeechSynthesis["SpeechSynthesisUtterance.lang = getSpeechLangCode()<br/>(en-US, hi-IN, te-IN, ta-IN, es-ES, ar-SA)"]
-        StateBroadcast --> ReelCaptions["Micro-Reel Video Captions Switched to Native Dialect"]
-        StateBroadcast --> ToastAlert["Floating Toast Notification: 'Language Synced: <Native Name>'"]
-    end
-```
-
----
-
-### Diagram 22: Complete 60 FPS Visual Animation Choreography & Keyframe Timeline
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Fan as 👤 Fan Viewport
-    participant FM as 🎨 Framer Motion Engine
-    participant CSS as ✨ CSS3 Hardware Keyframe Engine
-    participant WebGL as 🎮 Three.js 60 FPS Canvas
-    participant Audio as 🔊 Web Audio SFX Synth
-    participant Confetti as 🎊 Canvas Particle Confetti
-
-    Fan->>FM: Page Tab Switch (e.g. Discover → 3D Stadium)
-    par Framer Motion Page Transition
-        FM->>Fan: Animate Out previous tab (opacity: 1→0, y: 0→-14px, blur: 3px, 280ms)
-        FM->>Fan: Animate In new tab (opacity: 0→1, y: 14px→0, blur: 0px, ease: [0.22, 1, 0.36, 1])
-    and Audio SFX Sweep
-        Audio->>Fan: Synthesize portal transition frequency sweep (120Hz → 840Hz)
-    end
-
-    loop Infinite 60 FPS WebGL Animation Loop
-        WebGL->>WebGL: Quaternion Camera Slerp towards selected preset (Broadcaster / Batter POV)
-        WebGL->>WebGL: Bowler 4-Stage Run-Up & 360° Windmill Release Rig
-        WebGL->>WebGL: Parabolic Ball Trajectory ODE Integration + Magnus Air Drift
-        WebGL->>WebGL: Dynamic Clay Pitch Scuff & Volumetric Light Beam Scatter
-        WebGL-->>Fan: Render 60 FPS Framebuffer Output
-    end
-
-    loop Background GPU Keyframe Animations
-        CSS-->>Fan: Marquee Ticker 28s continuous horizontal scroll (paused on hover)
-        CSS-->>Fan: Holographic 3D Coin levitation floatSlow (4.5s ease-in-out infinite)
-        CSS-->>Fan: 360° Tactical Radar Beam circular rotation (3s infinite)
-        CSS-->>Fan: 5-Bar Dancing Audio Equalizer wavebar heights (staggered keyframes)
-    end
-
-    Fan->>Confetti: Cast Governance Poll Vote or Back Female Athlete
-    Confetti->>Fan: Burst 75 multi-colored particles across 65° spread with gravity physics
-    Audio->>Fan: Play triumphant harmonic victory chime
 ```
 
 ---

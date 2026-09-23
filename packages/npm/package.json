@@ -1,0 +1,29 @@
+{
+  "name": "@ranjeet7680/aura-fanverse-client",
+  "version": "5.2.0",
+  "description": "Official TypeScript & JavaScript Client SDK for AURA FanVerse (FastAPI, PINN Physics, Multilingual Telemetry)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ranjeet7680/AURA-FanVerse-AI-Powered-Multimodal-Storytelling-Fan-Co-Creation-.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "keywords": [
+    "cricket",
+    "sports-tech",
+    "icc-hackathon-2026",
+    "dubai-ai-festival",
+    "telemetry",
+    "multimodal",
+    "framer-motion",
+    "threejs"
+  ],
+  "author": "Ranjeet Kumar",
+  "license": "MIT"
+}

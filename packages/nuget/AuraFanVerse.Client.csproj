@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <PackageId>AuraFanVerse.Client</PackageId>
+    <Version>5.2.0</Version>
+    <Authors>Ranjeet Kumar</Authors>
+    <Company>AURA FanVerse</Company>
+    <Description>Official .NET C# Client SDK for AURA FanVerse Telemetry, PINN Physics, and Tactical AI</Description>
+    <PackageProjectUrl>https://github.com/Ranjeet7680/AURA-FanVerse-AI-Powered-Multimodal-Storytelling-Fan-Co-Creation-</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Ranjeet7680/AURA-FanVerse-AI-Powered-Multimodal-Storytelling-Fan-Co-Creation-.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>cricket;sports-tech;ai;telemetry;multimodal;icc-dubai-2026</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+  </ItemGroup>
+
+</Project>

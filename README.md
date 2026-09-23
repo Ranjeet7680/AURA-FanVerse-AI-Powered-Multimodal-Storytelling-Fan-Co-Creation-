@@ -14,6 +14,13 @@
   <img src="https://img.shields.io/badge/AI_Engine-Ensemble_ML_(98.2%25_Acc)-F59E0B?style=for-the-badge&logo=python" alt="AI Engine" />
   <img src="https://img.shields.io/badge/Architecture-20_System_&_Animation_Diagrams-10B981?style=for-the-badge" alt="Diagrams" />
 </p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Packages-Containers_(GHCR)-24292e?style=for-the-badge&logo=docker" alt="Containers" />
+  <img src="https://img.shields.io/badge/Package-npm-CB3837?style=for-the-badge&logo=npm" alt="npm" />
+  <img src="https://img.shields.io/badge/Package-NuGet-004880?style=for-the-badge&logo=nuget" alt="NuGet" />
+  <img src="https://img.shields.io/badge/Package-Apache_Maven-C71A36?style=for-the-badge&logo=apache-maven" alt="Maven" />
+  <img src="https://img.shields.io/badge/Package-RubyGems-E9573F?style=for-the-badge&logo=rubygems" alt="RubyGems" />
+</p>
 
 > **AURA FanVerse** is a next-generation sports-tech platform combining **Three.js WebGL 3D Stadium Visualization**, **Autonomous 9:16 Multimodal Vertical Storytelling**, **Conversational AI Tactical Co-Piloting**, **Big Data Match Analytics (trained on 2,896 matches & 90k players)**, **6-Language Synchronized Internationalization (with Telugu, Tamil, Hindi, English, Spanish, Arabic)**, and **Direct Female Athlete Micro-Sponsorship** built for the **ICC Global Hackathon 2026 (Dubai AI Festival Showcase)**.
 > 
@@ -47,7 +54,8 @@
 3. [🌐 6-Language Synchronized Internationalization (i18n & RTL)](#-6-language-synchronized-internationalization-i18n--rtl)
 4. [🤖 Machine Learning & Data Studio Telemetry](#-machine-learning--data-studio-telemetry)
 5. [📂 Repository Contents & Documentation](#-repository-contents--documentation)
-6. [🚀 Quickstart Guide](#-quickstart-guide)
+6. [📦 Multi-Ecosystem Package Registry (GitHub Packages)](#-multi-ecosystem-package-registry-github-packages)
+7. [🚀 Quickstart Guide](#-quickstart-guide)
 
 # 📐 20 Architectural & Animation Flow Diagrams
 
@@ -685,6 +693,90 @@ Every component, tactical query, narrative card, modal, and live tournament ribb
 * 🏛️ **[Fullstack Technical Architecture Doc](docs/FULLSTACK_ARCHITECTURE.md)**
 * ⚡ **`server/`:** FastAPI backend with deep learning trajectory engine, RL agent, and cybersecurity shield.
 * 💻 **`prototype/`:** React 19 + TypeScript + Vite frontend with Three.js WebGL, Framer Motion, and Tailwind CSS.
+* 📦 **`packages/`:** Multi-ecosystem client SDKs for npm, NuGet, Maven, and RubyGems.
+
+---
+
+## 📦 Multi-Ecosystem Package Registry (GitHub Packages)
+
+AURA FanVerse delivers multi-ecosystem SDKs and production OCI container images configured for and published via **GitHub Packages** (`ghcr.io`, `npm.pkg.github.com`, `nuget.pkg.github.com`, `maven.pkg.github.com`, and `rubygems.pkg.github.com`):
+
+| Ecosystem | Registry Target | Package Identifier | Purpose |
+|---|---|---|---|
+| 🐳 **Containers** | GitHub Container Registry (`ghcr.io`) | `ghcr.io/ranjeet7680/aura-fanverse:latest` | Fullstack Production Image (React 19 + FastAPI) |
+| 📦 **npm** | GitHub npm Registry (`npm.pkg.github.com`) | `@ranjeet7680/aura-fanverse-client` | TypeScript / JavaScript Web & Node SDK |
+| 🔷 **NuGet** | GitHub NuGet Registry (`nuget.pkg.github.com`)| `AuraFanVerse.Client` | .NET 8 / C# Client Library |
+| ☕ **Apache Maven** | GitHub Maven Registry (`maven.pkg.github.com`)| `io.auraverse:aura-fanverse-client:5.2.0` | Java 17+ Enterprise Client |
+| 💎 **RubyGems** | GitHub RubyGems Registry | `aura_fanverse` | Ruby Service Integration Gem |
+
+---
+
+### 1. 🐳 Containers (Docker & GHCR)
+A single place for your team to manage Docker images and decide who can see and access your images:
+```bash
+# Pull the latest production image from GitHub Container Registry
+docker pull ghcr.io/ranjeet7680/aura-fanverse:latest
+
+# Run the complete fullstack stack locally on port 8000
+docker run -d -p 8000:8000 --name aura_fanverse ghcr.io/ranjeet7680/aura-fanverse:latest
+
+# Or launch via Docker Compose
+docker-compose up -d
+```
+
+### 2. 📦 npm (JavaScript / TypeScript SDK)
+A package manager for JavaScript, included with Node.js. npm makes it easy for developers to share and reuse code:
+```bash
+# Authenticate with GitHub Packages registry (in ~/.npmrc or project .npmrc)
+echo "@ranjeet7680:registry=https://npm.pkg.github.com" >> ~/.npmrc
+echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
+
+# Install the client SDK
+npm install @ranjeet7680/aura-fanverse-client
+```
+
+### 3. 🔷 NuGet (.NET / C# SDK)
+A free and open source package manager used for the Microsoft development platforms including .NET:
+```bash
+# Add GitHub Packages as a NuGet source
+dotnet nuget add source --name github "https://nuget.pkg.github.com/Ranjeet7680/index.json" \
+  --username Ranjeet7680 --password ${GITHUB_TOKEN} --store-password-in-clear-text
+
+# Install the package
+dotnet add package AuraFanVerse.Client --version 5.2.0
+```
+
+### 4. ☕ Apache Maven (Java SDK)
+A default package manager used for the Java programming language and the Java runtime environment:
+```xml
+<!-- Add to your pom.xml <dependencies> -->
+<dependency>
+  <groupId>io.auraverse</groupId>
+  <artifactId>aura-fanverse-client</artifactId>
+  <version>5.2.0</version>
+</dependency>
+
+<!-- Repository configuration for GitHub Packages -->
+<repositories>
+  <repository>
+    <id>github</id>
+    <name>GitHub Packages</name>
+    <url>https://maven.pkg.github.com/Ranjeet7680/AURA-FanVerse-AI-Powered-Multimodal-Storytelling-Fan-Co-Creation-</url>
+  </repository>
+</repositories>
+```
+
+### 5. 💎 RubyGems (Ruby SDK)
+A standard format for distributing Ruby programs and libraries used for the Ruby programming language:
+```bash
+# Configure credentials
+mkdir -p ~/.gem
+echo ":github: Bearer ${GITHUB_TOKEN}" >> ~/.gem/credentials
+chmod 0600 ~/.gem/credentials
+
+# Install gem from GitHub Packages
+gem install aura_fanverse --source "https://rubygems.pkg.github.com/Ranjeet7680"
+```
 
 ---
 

@@ -690,7 +690,7 @@ export const CricketStadium3D: React.FC = () => {
   const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
-  const [cameraView, setCameraView] = useState<'broadcast' | 'batsman' | 'hawkEye' | 'topDown' | 'stumpCam' | 'drone'>('broadcast');
+  const [cameraView, setCameraView] = useState<'broadcast' | 'batsman' | 'hawkEye' | 'topDown' | 'stumpCam' | 'drone' | 'ballFollow'>('broadcast');
   const [bowlerType, setBowlerType] = useState<'pace' | 'spin' | 'yorker'>('pace');
   const [shotType, setShotType] = useState<'coverDrive' | 'pullShot' | 'wicket' | 'straightDrive' | 'upperCut'>('coverDrive');
   const [timeOfDay, setTimeOfDay] = useState<'day' | 'twilight' | 'night'>('night');
@@ -1255,6 +1255,258 @@ export const CricketStadium3D: React.FC = () => {
     wkGroup.rotation.y = Math.PI;
     scene.add(wkGroup);
 
+    // ── 17B. On-Field Umpires (Bowler End & Square Leg) ──────────────────────
+    const createUmpire = (x: number, z: number, rotY: number) => {
+      const uGroup = new THREE.Group();
+      // Black trousers
+      const pantsMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.6 });
+      [-0.11, 0.11].forEach((xOff) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.055, 0.85, 8), pantsMat);
+        leg.position.set(xOff, 0.42, 0);
+        leg.castShadow = true;
+        uGroup.add(leg);
+      });
+      // ICC Red Official Blazer
+      const coatMat = new THREE.MeshStandardMaterial({ color: 0xb91c1c, roughness: 0.5 });
+      const coat = new THREE.Mesh(new THREE.CapsuleGeometry(0.26, 0.65, 6, 12), coatMat);
+      coat.position.y = 1.15;
+      coat.castShadow = true;
+      uGroup.add(coat);
+      // White shirt collar
+      const shirtMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+      const collar = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.02, 4, 12), shirtMat);
+      collar.position.set(0, 1.48, 0);
+      collar.rotation.x = Math.PI / 2;
+      uGroup.add(collar);
+      // Head
+      const headMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.6 });
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), headMat);
+      head.position.y = 1.68;
+      head.castShadow = true;
+      uGroup.add(head);
+      // White wide-brim sunhat
+      const hatMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.4 });
+      const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.02, 16), hatMat);
+      brim.position.y = 1.78;
+      uGroup.add(brim);
+      const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.17, 0.12, 16), hatMat);
+      crown.position.y = 1.84;
+      uGroup.add(crown);
+
+      uGroup.position.set(x, 0, z);
+      uGroup.rotation.y = rotY;
+      return uGroup;
+    };
+    scene.add(createUmpire(0, -12.4, 0)); // Bowler's end umpire
+    scene.add(createUmpire(22, 9.2, -Math.PI / 2)); // Square leg umpire
+
+    // ── 17C. Non-Striker Batsman at Bowling End ──────────────────────────────
+    const createNonStriker = (x: number, z: number) => {
+      const nsGroup = new THREE.Group();
+      const whitesMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.5 });
+      [-0.12, 0.12].forEach((xOff) => {
+        const pad = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.85, 8), whitesMat);
+        pad.position.set(xOff, 0.42, 0.04);
+        pad.castShadow = true;
+        nsGroup.add(pad);
+      });
+      const jersey = new THREE.Mesh(new THREE.CapsuleGeometry(0.24, 0.65, 6, 12), whitesMat);
+      jersey.position.y = 1.15;
+      jersey.castShadow = true;
+      nsGroup.add(jersey);
+      const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), new THREE.MeshStandardMaterial({ color: 0x1e3a8a }));
+      helmet.position.y = 1.68;
+      helmet.castShadow = true;
+      nsGroup.add(helmet);
+      const batHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.45, 8), new THREE.MeshStandardMaterial({ color: 0x78350f }));
+      batHandle.position.set(0.22, 0.72, 0.22);
+      nsGroup.add(batHandle);
+      const batBlade = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.65, 0.06), new THREE.MeshStandardMaterial({ color: 0xfde68a }));
+      batBlade.position.set(0.22, 0.32, 0.22);
+      batBlade.castShadow = true;
+      nsGroup.add(batBlade);
+
+      nsGroup.position.set(x, 0, z);
+      nsGroup.rotation.y = 0;
+      return nsGroup;
+    };
+    scene.add(createNonStriker(-1.8, -9.2));
+
+    // ── 17D. Shaded Team Dugouts & Player Benches ─────────────────────────────
+    const createTeamDugout = (xPos: number, teamName: string, primaryColor: number, secondaryColor: number) => {
+      const dugoutGroup = new THREE.Group();
+      const roofMat = new THREE.MeshStandardMaterial({
+        color: 0x0f172a,
+        roughness: 0.3,
+        metalness: 0.8,
+        transparent: true,
+        opacity: 0.88,
+      });
+      const canopy = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 9, 16, 1, false, 0, Math.PI), roofMat);
+      canopy.position.set(0, 3.2, 0);
+      canopy.rotation.z = Math.PI / 2;
+      dugoutGroup.add(canopy);
+
+      const frameMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.9 });
+      [-4.2, 4.2].forEach((xOff) => {
+        const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 3.5, 8), frameMat);
+        pillar.position.set(xOff, 1.75, 0);
+        dugoutGroup.add(pillar);
+      });
+
+      const bench = new THREE.Mesh(new THREE.BoxGeometry(8, 0.45, 1.2), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      bench.position.set(0, 0.45, -0.6);
+      dugoutGroup.add(bench);
+
+      [-2.2, 0, 2.2].forEach((pX) => {
+        const playerTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.22, 0.55, 6, 10), new THREE.MeshStandardMaterial({ color: primaryColor }));
+        playerTorso.position.set(pX, 0.95, -0.6);
+        dugoutGroup.add(playerTorso);
+        const playerHead = new THREE.Mesh(new THREE.SphereGeometry(0.14, 10, 10), new THREE.MeshStandardMaterial({ color: 0xc68642 }));
+        playerHead.position.set(pX, 1.45, -0.6);
+        dugoutGroup.add(playerHead);
+        const playerCap = new THREE.Mesh(new THREE.SphereGeometry(0.15, 10, 10, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: secondaryColor }));
+        playerCap.position.set(pX, 1.5, -0.6);
+        dugoutGroup.add(playerCap);
+      });
+
+      const cooler = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.7, 0.65), new THREE.MeshStandardMaterial({ color: 0x0284c7 }));
+      cooler.position.set(3.4, 0.35, 0.6);
+      dugoutGroup.add(cooler);
+
+      const signCanvas = document.createElement('canvas');
+      signCanvas.width = 512;
+      signCanvas.height = 64;
+      const sCtx = signCanvas.getContext('2d')!;
+      sCtx.fillStyle = '#0f172a';
+      sCtx.fillRect(0, 0, 512, 64);
+      sCtx.fillStyle = '#ffffff';
+      sCtx.font = 'bold 28px sans-serif';
+      sCtx.textAlign = 'center';
+      sCtx.textBaseline = 'middle';
+      sCtx.fillText(teamName, 256, 32);
+
+      const signTex = new THREE.CanvasTexture(signCanvas);
+      const signBoard = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 0.85), new THREE.MeshBasicMaterial({ map: signTex, side: THREE.DoubleSide }));
+      signBoard.position.set(0, 3.4, 1.2);
+      dugoutGroup.add(signBoard);
+
+      dugoutGroup.position.set(xPos, 0, 0);
+      dugoutGroup.lookAt(0, 0, 0);
+      return dugoutGroup;
+    };
+    scene.add(createTeamDugout(48.5, '🇮🇳 TEAM INDIA WOMEN', 0x1d4ed8, 0xf97316));
+    scene.add(createTeamDugout(-48.5, '🇦🇺 TEAM AUSTRALIA WOMEN', 0xfacc15, 0x15803d));
+
+    // ── 17E. Boundary Triangular Foam Wedges (Toblerones) ────────────────────
+    const numToblerones = 32;
+    const tobleroneRadius = 47.1;
+    const tobleroneGeo = new THREE.CylinderGeometry(0.22, 0.22, 1.4, 3);
+    const tobleroneColors = [0x06b6d4, 0xec4899, 0xf59e0b, 0x3b82f6];
+
+    for (let i = 0; i < numToblerones; i++) {
+      const angle = (i / numToblerones) * Math.PI * 2;
+      const tMat = new THREE.MeshStandardMaterial({
+        color: tobleroneColors[i % tobleroneColors.length],
+        roughness: 0.5,
+      });
+      const wedge = new THREE.Mesh(tobleroneGeo, tMat);
+      wedge.position.set(Math.sin(angle) * tobleroneRadius, 0.12, Math.cos(angle) * tobleroneRadius);
+      wedge.rotation.y = angle + Math.PI / 2;
+      wedge.rotation.z = Math.PI / 2;
+      scene.add(wedge);
+    }
+
+    // ── 17F. North End Mega Jumbotron Live World Cup Scoreboard ───────────────
+    const northJumboGroup = new THREE.Group();
+    const northFrame = new THREE.Mesh(new THREE.BoxGeometry(20, 10, 1.2), new THREE.MeshStandardMaterial({ color: 0x020617 }));
+    northJumboGroup.add(northFrame);
+
+    const northScreenCanvas = document.createElement('canvas');
+    northScreenCanvas.width = 1024;
+    northScreenCanvas.height = 512;
+    const nsCtx = northScreenCanvas.getContext('2d')!;
+
+    nsCtx.fillStyle = '#060416';
+    nsCtx.fillRect(0, 0, 1024, 512);
+
+    nsCtx.fillStyle = '#7c3aed';
+    nsCtx.fillRect(0, 0, 1024, 60);
+    nsCtx.fillStyle = '#ffffff';
+    nsCtx.font = 'bold 28px monospace';
+    nsCtx.fillText("ICC WOMEN'S T20 WORLD CUP FINAL • DUBAI", 30, 40);
+
+    nsCtx.fillStyle = '#38bdf8';
+    nsCtx.font = 'bold 72px monospace';
+    nsCtx.fillText('IND-W  178/3', 40, 160);
+    nsCtx.fillStyle = '#94a3b8';
+    nsCtx.font = '36px monospace';
+    nsCtx.fillText('18.4 OVERS', 560, 160);
+
+    nsCtx.fillStyle = '#fbbf24';
+    nsCtx.font = 'bold 36px monospace';
+    nsCtx.fillText('TARGET: 192 • NEED 14 RUNS IN 8 BALLS', 40, 240);
+
+    nsCtx.fillStyle = '#f472b6';
+    nsCtx.font = 'bold 30px monospace';
+    nsCtx.fillText('BAT: S. MANDHANA 84*(51)   H. KAUR 42(22)', 40, 320);
+
+    nsCtx.fillStyle = '#34d399';
+    nsCtx.font = '28px monospace';
+    nsCtx.fillText('BOWL: M. SCHUTT 3.4-0-34-2', 40, 380);
+
+    nsCtx.fillStyle = '#a855f7';
+    nsCtx.font = 'bold 28px monospace';
+    nsCtx.fillText('WIN SIM: IND-W 74.2% • CRR 9.53 • RRR 10.50', 40, 450);
+
+    const northScreenTex = new THREE.CanvasTexture(northScreenCanvas);
+    const northScreenMesh = new THREE.Mesh(new THREE.PlaneGeometry(18.5, 8.8), new THREE.MeshBasicMaterial({ map: northScreenTex }));
+    northScreenMesh.position.z = 0.65;
+    northJumboGroup.add(northScreenMesh);
+
+    northJumboGroup.position.set(0, 26, -68);
+    northJumboGroup.lookAt(0, 10, 0);
+    scene.add(northJumboGroup);
+
+    // ── 17G. Dubai Stadium "Ring of Fire" Roof LED Floodlight Halo ───────────
+    const ringOfFireGroup = new THREE.Group();
+    const ringRadius = 52.5;
+    const ringY = 14.6;
+    const numHaloLights = 80;
+
+    for (let i = 0; i < numHaloLights; i++) {
+      const angle = (i / numHaloLights) * Math.PI * 2;
+      const lx = Math.sin(angle) * ringRadius;
+      const lz = Math.cos(angle) * ringRadius;
+
+      const fixMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.18, 0.22, 0.35, 8),
+        new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9 })
+      );
+      fixMesh.position.set(lx, ringY, lz);
+      fixMesh.lookAt(0, 0, 0);
+      ringOfFireGroup.add(fixMesh);
+
+      const lensMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.14, 8, 8),
+        new THREE.MeshBasicMaterial({
+          color: timeOfDay === 'day' ? 0xffffff : 0xfef08a,
+        })
+      );
+      lensMesh.position.set(lx * 0.995, ringY - 0.1, lz * 0.995);
+      ringOfFireGroup.add(lensMesh);
+    }
+    scene.add(ringOfFireGroup);
+
+    // ── 17H. Sandy Sawdust Bowler Footing Crease Apron ────────────────────────
+    const sawdustMat = new THREE.MeshStandardMaterial({ color: 0xa17e4b, roughness: 0.95 });
+    [-9.6, 9.6].forEach((zP) => {
+      const sawdust = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.02, 1.8), sawdustMat);
+      sawdust.position.set(0, 0.145, zP);
+      sawdust.receiveShadow = true;
+      scene.add(sawdust);
+    });
+
     // ── 18. Main Animation & Physics Loop ────────────────────────────────────
     let running = true;
     const clock = clockRef.current;
@@ -1702,6 +1954,41 @@ export const CricketStadium3D: React.FC = () => {
           const dronePos = new THREE.Vector3(Math.sin(droneAngle) * 44, 38, Math.cos(droneAngle) * 44);
           cam.position.lerp(dronePos, 0.045);
           cam.lookAt(0, 0, 0);
+        } else if (cameraView === 'ballFollow') {
+          if (ballRef.current) {
+            const bp = ballRef.current.position;
+            const t = tRef.current;
+            const bowler = bowlerRigRef.current;
+            if (t < 0.48) {
+              // Bowler Run-Up & Gather: Over-the-shoulder chase view tracking run-up
+              const bz = bowler ? bowler.root.position.z : -16;
+              const bx = bowler ? bowler.root.position.x : 0;
+              cam.position.lerp(new THREE.Vector3(bx + 0.85, 2.5, bz - 3.4), 0.08);
+              cam.lookAt(bp.x, bp.y + 0.25, bp.z + 10.0);
+            } else if (t < 1.0) {
+              // Dynamic ball flight chase camera trailing closely behind spinning seam
+              const camZ = bp.z - 2.8;
+              const camY = Math.max(0.65, bp.y + 0.55);
+              const camX = bp.x * 0.45;
+              cam.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.16);
+              cam.lookAt(bp.x, bp.y, bp.z + 6.0);
+            } else {
+              // Post-contact ball trajectory tracking
+              if (shotType === 'wicket') {
+                // Focus on cartwheeling stumps & flying bails
+                cam.position.lerp(new THREE.Vector3(1.4, 1.8, 13.5), 0.08);
+                cam.lookAt(0, 0.75, 10.06);
+              } else {
+                // Follow the ball soaring towards boundary
+                const dirX = Math.sign(bp.x) || 1;
+                const camX = bp.x - dirX * 3.5;
+                const camY = Math.max(1.8, bp.y + 2.2);
+                const camZ = bp.z - 4.5;
+                cam.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.09);
+                cam.lookAt(bp.x, bp.y, bp.z);
+              }
+            }
+          }
         }
       }
 
@@ -1789,6 +2076,7 @@ export const CricketStadium3D: React.FC = () => {
               { key: 'topDown' as const, label: t('stadium.cam_topdown') },
               { key: 'stumpCam' as const, label: t('stadium.cam_stump') },
               { key: 'drone' as const, label: t('stadium.cam_drone') },
+              { key: 'ballFollow' as const, label: `${t('stadium.cam_ballfollow')} ⚡` },
             ].map((cam) => (
               <button
                 key={cam.key}

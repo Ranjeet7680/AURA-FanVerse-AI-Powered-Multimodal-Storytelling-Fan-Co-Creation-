@@ -2,17 +2,144 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white;
+    @apply bg-[#080415] text-slate-100 min-h-screen font-sans antialiased selection:bg-purple-500 selection:text-white;
   }
 }
 
-/* Custom glow and animations */
+/* ==========================================================================
+   AURA FANVERSE: FUTURISTIC BROADCAST & CYBER ANIMATION SUITE
+   ========================================================================== */
+
+/* 1. Ambient Glow Pulsing */
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.06); }
 }
 
 .glow-ambient {
   animation: pulseGlow 6s ease-in-out infinite;
 }
 
+/* 2. Gentle Floating Levitation */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(0.8deg); }
+}
+
+.animate-float-slow {
+  animation: floatSlow 4.5s ease-in-out infinite;
+}
+
+/* 3. Infinite Tournament Ribbon Marquee */
+@keyframes marqueeRoll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeRoll 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* 4. Audio Equalizer Frequency Wave Bars */
+@keyframes waveBar1 { 0%, 100% { height: 25%; } 50% { height: 95%; } }
+@keyframes waveBar2 { 0%, 100% { height: 85%; } 50% { height: 35%; } }
+@keyframes waveBar3 { 0%, 100% { height: 45%; } 50% { height: 100%; } }
+@keyframes waveBar4 { 0%, 100% { height: 90%; } 50% { height: 20%; } }
+@keyframes waveBar5 { 0%, 100% { height: 30%; } 50% { height: 75%; } }
+
+.wave-bar-1 { animation: waveBar1 0.75s ease-in-out infinite alternate; }
+.wave-bar-2 { animation: waveBar2 0.65s ease-in-out infinite alternate; }
+.wave-bar-3 { animation: waveBar3 0.85s ease-in-out infinite alternate; }
+.wave-bar-4 { animation: waveBar4 0.55s ease-in-out infinite alternate; }
+.wave-bar-5 { animation: waveBar5 0.9s ease-in-out infinite alternate; }
+
+/* 5. Button & Card Shimmer Light Sheen */
+@keyframes shimmerPass {
+  0% { transform: translateX(-120%) skewX(-20deg); }
+  50%, 100% { transform: translateX(220%) skewX(-20deg); }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  animation: shimmerPass 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* 6. Subtle Cyber Scanline Overlay */
+@keyframes scanlineMove {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.cyber-scanline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 50%, rgba(6, 182, 212, 0.03) 51%);
+  background-size: 100% 4px;
+}
+
+/* 7. Rotating Radar Sweep Beam */
+@keyframes radarSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-radar-sweep {
+  animation: radarSpin 4s linear infinite;
+}
+
+/* 8. Neon Gradient Border Glow */
+@keyframes borderGlowPulse {
+  0%, 100% { border-color: rgba(168, 85, 247, 0.35); box-shadow: 0 0 15px rgba(168, 85, 247, 0.15); }
+  50% { border-color: rgba(6, 182, 212, 0.55); box-shadow: 0 0 25px rgba(6, 182, 212, 0.25); }
+}
+
+.neon-border-dynamic {
+  animation: borderGlowPulse 4s ease-in-out infinite;
+}
+
+/* 9. Cyber Grid Background Overlay */
+.cyber-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+}
+
+/* 10. Sleek Futuristic Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d081d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9333ea, #06b6d4);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #a855f7, #22d3ee);
+}

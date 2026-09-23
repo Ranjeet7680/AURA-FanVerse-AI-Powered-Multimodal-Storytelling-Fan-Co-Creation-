@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import {
   Send,
   Target,
@@ -493,6 +494,11 @@ export const TacticalCoPilot: React.FC = () => {
 
             {/* Simulated 2D Cricket Oval */}
             <div className="relative w-full aspect-square max-w-[420px] mx-auto rounded-full bg-emerald-950/40 border-2 border-dashed border-emerald-500/30 flex items-center justify-center p-4 overflow-hidden shadow-inner">
+              {/* Animated Radar Sweep */}
+              <div className="absolute inset-0 pointer-events-none rounded-full overflow-hidden opacity-30">
+                <div className="w-full h-full animate-radar-sweep bg-[conic-gradient(from_0deg,transparent_0deg,transparent_270deg,rgba(6,182,212,0.5)_360deg)]" />
+              </div>
+
               <div className="absolute w-[65%] h-[65%] rounded-full border border-emerald-400/40 bg-emerald-900/20 pointer-events-none flex items-center justify-center">
                 <span className="text-[10px] text-emerald-400/60 font-mono -mt-24">30-Yd Circle</span>
               </div>
@@ -576,22 +582,27 @@ export const TacticalCoPilot: React.FC = () => {
 
               <div className="flex flex-col gap-1.5 max-h-36 overflow-y-auto pr-1">
                 {filteredQueries.map((q) => (
-                  <button
+                  <motion.button
                     key={q.id}
+                    whileHover={{ scale: 1.015, x: 3 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => handleSelectPreset(q)}
                     className="text-left text-xs text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 p-2.5 rounded-xl border border-slate-700/60 flex items-center justify-between transition-all group"
                   >
                     <span className="truncate pr-2">{getLocalizedQuestion(q)}</span>
                     <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-purple-400 flex-shrink-0" />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </div>
 
             <div className="flex-1 p-4 overflow-y-auto space-y-3">
               {chatLog.map((msg, i) => (
-                <div
+                <motion.div
                   key={i}
+                  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.2 }}
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
@@ -622,7 +633,7 @@ export const TacticalCoPilot: React.FC = () => {
                     )}
                     {msg.text}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 

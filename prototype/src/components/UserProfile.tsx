@@ -1,6 +1,9 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import { Bolt, Verified, Share2, Award, BookOpen, Star, Headphones, Flame, LogOut } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { soundFX } from '../services/soundFX';
 
 interface UserProfileProps {
   user: {
@@ -13,10 +16,29 @@ interface UserProfileProps {
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
   const { t } = useLanguage();
+
+  const handleNewChapter = () => {
+    soundFX.playSuccess();
+    try {
+      confetti({
+        particleCount: 60,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#a855f7', '#06b6d4', '#ec4899', '#10b981']
+      });
+    } catch (e) {
+      console.log('Confetti trigger', e);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Dynamic Ambient Banner Card */}
-      <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-800 bg-[#1d182f]">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-purple-500/20 bg-[#160f29]"
+      >
         {/* Banner Graphic Backdrop */}
         <div className="relative h-48 w-full bg-gradient-to-r from-purple-900 via-pink-900 to-indigo-950 overflow-hidden">
           <img
@@ -24,7 +46,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
             alt="Cyber Banner"
             className="w-full h-full object-cover opacity-60 mix-blend-overlay"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#151026] via-transparent to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#160f29] via-transparent to-black/30" />
 
           {/* Floating Sparks Balance Pill */}
           <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#100b21]/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 shadow-lg">
@@ -57,7 +79,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
 
             <div>
               <div className="flex items-center justify-center sm:justify-start gap-2">
-                <h2 className="text-2xl font-extrabold text-white">{user.name}</h2>
+                <h2 className="text-2xl font-black text-white">{user.name}</h2>
                 <span className="text-xs text-cyan-400 font-mono">{user.handle}</span>
               </div>
               <p className="text-xs text-purple-300 font-semibold mt-0.5">
@@ -70,43 +92,55 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold shadow-lg shadow-purple-600/30 hover:opacity-95 active:scale-95 transition-transform">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={handleNewChapter}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold shadow-lg shadow-purple-600/30 transition-transform shimmer-effect"
+            >
               <BookOpen className="w-3.5 h-3.5" />
               <span>New Chapter</span>
-            </button>
-            <button className="p-2 rounded-full bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors">
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => soundFX.playClick()}
+              className="p-2 rounded-full bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+            >
               <Share2 className="w-4 h-4" />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={onLogout}
               className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-red-950/60 text-red-300 hover:bg-red-900/60 text-xs font-semibold border border-red-800/60 transition-colors"
               title="Logout session"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>{t('nav.logout', 'Logout')}</span>
-            </button>
+            </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Lore Stat Matrix */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#1d182f] border border-slate-800 rounded-2xl p-4 shadow-xl text-center">
-        <div className="p-2">
-          <span className="text-2xl font-extrabold text-white block">14.2K</span>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#17102d] border border-purple-500/20 rounded-2xl p-4 shadow-xl text-center">
+        <motion.div whileHover={{ scale: 1.02 }} className="p-2">
+          <span className="text-2xl font-black text-white block">14.2K</span>
           <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Followers</span>
-        </div>
-        <div className="p-2">
-          <span className="text-2xl font-extrabold text-purple-400 block">38</span>
+        </motion.div>
+        <motion.div whileHover={{ scale: 1.02 }} className="p-2">
+          <span className="text-2xl font-black text-purple-400 block">38</span>
           <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Active Stories</span>
-        </div>
-        <div className="p-2">
-          <span className="text-2xl font-extrabold text-pink-400 block">2.4M</span>
+        </motion.div>
+        <motion.div whileHover={{ scale: 1.02 }} className="p-2">
+          <span className="text-2xl font-black text-pink-400 block">2.4M</span>
           <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Fan Reads</span>
-        </div>
-        <div className="p-2">
-          <span className="text-2xl font-extrabold text-cyan-400 block">99.4%</span>
+        </motion.div>
+        <motion.div whileHover={{ scale: 1.02 }} className="p-2">
+          <span className="text-2xl font-black text-cyan-400 block">99.4%</span>
           <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Canon Coherence</span>
-        </div>
+        </motion.div>
       </div>
 
       {/* Badges & Accolades Strip */}
@@ -120,7 +154,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="p-3 rounded-xl bg-[#211c33] border border-slate-800 flex items-center gap-3">
+          <motion.div whileHover={{ y: -4 }} className="p-3 rounded-xl bg-[#1d1433] border border-slate-800 flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0">
               <Star className="w-5 h-5" />
             </div>
@@ -128,9 +162,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
               <span className="text-xs font-bold text-white block leading-tight">AI Master Promptsmith</span>
               <span className="text-[10px] text-slate-400">Top 0.5% Accuracy</span>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="p-3 rounded-xl bg-[#211c33] border border-slate-800 flex items-center gap-3">
+          <motion.div whileHover={{ y: -4 }} className="p-3 rounded-xl bg-[#1d1433] border border-slate-800 flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
               <Award className="w-5 h-5" />
             </div>
@@ -138,9 +172,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
               <span className="text-xs font-bold text-white block leading-tight">Canon Pioneer 2026</span>
               <span className="text-[10px] text-slate-400">Council Voted</span>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="p-3 rounded-xl bg-[#211c33] border border-slate-800 flex items-center gap-3">
+          <motion.div whileHover={{ y: -4 }} className="p-3 rounded-xl bg-[#1d1433] border border-slate-800 flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center shrink-0">
               <Headphones className="w-5 h-5" />
             </div>
@@ -148,9 +182,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
               <span className="text-xs font-bold text-white block leading-tight">Audio Dramatist</span>
               <span className="text-[10px] text-slate-400">400k Listeners</span>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="p-3 rounded-xl bg-[#211c33] border border-slate-800 flex items-center gap-3">
+          <motion.div whileHover={{ y: -4 }} className="p-3 rounded-xl bg-[#1d1433] border border-slate-800 flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
               <Flame className="w-5 h-5" />
             </div>
@@ -158,12 +192,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
               <span className="text-xs font-bold text-white block leading-tight">100-Day Streak</span>
               <span className="text-[10px] text-slate-400">Unbroken Synapse</span>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Pinned Showcase Universe Card */}
-      <div className="bg-[#1d182f] border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
+      <motion.div whileHover={{ y: -4 }} className="bg-[#17102d] border border-purple-500/20 rounded-2xl p-5 space-y-4 shadow-xl">
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold uppercase text-pink-400 font-mono tracking-wider">
             Pinned Multiverse Showcase • Vol. 2
@@ -193,7 +227,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

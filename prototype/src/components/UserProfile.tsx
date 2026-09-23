@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bolt, Verified, Share2, Award, BookOpen, Star, Headphones, Flame, LogOut } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface UserProfileProps {
   user: {
@@ -11,6 +12,7 @@ interface UserProfileProps {
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
+  const { t } = useLanguage();
   return (
     <div className="space-y-6">
       {/* Dynamic Ambient Banner Card */}
@@ -28,12 +30,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
           <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#100b21]/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 shadow-lg">
             <Bolt className="w-4 h-4 fill-cyan-400 text-cyan-400 animate-pulse" />
             <span className="font-extrabold text-sm text-white font-mono">{user.sparks.toLocaleString()}</span>
-            <span className="text-xs text-cyan-400">Sparks</span>
+            <span className="text-xs text-cyan-400">{t('nav.sparks', 'Sparks')}</span>
           </div>
 
           <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#100b21]/80 backdrop-blur-md border border-pink-500/30 text-pink-300 text-xs">
             <span className="w-2 h-2 rounded-full bg-pink-400 animate-ping" />
-            <span className="font-mono uppercase text-[10px] font-bold">Synapse Connected</span>
+            <span className="font-mono uppercase text-[10px] font-bold">{t('profile.connected', 'Synapse Connected')}</span>
           </div>
         </div>
 
@@ -81,7 +83,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout }) => {
               title="Logout session"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Logout</span>
+              <span>{t('nav.logout', 'Logout')}</span>
             </button>
           </div>
         </div>

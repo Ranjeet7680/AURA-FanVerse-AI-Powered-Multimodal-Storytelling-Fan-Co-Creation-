@@ -18,12 +18,15 @@ import {
 } from 'lucide-react';
 import { MOCK_REELS, MOCK_LONG_VIDEOS, type MicroReel, type LongMatchVideo } from '../data/mockMatchData';
 import { soundFX } from '../services/soundFX';
+import { useLanguage } from '../context/LanguageContext';
 
 interface MicroNarrativesProps {
-  selectedLang: string;
+  selectedLang?: string;
 }
 
 export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }) => {
+  const { language, t, getSpeechLangCode } = useLanguage();
+  const activeLang = selectedLang || language;
   const [mediaFormat, setMediaFormat] = useState<'shorts' | 'long'>('shorts');
   const [selectedReel, setSelectedReel] = useState<MicroReel>(MOCK_REELS[0]);
   const [selectedLongVideo, setSelectedLongVideo] = useState<LongMatchVideo>(MOCK_LONG_VIDEOS[0]);
@@ -33,8 +36,23 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
 
   const categories = ['All', 'Masterclass', 'Pace Attack', 'Clutch Defense', 'Captaincy', 'Fielding', 'Spin Magic', 'Power Hitting', 'Death Bowling', 'Grassroots Talent', 'Wicketkeeping', 'Final Moments'];
 
+  const categoryKeys: Record<string, string> = {
+    'All': 'shorts.all',
+    'Masterclass': 'shorts.cat_masterclass',
+    'Pace Attack': 'shorts.cat_pace',
+    'Clutch Defense': 'shorts.cat_clutch',
+    'Captaincy': 'shorts.cat_captaincy',
+    'Fielding': 'shorts.cat_fielding',
+    'Spin Magic': 'shorts.cat_spin',
+    'Power Hitting': 'shorts.cat_power',
+    'Death Bowling': 'shorts.cat_death',
+    'Grassroots Talent': 'shorts.cat_grassroots',
+    'Wicketkeeping': 'shorts.cat_wicketkeeping',
+    'Final Moments': 'shorts.cat_final',
+  };
+
   // Speech synthesis simulation for multi-language audio commentary
-  const handlePlayVoice = (text: string, lang: string) => {
+  const handlePlayVoice = (text: string) => {
     soundFX.playClick();
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -43,16 +61,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
         return;
       }
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang =
-        lang === 'hi'
-          ? 'hi-IN'
-          : lang === 'es'
-          ? 'es-ES'
-          : lang === 'ar'
-          ? 'ar-SA'
-          : lang === 'ta'
-          ? 'ta-IN'
-          : 'en-US';
+      utterance.lang = getSpeechLangCode();
       utterance.rate = 1.05;
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
@@ -71,7 +80,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
       ? MOCK_REELS
       : MOCK_REELS.filter((r) => r.category === activeCategory);
 
-  const currentCaption = selectedReel.caption[selectedLang] || selectedReel.caption['en'];
+  const currentCaption = selectedReel.caption[activeLang] || selectedReel.caption[language] || selectedReel.caption['en'];
 
   return (
     <div className="space-y-6">
@@ -80,19 +89,19 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
         <div>
           <div className="flex items-center space-x-2 text-purple-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Sparkles className="w-4 h-4" />
-            <span>Autonomous Multimodal Highlight Pipeline</span>
+            <span>{t('shorts.badge', 'Autonomous Multimodal Highlight Pipeline')}</span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Vertical Micro-Narratives & Multi-Language Synthesis
+            {t('shorts.title', 'Vertical Micro-Narratives & Multi-Language Synthesis')}
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            Raw ICC broadcast video converted into 9:16 vertical storytelling reels in under 45 seconds with automated ball telemetry, tactical annotations, and commentary in 12+ languages.
+            {t('shorts.desc', 'Raw ICC broadcast video converted into 9:16 vertical storytelling reels in under 45 seconds with automated ball telemetry, tactical annotations, and commentary in 12+ languages.')}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
           <span className="px-3 py-1.5 rounded-xl bg-purple-500/20 border border-purple-400/30 text-purple-300 text-xs font-medium flex items-center gap-1.5">
             <Zap className="w-3.5 h-3.5 text-yellow-400" />
-            Edge Ingestion: 38s
+            {t('shorts.edge_ingestion', 'Edge Ingestion: 38s')}
           </span>
           {/* Format Switcher: 9:16 Shorts vs 16:9 Long Videos */}
           <div className="flex items-center p-1 rounded-xl bg-[#120d22] border border-cyan-500/30">
@@ -108,7 +117,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
               }`}
             >
               <Film className="w-3.5 h-3.5" />
-              <span>9:16 Shorts ({MOCK_REELS.length})</span>
+              <span>{t('shorts.tab_shorts', '9:16 Shorts')} ({MOCK_REELS.length})</span>
             </button>
             <button
               onClick={() => {
@@ -122,7 +131,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
               }`}
             >
               <Video className="w-3.5 h-3.5" />
-              <span>16:9 Full Match ({MOCK_LONG_VIDEOS.length})</span>
+              <span>{t('shorts.tab_long', '16:9 Full Match')} ({MOCK_LONG_VIDEOS.length})</span>
             </button>
           </div>
         </div>
@@ -305,7 +314,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
                     : 'bg-[#1a142c] text-slate-400 hover:text-slate-200 border border-slate-800'
                 }`}
               >
-                {cat}
+                {categoryKeys[cat] ? t(categoryKeys[cat], cat) : cat}
               </button>
             ))}
           </div>
@@ -385,7 +394,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
                       {selectedReel.duration}
                     </span>
                     <button
-                      onClick={() => handlePlayVoice(currentCaption, selectedLang)}
+                      onClick={() => handlePlayVoice(currentCaption)}
                       className={`p-2 rounded-full backdrop-blur-md transition-colors ${
                         isSpeaking
                           ? 'bg-purple-600 text-white animate-bounce'
@@ -471,7 +480,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
               </span>
             </div>
             <button
-              onClick={() => handlePlayVoice(currentCaption, selectedLang)}
+              onClick={() => handlePlayVoice(currentCaption)}
               className={`p-2 rounded-xl flex items-center gap-1.5 text-xs font-bold transition-all ${
                 isSpeaking
                   ? 'bg-purple-600 text-white animate-pulse'
@@ -479,7 +488,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
               }`}
             >
               <Volume2 className="w-3.5 h-3.5" />
-              <span>Voice</span>
+              <span>{isSpeaking ? t('shorts.stop_audio', 'Stop Voice') : t('shorts.play_audio', 'Listen in Voice')}</span>
             </button>
           </div>
         </div>
@@ -559,7 +568,7 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
             <div className="flex items-center justify-between">
               <span className="text-xs uppercase font-bold tracking-wider text-indigo-400 flex items-center gap-1.5 font-mono">
                 <Sparkles className="w-3.5 h-3.5" />
-                AI Multimodal Tactical Note
+                {t('shorts.tactical_breakdown', 'AI Multimodal Tactical Note')}
               </span>
               <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 Confidence: 98.4%
@@ -570,13 +579,13 @@ export const MicroNarratives: React.FC<MicroNarrativesProps> = ({ selectedLang }
             </p>
             <div className="flex flex-wrap gap-2 pt-2">
               <span className="text-xs px-2.5 py-1 bg-slate-800 text-slate-300 rounded-lg border border-slate-700">
-                Category: {selectedReel.category || 'Highlight'}
+                {t('shorts.exit_velocity', 'Exit Velocity')}: {selectedReel.metrics.exitVelocity}
               </span>
               <span className="text-xs px-2.5 py-1 bg-slate-800 text-slate-300 rounded-lg border border-slate-700">
-                Exit Velocity: {selectedReel.metrics.exitVelocity}
+                {t('shorts.win_prob_delta', 'Win Swing')}: {selectedReel.metrics.winProbChange}
               </span>
               <span className="text-xs px-2.5 py-1 bg-slate-800 text-slate-300 rounded-lg border border-slate-700">
-                Win Swing: {selectedReel.metrics.winProbChange}
+                {t('shorts.launch_angle', 'Launch Angle')}: {selectedReel.metrics.launchAngle}
               </span>
             </div>
           </div>

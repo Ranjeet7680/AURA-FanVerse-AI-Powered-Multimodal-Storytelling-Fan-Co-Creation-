@@ -80,8 +80,65 @@ interface ModelTelemetry {
 }
 
 export const TacticalCoPilot: React.FC = () => {
-  const { t, getSpeechLangCode } = useLanguage();
+  const { language, t, getSpeechLangCode } = useLanguage();
   const [viewMode, setViewMode] = useState<'copilot' | 'matchupMatrix' | 'inplaySimulator' | 'modelStudio'>('copilot');
+
+  // Localized AI Tactical Questions and Answers
+  const getLocalizedQuestion = (q: TacticalQuery): string => {
+    const map: Record<string, Record<string, string>> = {
+      'q-1': {
+        hi: 'हरमनप्रीत कौर ने 14.3 ओवर में डीप बैकवर्ड स्क्वायर लेग क्यों लगाया?',
+        ta: 'ஹர்மன்பிரீத் கவுர் 14.3 ஓவரில் டீப் பேக்வர்ட் ஸ்கொயர் லெக்கை ஏன் வைத்தார்?',
+        es: '¿Por qué Harmanpreet colocó una deep backward square leg en la bola 14.3?',
+        ar: 'لماذا وضعت الكابتن هارمانبريت لاعبة في التمركز الخلفي العميق في الرمية 14.3؟',
+      },
+      'q-2': {
+        hi: 'ऑस्ट्रेलिया के शीर्ष क्रम के खिलाफ रेणुका की रणनीतिक योजना क्या है?',
+        ta: 'ஆஸ்திரேலியாவின் டாப் ஆர்டருக்கு எதிரான ரேணுகாவின் தந்திரோபாய திட்டம் என்ன?',
+        es: '¿Cuál es el plan táctico de Renuka contra el orden superior de Australia?',
+        ar: 'ما هي الخطة التكتيكية لـ رينوكا سينغ ضد خط هجوم أستراليا الأمامي؟',
+      },
+      'q-3': {
+        hi: 'डेथ ओवर्स (18-20) में यॉर्कर का बचाव करते समय फील्डर्स कैसे खड़े करने चाहिए?',
+        ta: 'டெத் ஓவர்களில் (18-20) யார்க்கர் பந்துவீசும்போது பீல்டிங் அமைப்புகள் எப்படி இருக்க வேண்டும்?',
+        es: '¿Cómo deben colocarse los fildeadores al defender con yorkers en los overs finales (18-20)?',
+        ar: 'كيف يجب توزيع اللاعبات عند الدفاع برميات الـ Yorker في الأدوار الحاسمة (18-20)؟',
+      }
+    };
+    return map[q.id]?.[language] || q.question;
+  };
+
+  const getLocalizedAnswer = (q: TacticalQuery): string => {
+    const map: Record<string, Record<string, string>> = {
+      'q-1': {
+        hi: 'ऑस्ट्रेलियाई बल्लेबाज बेथ मूनी दीप्ति शर्मा की ऑफ-स्पिन के खिलाफ लैप स्वीप खेलने की योजना बना रही थीं। भारत ने शॉर्ट फाइन लेग को पीछे 72 मीटर की सीमा पर भेजकर 4 रन की संभावना को रोक दिया, जिससे मूनी जोखिम भरे हवाई शॉट खेलने पर मजबूर हुईं।',
+        ta: 'ஆஸ்திரேலிய பேட்டர் பெத் மூனி தீப்தி சர்மாவின் ஆஃப்-ஸ்பின்னுக்கு எதிராக ஸ்வீப் ஷாட்களை ஆட முற்பட்டார். இந்தியா ஷார்ட் ஃபைன் லெக்கை டீப் பேக்வர்ட் ஸ்கொயர் லெக்கிற்கு நகர்த்தி பவுண்டரி வாய்ப்பைத் தடுத்தது.',
+        es: 'La bateadora australiana Beth Mooney estaba premeditando el barrido contra el efecto de Deepti Sharma. Al retrasar la posición defensiva al límite de 72m, India cerró el canal de 4 carreras, forzando cortes aéreos de alto riesgo.',
+        ar: 'كانت الضاربة الأسترالية بيث موني تخطط لتسديدة الدوران المعاكس ضد ديبتي شارما. ومن خلال سحب المدافعة إلى مسافة 72 متراً على حدود الملعب، أغلقت الهند زاوية الـ 4 نقاط وأجبرتها على المجازفة بضربات هوائية عالية الخطورة.',
+      },
+      'q-2': {
+        hi: 'रेणुका अपनी 78% पावरप्ले गेंदें 5.5 मीटर की फुलर लेंथ पर 1.8 डिग्री सीम मूवमेंट के साथ फेंकती हैं। दाएं हाथ के बल्लेबाजों के खिलाफ वह ऑफ-स्टंप पर हमला करती हैं और गली में कैच के लिए 3 कैचर का अंब्रेला सेट करती हैं।',
+        ta: 'ரேணுகா தனது பவர்பிளே பந்துகளில் 78% பந்துகளை 5.5 மீட்டர் லென்த்தில் 1.8 டிகிரி சீம் மூவ்மென்ட்டுடன் வீசுகிறார். வலது கை பேட்டர்களுக்கு எதிராக 3 கேட்சர்களை வைத்து அழுத்தத்தை உருவாக்குகிறார்.',
+        es: 'Renuka lanza el 78% de sus entregas de powerplay en una longitud más completa de 5.5 metros con 1.8° de movimiento de costura. Frente a bateadoras diestras, ataca el muñón exterior para inducir capturas en gully.',
+        ar: 'ترمي رينوكا 78% من كراتها في الـ Powerplay على طول 5.5 متر مع انحراف بحركة التماس 1.8 درجة لمفاجأة الضاربات باليمنى وإجبارهن على ارتكاب أخطاء في التمرير.',
+      },
+      'q-3': {
+        hi: 'डेथ ओवर्स में डीप मिड-विकेट और लॉन्ग-ऑन पर दो बाउंड्री राइडर्स तैनात किए जाते हैं, जबकि शॉर्ट थर्ड मैन और बैकवर्ड पॉइंट सिंगल रोकने के लिए 30-यार्ड घेरे के भीतर रहते हैं।',
+        ta: 'டெத் ஓவர்களில் டீப் மிட்-விக்கெட் மற்றும் லாங்-ஆனில் இரண்டு எல்லைப் பாதுகாவலர்கள் நிலைநிறுத்தப்படுகிறார்கள், அதே நேரத்தில் சிங்கிள்களைத் தடுக்க 30 யார்டு வட்டத்திற்குள் வீரர்கள் வைக்கப்படுகிறார்கள்.',
+        es: 'Durante los overs finales, dos guardianas cubren el límite en deep mid-wicket y long-on, mientras que el círculo interior de 30 yardas presiona para evitar carreras simples.',
+        ar: 'خلال الأدوار الحاسمة، يتم نشر مدافعتين على أطراف الملعب في Deep Mid-Wicket و Long-On، بينما تحاصر بقية اللاعبات الدائرة الداخلية لمنع التسديدات الفردية.',
+      }
+    };
+    return map[q.id]?.[language] || q.answer;
+  };
+
+  const getGreeting = () => {
+    if (language === 'hi') return 'नमस्ते! मैं आपका ऑरा टैक्टिकल को-पायलट हूँ। फील्ड प्लेसमेंट, बॉलिंग मैचअप या जीत की संभावना के बारे में मुझसे कोई भी प्रश्न पूछें।';
+    if (language === 'ta') return 'வணக்கம்! நான் உங்கள் ஆரா தந்திரோபாய AI வழிகாட்டி. பீல்டிங் உத்திகள், பந்துவீச்சு அமைப்புகள் அல்லது வெற்றி வாய்ப்பு மாற்றங்கள் குறித்து என்னிடம் கேளுங்கள்.';
+    if (language === 'es') return '¡Hola! Soy su Co-Piloto Táctico AURA. Pregúnteme cualquier duda táctica sobre esquemas de campo, lanzadoras o probabilidades de victoria.';
+    if (language === 'ar') return 'مرحباً! أنا مساعدك التكتيكي الذكي AURA. اسألني أي سؤال تكتيكي حول تمركز اللاعبات أو احتمالات الفوز المباشرة.';
+    return 'Hello! I am your AURA Tactical Co-Pilot powered by Gradient Boosting ML. Ask me any tactical question regarding field setups, bowling matchups, or situational win probability swings.';
+  };
 
   // Co-Pilot Chat State
   const [selectedQuery, setSelectedQuery] = useState<TacticalQuery>(MOCK_TACTICAL_QUERIES[0]);
@@ -128,18 +185,37 @@ export const TacticalCoPilot: React.FC = () => {
   const [chatLog, setChatLog] = useState<{ role: 'user' | 'assistant'; text: string; query?: TacticalQuery }[]>([
     {
       role: 'assistant',
-      text: "Hello! I am your AURA Tactical Co-Pilot powered by Gradient Boosting ML. Ask me any tactical question regarding field setups, bowling matchups, or situational win probability swings."
+      text: getGreeting()
     },
     {
       role: 'user',
-      text: MOCK_TACTICAL_QUERIES[0].question
+      text: getLocalizedQuestion(MOCK_TACTICAL_QUERIES[0])
     },
     {
       role: 'assistant',
-      text: MOCK_TACTICAL_QUERIES[0].answer,
+      text: getLocalizedAnswer(MOCK_TACTICAL_QUERIES[0]),
       query: MOCK_TACTICAL_QUERIES[0]
     }
   ]);
+
+  // Synchronize chat with active language when language changes
+  useEffect(() => {
+    setChatLog([
+      {
+        role: 'assistant',
+        text: getGreeting()
+      },
+      {
+        role: 'user',
+        text: getLocalizedQuestion(MOCK_TACTICAL_QUERIES[0])
+      },
+      {
+        role: 'assistant',
+        text: getLocalizedAnswer(MOCK_TACTICAL_QUERIES[0]),
+        query: MOCK_TACTICAL_QUERIES[0]
+      }
+    ]);
+  }, [language]);
 
   // Voice Speech Synthesis (AI Reads Response aloud)
   const handleSpeakText = (text: string, index: number) => {
@@ -214,10 +290,12 @@ export const TacticalCoPilot: React.FC = () => {
   const handleSelectPreset = (query: TacticalQuery) => {
     soundFX.playClick();
     setSelectedQuery(query);
+    const locQ = getLocalizedQuestion(query);
+    const locA = getLocalizedAnswer(query);
     setChatLog((prev) => [
       ...prev,
-      { role: 'user', text: query.question },
-      { role: 'assistant', text: query.answer, query }
+      { role: 'user', text: locQ },
+      { role: 'assistant', text: locA, query }
     ]);
   };
 
@@ -503,7 +581,7 @@ export const TacticalCoPilot: React.FC = () => {
                     onClick={() => handleSelectPreset(q)}
                     className="text-left text-xs text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 p-2.5 rounded-xl border border-slate-700/60 flex items-center justify-between transition-all group"
                   >
-                    <span className="truncate pr-2">{q.question}</span>
+                    <span className="truncate pr-2">{getLocalizedQuestion(q)}</span>
                     <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-purple-400 flex-shrink-0" />
                   </button>
                 ))}

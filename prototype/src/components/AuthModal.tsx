@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Fingerprint, Shield, ArrowLeft, ArrowRight, CheckCircle2, RefreshCw } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
+  const { t } = useLanguage();
   const [step, setStep] = useState<'login' | 'otp'>('login');
   const [identifier, setIdentifier] = useState<string>('lorekeeper@auraverse.io');
   const [otpDigits, setOtpDigits] = useState<string[]>(['4', '9', '1']);
@@ -96,10 +98,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
           <div className="space-y-4 relative z-10">
             <div className="text-center space-y-1">
               <h2 className="text-2xl font-bold text-white tracking-tight">
-                Welcome Back, <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Lorekeeper</span>
+                {t('auth.title', 'AURA Lorekeeper Access')}
               </h2>
               <p className="text-xs text-slate-400">
-                Sign in to resume your multiverse chronicles and tactical co-creation rooms.
+                {t('auth.subtitle', 'Sign in with cryptographic keypass or email verification')}
               </p>
             </div>
 
@@ -108,7 +110,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
                 <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <Fingerprint className="w-3.5 h-3.5 text-cyan-400" />
-                    Neural ID, Email or Mobile
+                    {t('auth.email_label', 'Creator Email or Web3 Handle')}
                   </span>
                   <span className="text-cyan-400 text-[10px] uppercase font-mono">Secured</span>
                 </label>
@@ -119,7 +121,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     className="w-full bg-transparent text-xs text-white placeholder-slate-500 focus:outline-none"
-                    placeholder="lorekeeper@multiverse.ai"
+                    placeholder={t('auth.email_placeholder', 'lorekeeper@auraverse.io')}
                   />
                 </div>
               </div>
@@ -128,7 +130,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
                 type="submit"
                 className="w-full py-3 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all"
               >
-                <span>Send Neural Verification Code</span>
+                <span>{t('auth.send_code', 'Generate Verification Cipher')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -138,7 +140,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
                 className="w-full py-2.5 rounded-xl bg-[#211c33] hover:bg-[#2c273e] text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 border border-slate-800 transition-colors"
               >
                 <Fingerprint className="w-4 h-4 text-cyan-400" />
-                <span>Quick Pass via Neural Face ID</span>
+                <span>{t('auth.biometric', 'Use Biometric Passkey')}</span>
               </button>
             </form>
 

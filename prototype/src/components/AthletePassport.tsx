@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Award, Heart, Sparkles, CheckCircle2, DollarSign } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { MOCK_ATHLETES, type AthleteProfile } from '../data/mockMatchData';
+import { useLanguage } from '../context/LanguageContext';
 
 export const AthletePassport: React.FC = () => {
+  const { t } = useLanguage();
   const [athletes, setAthletes] = useState<AthleteProfile[]>(MOCK_ATHLETES);
   const [supportedId, setSupportedId] = useState<string | null>(null);
   const [userTokens, setUserTokens] = useState<number>(350);
@@ -49,13 +51,13 @@ export const AthletePassport: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-pink-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Heart className="w-4 h-4 text-pink-500 fill-pink-500" />
-            <span>Empowerment & Grassroots Inclusivity</span>
+            <span>{t('athletes.badge', 'Empowerment & Grassroots Inclusivity')}</span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Athlete Digital Passport & Micro-Sponsorship Hub
+            {t('athletes.title', 'Athlete Digital Passport & Micro-Sponsorship Hub')}
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            Bridging the grassroots funding divide. Fans back women athletes and academy talent directly, earning verified digital credentials while funding gear, travel, and training clinics.
+            {t('athletes.desc', 'Bridging the grassroots funding divide. Fans back women athletes and academy talent directly, earning verified digital credentials while funding gear, travel, and training clinics.')}
           </p>
         </div>
 
@@ -65,8 +67,8 @@ export const AthletePassport: React.FC = () => {
             <DollarSign className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] text-slate-400 block">Your Fan Balance</span>
-            <span className="text-base font-extrabold text-white">{userTokens} Fan Tokens</span>
+            <span className="text-[11px] text-slate-400 block">{t('athletes.balance', 'Your Fan Balance')}</span>
+            <span className="text-base font-extrabold text-white">{userTokens} {t('athletes.tokens', 'Fan Tokens')}</span>
           </div>
         </div>
       </div>
@@ -179,12 +181,12 @@ export const AthletePassport: React.FC = () => {
                   {isJustSupported ? (
                     <>
                       <CheckCircle2 className="w-4 h-4" />
-                      <span>Supported (+50 Tokens)!</span>
+                      <span>{t('athletes.backed_success', 'Athlete Backed! +50 Sparks')}</span>
                     </>
                   ) : (
                     <>
                       <Heart className="w-4 h-4 fill-white" />
-                      <span>Back Athlete (50 Fan Tokens)</span>
+                      <span>{t('athletes.back_athlete', 'Back with 50 Tokens')}</span>
                     </>
                   )}
                 </button>

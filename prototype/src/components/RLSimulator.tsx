@@ -9,8 +9,10 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
+import { useLanguage } from '../context/LanguageContext';
 
 export const RLSimulator: React.FC = () => {
+  const { t } = useLanguage();
   const [episodes, setEpisodes] = useState<number>(300);
   const [isTraining, setIsTraining] = useState<boolean>(false);
   const [trainingData, setTrainingData] = useState<{ epoch: number; reward: number; epsilon: number }[]>([
@@ -82,13 +84,13 @@ export const RLSimulator: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <TrendingUp className="w-4 h-4" />
-            <span>Autonomous Reinforcement Learning Agent</span>
+            <span>{t('rl.badge', 'Deep Q-Learning & Policy Gradient Architecture')}</span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Q-Learning Tactical Field Placement Optimizer
+            {t('rl.title', 'Deep Reinforcement Learning Pitch Simulator')}
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            An episodic Bellman-optimizing MDP agent that learns optimal 11-player cricket coordinates to maximize dot-ball and wicket rewards against batter wagon wheel distributions.
+            {t('rl.desc', 'Simulating captaincy decisions with Markov Decision Process (MDP) state-space policies trained on thousands of match scenarios.')}
           </p>
         </div>
 
@@ -99,7 +101,7 @@ export const RLSimulator: React.FC = () => {
             className="flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-purple-600 hover:from-amber-500 hover:to-purple-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-amber-600/20 transition-all disabled:opacity-50"
           >
             <Play className="w-3.5 h-3.5 fill-white" />
-            <span>{isTraining ? 'Updating Q-Table...' : 'Train +50 Episodes'}</span>
+            <span>{isTraining ? t('rl.training', 'Optimizing Q-Policy...') : t('rl.train_step', 'Run RL Optimization Step (+50 Epochs)')}</span>
           </button>
           <button
             onClick={handleResetPolicy}

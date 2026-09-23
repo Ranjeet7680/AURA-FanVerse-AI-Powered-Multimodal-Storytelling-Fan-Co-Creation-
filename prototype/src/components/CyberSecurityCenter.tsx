@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Lock, Terminal, Activity, Key } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export const CyberSecurityCenter: React.FC = () => {
+  const { t } = useLanguage();
   const [testPrompt, setTestPrompt] = useState<string>('Why did the captain set a deep backward square leg?');
   const [firewallResult, setFirewallResult] = useState<{
     status: 'CLEAN' | 'BLOCKED';
@@ -58,13 +60,13 @@ export const CyberSecurityCenter: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-red-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Lock className="w-4 h-4" />
-            <span>Zero-Trust Infrastructure & Threat Shield</span>
+            <span>{t('cyber.badge', 'Zero-Trust Security & HMAC Cryptographic Mesh')}</span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            Security Operations Center (SOC) & Cryptographic Telemetry Shield
+            {t('cyber.title', 'Cyber Shield & AI Prompt Defense Center')}
           </h2>
           <p className="text-sm text-slate-300 max-w-2xl mt-1">
-            End-to-end telemetry protection: HMAC-SHA256 anti-tamper stadium sensor verification, adversarial LLM prompt injection firewalls, and real-time IDS event auditing.
+            {t('cyber.desc', 'Protecting real-time broadcast telemetry and fan governance from adversarial injection, data tampering, and malicious model jailbreaks.')}
           </p>
         </div>
 

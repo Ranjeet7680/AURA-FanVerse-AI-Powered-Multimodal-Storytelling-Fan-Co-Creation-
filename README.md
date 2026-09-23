@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/aura_header_banner.svg" alt="AURA FanVerse Animated Hero Banner" width="100%" />
+</p>
+
 # AURA FanVerse — AI-Powered Multimodal Storytelling & Fan Co-Creation
 
 <p align="center">

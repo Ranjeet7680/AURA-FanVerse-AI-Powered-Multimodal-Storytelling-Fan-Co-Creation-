@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/aura_header_banner.svg" alt="AURA FanVerse Web Client Banner" width="100%" />
+</p>
+
 # AURA FanVerse — Web Client (React 19 + Vite + Three.js + Framer Motion)
 
 <p align="center">

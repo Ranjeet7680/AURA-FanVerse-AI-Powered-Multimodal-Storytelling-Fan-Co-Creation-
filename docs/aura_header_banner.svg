@@ -1,0 +1,241 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="headerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b061c"/>
+      <stop offset="35%" stop-color="#150d36"/>
+      <stop offset="70%" stop-color="#1d1045"/>
+      <stop offset="100%" stop-color="#070314"/>
+    </linearGradient>
+
+    <!-- Neon Cyber Border Gradient -->
+    <linearGradient id="neonBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="30%" stop-color="#A855F7"/>
+      <stop offset="70%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+
+    <!-- Title Shimmer Gradient -->
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#67E8F9"/>
+      <stop offset="25%" stop-color="#D8B4FE"/>
+      <stop offset="50%" stop-color="#F472B6"/>
+      <stop offset="75%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+
+    <!-- Emblem Glowing Gradient -->
+    <linearGradient id="auraGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="50%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+
+    <!-- Button Surface Gradient -->
+    <linearGradient id="chipBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#211447" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#120a2e" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- Neon Bloom Filters -->
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="deepBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="30"/>
+    </filter>
+
+    <filter id="badgeGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .title-font { font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif; font-weight: 900; }
+    .body-font { font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; font-weight: 600; }
+    .mono-font { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    @keyframes pulseOrb {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(1.15); }
+    }
+    @keyframes sweepLine {
+      0% { x1: 50; x2: 250; }
+      50% { x1: 950; x2: 1150; }
+      100% { x1: 50; x2: 250; }
+    }
+  </style>
+
+  <!-- Main Container Card -->
+  <rect x="12" y="12" width="1176" height="396" rx="28" fill="url(#headerBg)" stroke="url(#neonBorder)" stroke-width="2.5" />
+
+  <!-- Ambient Pulsing Glow Orbs -->
+  <circle cx="220" cy="180" r="140" fill="#06B6D4" opacity="0.18" filter="url(#deepBlur)">
+    <animate attributeName="opacity" values="0.12;0.25;0.12" dur="4s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="980" cy="220" r="160" fill="#EC4899" opacity="0.18" filter="url(#deepBlur)">
+    <animate attributeName="opacity" values="0.22;0.10;0.22" dur="5s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="600" cy="160" r="180" fill="#A855F7" opacity="0.14" filter="url(#deepBlur)">
+    <animate attributeName="opacity" values="0.10;0.22;0.10" dur="4.5s" repeatCount="indefinite" />
+  </circle>
+
+  <!-- Perspective Cyber Grid Lines -->
+  <g stroke="#6b21a8" stroke-opacity="0.12" stroke-width="1">
+    <line x1="12" y1="80" x2="1188" y2="80" />
+    <line x1="12" y1="160" x2="1188" y2="160" />
+    <line x1="12" y1="240" x2="1188" y2="240" />
+    <line x1="12" y1="320" x2="1188" y2="320" />
+    <line x1="200" y1="12" x2="200" y2="408" />
+    <line x1="400" y1="12" x2="400" y2="408" />
+    <line x1="600" y1="12" x2="600" y2="408" />
+    <line x1="800" y1="12" x2="800" y2="408" />
+    <line x1="1000" y1="12" x2="1000" y2="408" />
+  </g>
+
+  <!-- Animated Top Specular Laser Scan Beam -->
+  <line y1="12" y2="12" stroke="url(#titleGrad)" stroke-width="3" stroke-linecap="round">
+    <animate attributeName="x1" values="50;950;50" dur="5s" repeatCount="indefinite" />
+    <animate attributeName="x2" values="250;1150;250" dur="5s" repeatCount="indefinite" />
+  </line>
+
+  <!-- Animated Bottom Specular Laser Scan Beam -->
+  <line y1="408" y2="408" stroke="url(#titleGrad)" stroke-width="2.5" stroke-linecap="round">
+    <animate attributeName="x1" values="950;50;950" dur="5s" repeatCount="indefinite" />
+    <animate attributeName="x2" values="1150;250;1150" dur="5s" repeatCount="indefinite" />
+  </line>
+
+  <!-- ==================== LEFT: ANIMATED 3D AURA EMBLEM ==================== -->
+  <g transform="translate(130, 200)">
+    <!-- Outer Counter-Rotating Dashed Radar Ring -->
+    <circle cx="0" cy="0" r="86" stroke="#06B6D4" stroke-opacity="0.35" stroke-width="1.8" stroke-dasharray="12 12">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="30s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Mid Rotating Segmented Ring -->
+    <circle cx="0" cy="0" r="70" stroke="#A855F7" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="24 16">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Inner Smooth Halo Ring with Specular Glow -->
+    <circle cx="0" cy="0" r="54" stroke="url(#auraGlow)" stroke-width="3" filter="url(#badgeGlow)">
+      <animate attributeName="stroke-width" values="2.5;4;2.5" dur="3s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Central Obsidian Core Shield -->
+    <rect x="-42" y="-42" width="84" height="84" rx="24" fill="#140b2b" stroke="#EC4899" stroke-opacity="0.6" stroke-width="2" />
+
+    <!-- AURA Holographic Emblem Icon -->
+    <path d="M0 -26 L22 22 L11 22 L0 0 L-11 22 L-22 22 Z" fill="url(#titleGrad)" filter="url(#neonGlow)">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="2s" repeatCount="indefinite" />
+    </path>
+    <circle cx="0" cy="-10" r="3.5" fill="#FFFFFF" filter="url(#neonGlow)" />
+    <line x1="-12" y1="12" x2="12" y2="12" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Orbiting Photon Particle 1 (Cyan) -->
+    <circle cx="0" cy="0" r="0">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="4s" repeatCount="indefinite" />
+      <animate attributeName="cx" values="70;70" dur="4s" repeatCount="indefinite" />
+    </circle>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="4s" repeatCount="indefinite" />
+      <circle cx="70" cy="0" r="4.5" fill="#22D3EE" filter="url(#neonGlow)" />
+    </g>
+
+    <!-- Orbiting Photon Particle 2 (Magenta) -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="180" to="540" dur="6s" repeatCount="indefinite" />
+      <circle cx="86" cy="0" r="3.5" fill="#EC4899" filter="url(#neonGlow)" />
+    </g>
+  </g>
+
+  <!-- ==================== CENTER: HERO HEADINGS & LIVE BADGES ==================== -->
+  <g transform="translate(265, 60)">
+    <!-- Top Pill: Hackathon & Event Banner -->
+    <g transform="translate(0, 0)">
+      <rect x="0" y="0" width="350" height="28" rx="14" fill="#06B6D4" fill-opacity="0.12" stroke="#06B6D4" stroke-width="1.2" />
+      <circle cx="16" cy="14" r="4.5" fill="#06B6D4">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite" />
+      </circle>
+      <text x="28" y="18" fill="#67E8F9" class="mono-font">ICC GLOBAL HACKATHON 2026 • DUBAI AI FESTIVAL</text>
+    </g>
+
+    <!-- Top Right Status Indicators -->
+    <g transform="translate(680, 0)">
+      <rect x="0" y="0" width="135" height="28" rx="14" fill="#10B981" fill-opacity="0.14" stroke="#10B981" stroke-width="1.2" />
+      <circle cx="16" cy="14" r="4" fill="#10B981">
+        <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite" />
+      </circle>
+      <text x="28" y="18" fill="#6EE7B7" class="mono-font">60 FPS WEBGL</text>
+
+      <rect x="145" y="0" width="75" height="28" rx="14" fill="#A855F7" fill-opacity="0.15" stroke="#A855F7" stroke-width="1.2" />
+      <text x="156" y="18" fill="#D8B4FE" class="mono-font">v5.2 PILOT</text>
+    </g>
+
+    <!-- Giant Hero Title: AURA FANVERSE -->
+    <g transform="translate(0, 75)">
+      <text x="0" y="0" fill="url(#titleGrad)" class="title-font" font-size="48" letter-spacing="1" filter="url(#neonGlow)">
+        AURA FANVERSE
+      </text>
+      <!-- Sub-headline Tagline -->
+      <text x="2" y="32" fill="#F8FAFC" class="title-font" font-size="18" font-weight="700" letter-spacing="0.2">
+        AI-Powered Multimodal Storytelling, 3D Stadium &amp; Fan Co-Creation
+      </text>
+      <text x="2" y="56" fill="#94A3B8" class="body-font" font-size="13">
+        Physics-Informed Trajectory ODE • Sub-15ms Action Softmax • Q-Learning Tactical Agent • Direct Female Athlete Empowerment
+      </text>
+    </g>
+
+    <!-- Bottom Feature Chips Row (5 Cyber Pills) -->
+    <g transform="translate(0, 195)">
+      <!-- Chip 1: 3D Stadium -->
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="168" height="38" rx="12" fill="url(#chipBg)" stroke="#06B6D4" stroke-width="1.2" />
+        <text x="12" y="24" font-size="16">🏟️</text>
+        <text x="36" y="18" fill="#67E8F9" class="body-font" font-size="11">3D Cricket Stadium</text>
+        <text x="36" y="30" fill="#94A3B8" class="mono-font" font-size="9">Three.js WebGL • 60 FPS</text>
+      </g>
+
+      <!-- Chip 2: 9:16 Shorts -->
+      <g transform="translate(178, 0)">
+        <rect x="0" y="0" width="168" height="38" rx="12" fill="url(#chipBg)" stroke="#EC4899" stroke-width="1.2" />
+        <text x="12" y="24" font-size="16">📱</text>
+        <text x="36" y="18" fill="#F472B6" class="body-font" font-size="11">Micro-Narratives</text>
+        <text x="36" y="30" fill="#94A3B8" class="mono-font" font-size="9">9:16 Vertical Reels &lt;45s</text>
+      </g>
+
+      <!-- Chip 3: 6-Lang Synapse (with Telugu) -->
+      <g transform="translate(356, 0)">
+        <rect x="0" y="0" width="186" height="38" rx="12" fill="url(#chipBg)" stroke="#A855F7" stroke-width="1.2" />
+        <text x="12" y="24" font-size="16">🌐</text>
+        <text x="36" y="18" fill="#D8B4FE" class="body-font" font-size="11">6-Language Synapse</text>
+        <text x="36" y="30" fill="#94A3B8" class="mono-font" font-size="9">TE • HI • TA • EN • ES • AR</text>
+      </g>
+
+      <!-- Chip 4: Zero-Trust Security -->
+      <g transform="translate(552, 0)">
+        <rect x="0" y="0" width="176" height="38" rx="12" fill="url(#chipBg)" stroke="#EF4444" stroke-width="1.2" />
+        <text x="12" y="24" font-size="16">🛡️</text>
+        <text x="36" y="18" fill="#FCA5A5" class="body-font" font-size="11">Zero-Trust Shield</text>
+        <text x="36" y="30" fill="#94A3B8" class="mono-font" font-size="9">HMAC-SHA256 • Prompt WAF</text>
+      </g>
+
+      <!-- Chip 5: Future Stars Fund -->
+      <g transform="translate(738, 0)">
+        <rect x="0" y="0" width="168" height="38" rx="12" fill="url(#chipBg)" stroke="#10B981" stroke-width="1.2" />
+        <text x="12" y="24" font-size="16">💖</text>
+        <text x="36" y="18" fill="#6EE7B7" class="body-font" font-size="11">Future Stars Fund</text>
+        <text x="36" y="30" fill="#94A3B8" class="mono-font" font-size="9">15% Female Athlete Passports</text>
+      </g>
+    </g>
+  </g>
+</svg>

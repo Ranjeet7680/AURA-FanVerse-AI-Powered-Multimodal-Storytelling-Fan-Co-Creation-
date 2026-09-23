@@ -32,6 +32,7 @@ interface NavbarProps {
   setSelectedLang?: (lang: string) => void;
   user: { name: string; handle: string; sparks: number } | null;
   onOpenAuth: () => void;
+  onOpenDiagram?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -39,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveTab,
   user,
   onOpenAuth,
+  onOpenDiagram,
 }) => {
   const { language, setLanguage, t, currentOption } = useLanguage();
   const [isMuted, setIsMuted] = useState<boolean>(soundFX.getMuted());
@@ -99,17 +101,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   v5.2
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 tracking-wide font-medium hidden sm:block whitespace-nowrap leading-tight">
+              <p className="text-[10px] text-slate-400 tracking-wide font-medium hidden 2xl:block whitespace-nowrap leading-tight">
                 {t('brand.tagline', 'Multimodal Canon • 3D Stadium • Live Fandom')}
               </p>
             </div>
           </div>
 
-          {/* Desktop Navigation 3D Floating Console Strip */}
-          <nav className="hidden lg:flex items-center space-x-1 bg-[#100924]/90 p-1 rounded-2xl border-t border-white/10 border-b border-black/80 shadow-[0_6px_18px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.06)] text-[11px] flex-shrink">
+          {/* Desktop Navigation 3D Floating Console Strip with Horizontal Overflow Protection */}
+          <nav className="hidden lg:flex items-center space-x-1 bg-[#100924]/90 p-1 rounded-2xl border-t border-white/10 border-b border-black/80 shadow-[0_6px_18px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.06)] text-[11px] min-w-0 flex-1 max-w-full overflow-x-auto scrollbar-none mx-2">
             <button
               onClick={() => handleTabChange('discover')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'discover'
                   ? 'bg-gradient-to-b from-purple-500 to-pink-600 text-white shadow-[0_4px_12px_rgba(236,72,153,0.4),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -121,7 +123,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('reels')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'reels'
                   ? 'bg-gradient-to-b from-purple-500 to-indigo-600 text-white shadow-[0_4px_12px_rgba(168,85,247,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -133,7 +135,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('tactical')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'tactical'
                   ? 'bg-gradient-to-b from-purple-600 to-violet-700 text-white shadow-[0_4px_12px_rgba(139,92,246,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -145,7 +147,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('stadium3d')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'stadium3d'
                   ? 'bg-gradient-to-b from-cyan-500 to-blue-600 text-white shadow-[0_4px_14px_rgba(6,182,212,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5 ring-1 ring-cyan-300/40'
                   : 'text-slate-400 hover:text-cyan-300 hover:bg-white/5 active:translate-y-0.5'
@@ -157,7 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('analytics')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'analytics'
                   ? 'bg-gradient-to-b from-emerald-500 to-teal-700 text-white shadow-[0_4px_12px_rgba(16,185,129,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -169,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('rl')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'rl'
                   ? 'bg-gradient-to-b from-amber-500 to-orange-600 text-white shadow-[0_4px_12px_rgba(245,158,11,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -181,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('cybersecurity')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'cybersecurity'
                   ? 'bg-gradient-to-b from-red-500 to-rose-700 text-white shadow-[0_4px_12px_rgba(239,68,68,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -193,7 +195,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handleTabChange('athletes')}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+              className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                 activeTab === 'athletes'
                   ? 'bg-gradient-to-b from-pink-500 to-rose-600 text-white shadow-[0_4px_12px_rgba(236,72,153,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -206,7 +208,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {user && (
               <button
                 onClick={() => handleTabChange('profile')}
-                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap ${
+                className={`flex items-center space-x-1 px-2 py-1.5 xl:px-2.5 xl:py-1.5 rounded-xl font-bold transition-all transform duration-150 whitespace-nowrap flex-shrink-0 ${
                   activeTab === 'profile'
                     ? 'bg-gradient-to-b from-purple-500 to-indigo-600 text-white shadow-[0_4px_12px_rgba(168,85,247,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] -translate-y-0.5'
                     : 'text-slate-400 hover:text-white hover:bg-white/5 active:translate-y-0.5'
@@ -218,8 +220,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </nav>
 
-          {/* Right Header 3D Tactile Buttons */}
-          <div className="flex items-center space-x-2 flex-shrink-0">
+          {/* Right Header 3D Tactile Buttons - Always Pinned and Visible */}
+          <div className="flex items-center space-x-2 flex-shrink-0 ml-auto z-20">
+            {/* 3D System & Animation Diagram Launcher Button */}
+            <button
+              onClick={() => {
+                soundFX.playPortalSweep();
+                if (onOpenDiagram) onOpenDiagram();
+              }}
+              className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-2xl bg-gradient-to-b from-[#2a1c52] to-[#140b2e] border-t border-cyan-400/40 border-b border-black shadow-[0_4px_10px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] text-cyan-300 hover:text-white hover:border-cyan-400 hover:shadow-[0_0_16px_rgba(6,182,212,0.4)] transition-all active:translate-y-0.5 group"
+              title="Open Live System & Animation Architecture Diagram"
+            >
+              <div className="relative flex items-center justify-center">
+                <Activity className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+                <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-pink-500 animate-ping" />
+              </div>
+              <span className="font-bold text-xs tracking-tight hidden md:inline-block bg-gradient-to-r from-cyan-300 via-purple-200 to-pink-300 bg-clip-text text-transparent whitespace-nowrap">
+                Diagram ⚡
+              </span>
+            </button>
+
             {/* 3D Audio SFX Synthesizer Toggle */}
             <button
               onClick={handleToggleSound}
@@ -259,14 +279,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Language Popover Menu */}
               {isLangMenuOpen && (
-                <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#140c2b]/95 border border-purple-500/40 shadow-[0_16px_36px_rgba(0,0,0,0.85),0_0_20px_rgba(168,85,247,0.25)] backdrop-blur-2xl p-2 z-50">
+                <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-[#140c2b]/95 border border-purple-500/40 shadow-[0_16px_36px_rgba(0,0,0,0.85),0_0_20px_rgba(168,85,247,0.25)] backdrop-blur-2xl p-2 z-50">
                   <div className="px-3 py-2 border-b border-purple-500/20 flex items-center justify-between text-[11px] font-mono text-purple-300">
                     <span className="font-semibold flex items-center gap-1.5">
                       <Globe2 className="w-3.5 h-3.5 text-cyan-400" />
                       ICC Mesh Languages
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-200 font-bold">
-                      5 Sync
+                      6 Sync
                     </span>
                   </div>
 
@@ -398,6 +418,32 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </div>
 
+          {/* Mobile Animation Diagram Button */}
+          <div className="pt-2">
+            <button
+              onClick={() => {
+                soundFX.playPortalSweep();
+                setIsMobileMenuOpen(false);
+                if (onOpenDiagram) onOpenDiagram();
+              }}
+              className="w-full flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-cyan-950/60 via-purple-950/60 to-pink-950/60 border border-cyan-400/40 text-white shadow-lg active:scale-98 transition-all"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center">
+                  <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
+                </div>
+                <div className="text-left">
+                  <div className="font-black text-sm text-cyan-300 flex items-center gap-1.5">
+                    <span>System & Animation Diagram</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-300 border border-pink-500/30 font-mono">60 FPS</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400">Interactive WebGL & 6-Lang Synapse</div>
+                </div>
+              </div>
+              <span className="text-xs text-cyan-400 font-bold">⚡ View</span>
+            </button>
+          </div>
+
           {/* Mobile Language Switcher Row */}
           <div className="pt-3 border-t border-purple-500/20">
             <div className="text-[11px] font-mono text-purple-300 mb-2 px-1 flex items-center justify-between">
@@ -405,9 +451,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Globe2 className="w-3.5 h-3.5 text-cyan-400" />
                 <span>ICC Mesh Language</span>
               </span>
-              <span className="text-[10px] text-slate-400">5 Synchronized</span>
+              <span className="text-[10px] text-slate-400">6 Synchronized</span>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {SUPPORTED_LANGUAGES.map((lang) => {
                 const isActive = language === lang.code;
                 return (

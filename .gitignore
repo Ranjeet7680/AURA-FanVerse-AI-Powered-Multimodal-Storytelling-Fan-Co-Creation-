@@ -6,3 +6,4 @@ __pycache__/
 .DS_Store
 prototype/data/
 prototype/raw_matches/
+wiki_repo/

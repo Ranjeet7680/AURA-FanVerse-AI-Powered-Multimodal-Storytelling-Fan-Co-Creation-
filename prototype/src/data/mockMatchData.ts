@@ -79,6 +79,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Smriti dances down against the off-spinner, opening the face with sublime timing for 6 over extra cover!",
       hi: "स्मृति मंधाना का जादुई शॉट! ऑफ-स्पिनर के खिलाफ आगे बढ़कर एक्स्ट्रा कवर के ऊपर से गगनचुंबी छक्का!",
+      te: "స్మృతి మంధాన అద్భుతమైన షాట్! ఆఫ్-స్పిన్నర్‌పై ముందుకు వచ్చి ఎక్స్‌ట్రా కవర్ మీదుగా భారీ సిక్సర్!",
       es: "¡Smriti Mandhana conecta un golpe sublime por encima de extra cover para un 6 memorable!",
       ar: "ضربة مذهلة من سمريتي ماندانا تتجاوز الحدود لست نقاط رائعة!",
       ta: "ஸ்மிருதி மந்தனாவின் அசாத்திய ஷாட்! எக்ஸ்ட்ரா கவர் மேல் அட்டகாசமான சிக்ஸர்!"
@@ -105,6 +106,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Pitched on 5th stump line, nip-backer beats the forward defence to knock out the middle peg!",
       hi: "रेणुका सिंह की घातक इनस्विंगर! पांचवें स्टंप से गेंद अंदर आई और मिडिल स्टंप उखाड़ दिया!",
+      te: "రేణుకా సింగ్ అద్భుతమైన ఇన్‌స్వింగర్! ఐదో స్టంప్ లైన్ నుండి దూసుకొచ్చి మిడిల్ స్టంప్‌ను ఎగురగొట్టింది!",
       es: "¡Una bola curva destructiva de Renuka vence la defensa y derriba el tocón!",
       ar: "كرة سريعة ودقيقة من رينوكا سينغ تقتلع القائم الأوسط بنجاح!",
       ta: "ரேணுகா சிங்கின் அசுர ஸ்விங் பந்துவீச்சு! மிடில் ஸ்டம்பை தகர்த்து அற்புதம்!"
@@ -131,6 +133,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Pinpoint wide yorker executed under extreme pressure to deny the boundary in the penultimate over!",
       hi: "अंतिम ओवरों में ताहलिया का सटीक यॉर्कर! दबाव में सिर्फ 1 रन दिया!",
+      te: "చివరి ఓవర్లలో తాహిలా మెక్‌గ్రాత్ ఖచ్చితమైన యార్కర్ రక్షణ! అత్యంత ఒత్తిడిలో బౌండరీని అడ్డుకుంది!",
       es: "¡Yorker milimétrico en el momento cumbre para salvar el límite!",
       ar: "رمية ساحقة ودقيقة في اللحظات الأخيرة تنقذ الفريق!",
       ta: "கடைசி ஓவரில் தஹ்லியாவின் துல்லியமான யார்க்கர் பந்துவீச்சு!"
@@ -157,6 +160,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Harmanpreet gets down low on one knee, dispatching the left-arm spin over deep backward square leg!",
       hi: "हरमनप्रीत का तूफानी स्वीप शॉट! विश्व नंबर 1 स्पिनर के खिलाफ डीप बैकवर्ड स्क्वायर लेग पर चौका!",
+      te: "హర్మన్‌ప్రీత్ కౌర్ విధ్వంసకర స్వీప్ షాట్! ప్రపంచ నంబర్ 1 స్పిన్నర్‌పై డీప్ బ్యాక్‌వర్డ్ స్క్వేర్ లెగ్‌కు బౌండరీ!",
       es: "¡Harmanpreet se arrodilla y conecta un barrido demoledor sobre square leg!",
       ar: "ضربة قوية ودقيقة من القائدة هارمانبريت تتجاوز الميدان ببراعة!",
       ta: "ஹர்மன்பிரீத் கவுரின் அபாரமான ஸ்வீப் ஷாட் பவுண்டரிக்கு விரண்டது!"
@@ -183,6 +187,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Full-length horizontal airborne slide at deep extra cover to flick the ball back inches before ropes!",
       hi: "जेमिमा रोड्रिग्स की अविश्वसनीय डाइव! बाउंड्री रस्सी से ठीक पहले गेंद रोककर टीम के लिए रन बचाए!",
+      te: "జెమిమా రోడ్రిగ్స్ నమ్మశక్యం కాని డైవ్! బౌండరీ లైన్ కంటే ముందే బంతిని ఆపి పరుగులను ఆదా చేసింది!",
       es: "¡Increíble salvada acrobática en el límite por Jemimah!",
       ar: "إنقاذ إعجازي من خيميمة على خط التماس ينقذ النقاط الحيوية!",
       ta: "ஜெமிமாவின் கண்கவர் பவுண்டரி தடுப்பு! அசாத்திய சுறுசுறுப்பு!"
@@ -209,6 +214,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Flicked with the middle finger, drifting into the right-hander before spinning away sharply to clip off peg!",
       hi: "दीप्ति शर्मा की कैरम बॉल का जादू! बल्लेबाज चकमा खा गई और गिल्लियां बिखर गईं!",
+      te: "దీప్తి శర్మ క్యారమ్ బాల్ మాయాజాలం! బ్యాటర్‌ను బోల్తా కొట్టించి క్లీన్ బౌల్డ్ చేసింది!",
       es: "¡La carrom ball de Deepti desconcierta por completo a la bateadora y derriba los tocones!",
       ar: "دوران سحري ودقة خارقة من ديبتي شارما تخدع المدافعة!",
       ta: "தீப்தி சர்மாவின் கேரம் பால் மாயாஜாலம்! ஸ்டம்ப் தகர்ந்தது!"
@@ -235,6 +241,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Shafali picks the bouncer in a split second, muscling a devastating flat pull six over square leg!",
       hi: "शेफाली वर्मा का प्रचंड पुल शॉट! बाउंसर को खींचकर मारा फ्लैट छक्का!",
+      te: "షఫాలీ వర్మ భారీ పుల్ షాట్! బౌన్సర్‌ను ఎదుర్కొని స్క్వేర్ లెగ్ మీదుగా ఫ్లాట్ సిక్సర్ కొట్టింది!",
       es: "¡Poder absoluto de Shafali con un golpe plano sobre square leg para 6!",
       ar: "قوة هائلة وضربة قاضية من شافالي فارما تهز الشباك!",
       ta: "ஷஃபாலி வர்மாவின் அசுர பலம் வாய்ந்த சிக்ஸர்! பவுண்டரிக்கு அப்பால் பறந்தது!"
@@ -261,6 +268,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Cold-blooded courage under pressure: flighting the ball to pick 3 wickets in 4 balls and seal the win!",
       hi: "श्रेयंका पाटिल का 20वें ओवर में कहर! अंतिम 4 गेंदों में 3 विकेट चटकाकर मैच जिताया!",
+      te: "శ్రేయంక పాటిల్ 20వ ఓవర్ క్లైమాక్స్! చివరి 4 బంతుల్లో 3 వికెట్లు పడగొట్టి విజయాన్ని ఖాయం చేసింది!",
       es: "¡Fría como el hielo! Shreyanka toma 3 wickets en el último over para sellar la victoria!",
       ar: "شجاعة استثنائية وثلاث إقصاءات في الشوط الحاسم من شريانكا!",
       ta: "ஷ்ரேயங்கா பாட்டீலின் கடைசி ஓவர் ருத்ரதாண்டவம்! 3 விக்கெட்டுகள் எடுத்து வெற்றி!"
@@ -287,6 +295,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "From Kathmandu to world stage: late banana swing breaching defense at 116 km/h!",
       hi: "नेपाल की सनसनी पूजा महतो! स्विंग होती गेंद ने बल्लेबाज को चारों खाने चित किया!",
+      te: "నేపాల్ సంచలనం పూజా మహతో! 116 కిమీ/గం వేగంతో లేట్ అరటి స్వింగ్ బంతితో డిఫెన్స్‌ను ఛేదించింది!",
       es: "¡El talento emergente de Nepal sorprende con un swing imparable a 116 km/h!",
       ar: "الموهبة الصاعدة من نيبال بوجا ماهاتو تخطف الأنظار برميها المتقن!",
       ta: "நேபாளத்தின் இளம் புயல் பூஜா மஹதோவின் அற்புதமான ஸ்விங் பந்துவீச்சு!"
@@ -313,6 +322,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Blink and you miss it: Richa whips the bails off in just 0.12s as batter's back foot lifts a millimeter!",
       hi: "ऋचा घोष की पलक झपकते स्टंपिंग! मात्र 0.12 सेकंड में गिल्लियां बिखेर दीं!",
+      te: "రిచా ఘోష్ మెరుపు వేగపు స్టంపింగ్! కేవలం 0.12 సెకన్లలోనే బెయిల్స్‌ను గాల్లోకి లేపింది!",
       es: "¡Velocidad sobrehumana! Richa derriba los tocones en 0.12 segundos!",
       ar: "سرعة خارقة من ريتشا غوش في كسر الأخشاب في جزء من الثانية!",
       ta: "ரிச்சா கோஷின் மின்னல் வேக ஸ்டம்பிங்! 0.12 வினாடியில் விக்கெட் காலி!"
@@ -339,6 +349,7 @@ export const MOCK_REELS: MicroReel[] = [
     caption: {
       en: "Dot ball on the final delivery triggers euphoria across 8.4 million fans synced live in the stadium & FanVerse!",
       hi: "अंतिम गेंद पर रोमांच की पराकाष्ठा! वर्ल्ड कप फाइनल का ऐतिहासिक विजयी क्षण!",
+      te: "ప్రపంచ కప్ ఫైనల్ చారిత్రక విజయం! చివరి బంతి డాట్ కావడంతో 8.4 మిలియన్ల అభిమానుల సంబరాలు!",
       es: "¡El momento culminante del campeonato mundial celebrado por millones!",
       ar: "لحظة التتويج التاريخية بنهائي كأس العالم بحضور جماهيري ضخم!",
       ta: "உலகக் கோப்பை இறுதிப் போட்டியின் மறக்க முடியாத வரலாற்று வெற்றித் தருணம்!"

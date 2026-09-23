@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
-export type LanguageCode = 'en' | 'hi' | 'ta' | 'es' | 'ar';
+export type LanguageCode = 'en' | 'hi' | 'te' | 'ta' | 'es' | 'ar';
 
 export interface LanguageOption {
   code: LanguageCode;
@@ -13,6 +13,7 @@ export interface LanguageOption {
 export const SUPPORTED_LANGUAGES: LanguageOption[] = [
   { code: 'en', label: 'English', nativeName: 'English', flag: '🇬🇧', dir: 'ltr' },
   { code: 'hi', label: 'Hindi', nativeName: 'हिंदी', flag: '🇮🇳', dir: 'ltr' },
+  { code: 'te', label: 'Telugu', nativeName: 'తెలుగు', flag: '🇮🇳', dir: 'ltr' },
   { code: 'ta', label: 'Tamil', nativeName: 'தமிழ்', flag: '🇮🇳', dir: 'ltr' },
   { code: 'es', label: 'Spanish', nativeName: 'Español', flag: '🇪🇸', dir: 'ltr' },
   { code: 'ar', label: 'Arabic', nativeName: 'العربية', flag: '🇦🇪', dir: 'rtl' },
@@ -124,7 +125,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'ribbon.fans_synced': '8.4M Fans Synced Live',
     'ribbon.streams': '12 Regional AI Streams',
     'ribbon.zerotrust': 'Zero-Trust Guard: Active',
-    'ribbon.sync_langs': '5 Languages Synchronized',
+    'ribbon.sync_langs': '6 Languages Synchronized',
     'brand.tagline': 'Multimodal Canon • 3D Stadium • Live Fandom',
 
     // Hero Section
@@ -418,7 +419,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'ribbon.fans_synced': '8.4M प्रशंसक लाइव जुड़े',
     'ribbon.streams': '12 क्षेत्रीय AI स्ट्रीम्स',
     'ribbon.zerotrust': 'जीरो-ट्रस्ट शील्ड: सक्रिय',
-    'ribbon.sync_langs': '5 भाषाएँ समन्वयित',
+    'ribbon.sync_langs': '6 भाषाएँ समन्वयित',
     'brand.tagline': 'मल्टीमॉडल कैनन • 3D स्टेडियम • लाइव फैंस',
 
     // Hero Section
@@ -608,6 +609,301 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'auth.back': 'वापस',
   },
 
+  te: {
+    // Nav Tabs
+    'nav.discover': 'కనుగొనండి',
+    'nav.shorts': 'షార్ట్స్',
+    'nav.tactical': 'వ్యూహాత్మక AI',
+    'nav.stadium3d': '3D స్టేడియం',
+    'nav.analytics': 'రాడార్',
+    'nav.rl': 'RL ఏజెంట్',
+    'nav.cybersecurity': 'సైబర్ షీల్డ్',
+    'nav.athletes': 'క్రీడాకారులు',
+    'nav.profile': 'ప్రొఫైల్',
+    'nav.login': 'లాగిన్ / రిజిస్టర్',
+    'nav.logout': 'లాగ్ అవుట్',
+    'nav.sparks': 'స్పార్క్స్',
+    'nav.live_mesh': 'ఐసీసీ లైవ్ టోర్నమెంట్ మెష్',
+    'nav.over_live': 'ఓవర్ 14.3 లైవ్',
+
+    // 3D Stadium
+    'stadium.title': 'హైపర్-రియలిస్టిక్ 3D WebGL క్రికెట్ స్టేడియం',
+    'stadium.subtitle': 'వాల్యూమెట్రిక్ లైటింగ్, ప్రొసీజరల్ అల్లికలు & భౌతిక ఇంజిన్',
+    'stadium.desc': '4 ఫ్లడ్‌లైట్ వాల్యూమెట్రిక్ కిరణాలు, ప్రొసీజరల్ పచ్చిక, పిచ్ మార్కులు, యానిమేటెడ్ LED హోర్డింగ్‌లు మరియు ఎగిరే బెయిల్స్ భౌతికశాస్త్రం.',
+    'stadium.play': 'ప్లే',
+    'stadium.pause': 'పాజ్',
+    'stadium.reset': 'రీసెట్',
+    'stadium.cam_broadcast': 'ప్రసారం',
+    'stadium.cam_batter': 'బ్యాటర్ దృశ్యం',
+    'stadium.cam_hawkeye': 'హాక్-ఐ',
+    'stadium.cam_topdown': 'పైనుండి దృశ్యం',
+    'stadium.cam_stump': 'స్టంప్ క్యామ్',
+    'stadium.cam_drone': 'డ్రోన్ ఆర్బిట్',
+    'stadium.cam_ballfollow': 'బాల్ ట్రాకింగ్',
+    'stadium.delivery': 'బౌలింగ్:',
+    'stadium.del_seam': '142 కిమీ/గం సీమ్',
+    'stadium.del_spin': '86 కిమీ/గం స్పిన్',
+    'stadium.del_yorker': '148 కిమీ/గం యార్కర్',
+    'stadium.shot': 'షాట్:',
+    'stadium.shot_cover': 'కవర్ డ్రైవ్ (6)',
+    'stadium.shot_pull': 'పుల్ షాట్ (4)',
+    'stadium.shot_straight': 'స్ట్రెయిట్ డ్రైవ్ (4)',
+    'stadium.shot_upper': 'అప్పర్ కట్ (6)',
+    'stadium.shot_wicket': 'వికెట్ ⚡',
+    'stadium.lighting': 'లైటింగ్:',
+    'stadium.light_day': 'పగలు',
+    'stadium.light_sunset': 'సూర్యాస్తమయం',
+    'stadium.light_night': 'రాత్రి',
+    'stadium.trail': 'హాక్-ఐ ట్రయల్',
+    'stadium.flashes': 'ప్రేక్షకుల ఫ్లాష్‌లు',
+    'stadium.in_flight': 'గాల్లో ఉంది',
+    'stadium.contact_made': 'తాకింది',
+    'stadium.ready': 'సిద్ధం',
+
+    // Tactical AI Co-Pilot
+    'tactical.badge': 'AI వ్యూహాత్మక మేధస్సు & బహుళ-మోడల్ ఎన్సెంబల్',
+    'tactical.title': 'వ్యూహాత్మక కో-పైలట్ & AI మోడల్ స్టూడియో',
+    'tactical.subtitle': '2,896 మ్యాచ్ ఫైళ్లు (7,119 వ్యూహాత్మక స్థితులు) మరియు 90,308 ఆటగాళ్ల రికార్డులతో శిక్షణ పొందింది.',
+    'tactical.tab_copilot': 'కో-పైలట్ & రాడార్',
+    'tactical.tab_matchup': 'మ్యాచ్‌అప్ మ్యాట్రిక్స్',
+    'tactical.tab_inplay': 'ఇన్-ప్లే విన్ సిమ్యులేషన్',
+    'tactical.tab_studio': 'AI స్టూడియో & దృశ్యాలు',
+    'tactical.field_radar': 'డైనమిక్ ఫీల్డ్ ప్లేస్‌మెంట్ విజువలైజర్',
+    'tactical.suggested_questions': 'AI సూచించిన వ్యూహాత్మక ప్రశ్నలు',
+    'tactical.click_analyze': 'విశ్లేషించడానికి క్లిక్ చేయండి',
+    'tactical.ask_placeholder': 'వ్యూహాత్మక ప్రశ్న అడగండి (ఉదా. కెప్టెన్ డీప్ స్లిప్‌ను ఎందుకు ఉంచారు?)...',
+    'tactical.speak_guidance': 'వ్యూహం వినండి',
+    'tactical.listen_review': 'ఓవర్ సమీక్ష వినండి',
+    'tactical.threat_high': 'అధిక ముప్పు',
+    'tactical.threat_vulnerable': 'బలహీనమైనది',
+    'tactical.threat_neutral': 'తటస్థం',
+    'tactical.threat_favorable': 'అనుకూలం',
+
+    // Data Analytics
+    'analytics.badge': 'బిగ్ డేటా క్రికెట్ అనలిటిక్స్ & ఇంటెలిజెన్స్ ప్లాట్‌ఫామ్',
+    'analytics.title': 'డేటా విశ్లేషణ, మ్యాచ్ గణాంకాలు & ML టెలిమెట్రీ',
+    'analytics.subtitle': '2,896 మ్యాచ్ ఫైళ్లు, 90,308 క్రీడాకారుల రికార్డులు మరియు 16,666 ప్రొఫైళ్ల ఆధారంగా రూపొందించబడింది.',
+    'analytics.tab_data': 'డేటా విశ్లేషణ',
+    'analytics.tab_ml': 'ML అంచనా',
+    'analytics.tab_players': 'టాప్ ప్లేయర్స్ (500)',
+    'analytics.tab_matches': 'ఇటీవలి మ్యాచ్‌లు',
+    'analytics.tab_charts': 'లైవ్ చార్ట్‌లు',
+    'analytics.kpi_matches': 'విశ్లేషించిన మ్యాచ్‌లు',
+    'analytics.kpi_states': 'వ్యూహాత్మక స్థితులు',
+    'analytics.kpi_players': 'ఆటగాళ్ల రికార్డులు',
+    'analytics.kpi_accuracy': 'GB ఖచ్చితత్వం',
+    'analytics.kpi_t20_par': 'T20 సగటు స్కోరు',
+    'analytics.kpi_odi_par': 'ODI సగటు స్కోరు',
+    'analytics.team_power_title': 'అత్యున్నత రేటింగ్ పొందిన అంతర్జాతీయ & ఫ్రాంచైజీ జట్లు',
+    'analytics.phase_quantiles_title': 'దశల వారీ స్కోరింగ్ అంచనాలు (కనిష్ట వర్సెస్ గరిష్ట)',
+    'analytics.leaderboard_title': 'సమగ్ర ఆటగాళ్ల ప్రభావం (CPI) లీడర్‌బోర్డ్',
+    'analytics.predict_win': 'గెలుపు సంభావ్యత',
+    'analytics.projected_score': 'అంచనా వేసిన మొదటి ఇన్నింగ్స్ స్కోర్',
+    'analytics.search_player': 'ఆటగాడు లేదా దేశం పేరుతో వెతకండి...',
+
+    // General
+    'common.live': 'లైవ్',
+    'common.all': 'అన్నీ',
+    'common.runs': 'పరుగులు',
+    'common.wickets': 'వికెట్లు',
+    'common.strike_rate': 'స్ట్రైక్ రేట్',
+    'common.overs': 'ఓవర్లు',
+    // Tournament Ribbon & Brand
+    'ribbon.tournament': "ఐసీసీ మహిళల T20 ప్రపంచ కప్ ఫైనల్",
+    'ribbon.venue': 'దుబాయ్ అంతర్జాతీయ స్టేడియం',
+    'ribbon.fans_synced': '8.4M మంది అభిమానులు లైవ్‌లో ఉన్నారు',
+    'ribbon.streams': '12 ప్రాంతీయ AI స్ట్రీమ్‌లు',
+    'ribbon.zerotrust': 'జీరో-ట్రస్ట్ రక్షణ: సక్రియం',
+    'ribbon.sync_langs': '6 భాషలు సమకాలీకరించబడ్డాయి',
+    'brand.tagline': 'మల్టీమోడల్ కానన్ • 3D స్టేడియం • లైవ్ ఫ్యాన్డమ్',
+
+    // Hero Section
+    'hero.badge': 'జెనెసిస్ V2.4 కానన్ ప్రోటోకాల్ • దుబాయ్ AI షోకేస్',
+    'hero.title_pre': 'కలిసి సృష్టించండి',
+    'hero.title_gradient': 'అపరిమిత కానన్',
+    'hero.title_post': 'AI & మీ అభిమానుల బృందంతో',
+    'hero.desc': 'లైవ్ మహిళల క్రికెట్ డేటా స్వయంప్రతిపత్త నిలువు సూక్ష్మ కథలు, 3D స్టేడియం భౌతికశాస్త్రం మరియు సంభాషణాత్మక వ్యూహాత్మక సహ-పైలట్‌ను శక్తివంతం చేసే దివ్య సహకార ప్రపంచంలోకి అడుగుపెట్టండి.',
+    'hero.cta_dashboard': 'లైవ్ డాష్‌బోర్డ్ ప్రారంభించండి',
+    'hero.cta_auth': 'సైన్ ఇన్ / లోర్‌కీపర్ యాక్సెస్',
+
+    // Featured Multimodal Storyboards
+    'featured.title': 'ప్రత్యేక మల్టీమోడల్ స్టోరీబోర్డులు',
+    'featured.subtitle': 'నిజ-సమయంలో రూపొందించబడిన ఆటోమేటెడ్ వీడియో-టు-మాంగా అనుసరణలు',
+    'featured.view_all': 'అన్నీ చూడండి (28)',
+    'featured.card1_title': "షార్జా మిరాజ్: స్మృతి యొక్క 140కిమీ/గం ఎదురుదాడి",
+    'featured.card1_desc': '18వ ఓవర్ బంతి డేటా నుండి పునర్నిర్మించబడింది. స్టేబుల్ డిఫ్యూజన్ XL LoRA మరియు వ్యాఖ్యాన సంశ్లేషణతో షోనెన్ మాంగా శైలి.',
+    'featured.card1_watch': 'కథ చూడండి',
+    'featured.card2_title': "హర్మన్‌ప్రీత్ లెగ్-సైడ్ ట్రాప్: సంభావ్యత విశ్లేషణ",
+    'featured.card2_desc': 'సోఫీ ఎక్లెస్టోన్‌కు వ్యతిరేకంగా బ్యాక్‌వర్డ్ స్క్వేర్ లెగ్ మరియు డీప్ మిడ్-వికెట్ ఫీల్డింగ్‌ను వివరించే డీప్ Q-లెర్నింగ్ విశ్లేషణ.',
+    'featured.card2_inspect': 'రీప్లే పరిశీలించండి',
+    'featured.card3_title': "ఖాట్మండు నుండి లార్డ్స్ వరకు: పూజా మహతో 5-వికెట్ల ఒడిస్సీ",
+    'featured.card3_desc': 'నేపాల్ U-19 ఫాస్ట్ బౌలర్‌ను గౌరవించే కమ్యూనిటీ-నిధుల కథ.',
+    'featured.card3_tip': 'క్రీడాకారిణికి మద్దతు ఇవ్వండి',
+
+    // Live Co-Creation Arenas
+    'arenas.title': 'లైవ్ సహ-సృష్టి రంగాలు',
+    'arenas.subtitle': 'మ్యాచ్ కథనాలను సంశ్లేషణ చేసే రియల్-టైమ్ మల్టీప్లేయర్ గదులు',
+    'arenas.active_badge': '3 రంగాలు సక్రియంగా ఉన్నాయి',
+    'arenas.room1_title': 'సైబర్-వాల్కిరీ రచయితలు',
+    'arenas.room1_sub': 'మ్యాచ్: IND-W vs AUS-W (ఫైనల్స్)',
+    'arenas.room1_creators': '84 మంది సృష్టికర్తలు',
+    'arenas.room1_scene': "ప్రస్తుత దృశ్యం: 19వ ఓవర్లో హర్మన్‌ప్రీత్ రివర్స్-స్వీప్",
+    'arenas.room2_title': 'వ్యూహాత్మక విశ్లేషణ గిల్డ్',
+    'arenas.room2_sub': 'ఫీల్డ్ జ్యామితి & స్పిన్ పథాలు',
+    'arenas.room2_creators': '126 మంది సృష్టికర్తలు',
+    'arenas.room2_scene': 'ప్రస్తుత దృశ్యం: 62కిమీ/గం లెగ్ బ్రేక్‌పై PINN ఏరోడైనమిక్ డ్రిఫ్ట్',
+    'arenas.room3_title': 'గ్రాస్‌రూట్స్ స్పాట్‌లైట్ స్టూడియో',
+    'arenas.room3_sub': 'నేపాల్, థాయిలాండ్ & స్కాట్లాండ్ తారలు',
+    'arenas.room3_creators': '62 మంది సృష్టికర్తలు',
+    'arenas.room3_scene': 'ప్రస్తుత దృశ్యం: క్రౌడ్‌సోర్స్ గ్రాంట్ మైలురాయి 5,000 స్పార్క్స్',
+    'arenas.join_btn': 'సెషన్‌లో చేరండి',
+
+    // Canon Governance Poll
+    'poll.badge': 'కానన్ పాలనా ప్రతిపాదన #88',
+    'poll.closes': 'ముగియడానికి సమయం 04:18:22',
+    'poll.title': 'వ్యూహాత్మక సందిగ్ధత: కెప్టెన్ హర్మన్‌ప్రీత్ ఓవర్ 19.4లో ఏ బంతి వేయాలి?',
+    'poll.desc': 'గెలిచిన ఎంపిక రూపొందించబడే క్లైమాక్స్‌ను నిర్ణయిస్తుంది మరియు ఓటర్లకు డబుల్ స్పార్క్స్ అన్‌లాక్ చేస్తుంది.',
+    'poll.opt1': 'క్వాంటం గూగ్లీ ట్రాప్‌ను అమలు చేయండి',
+    'poll.opt2': 'ఆఫ్-స్టంప్ వెలుపల ప్రామాణిక గుడ్ లెంగ్త్‌ను కొనసాగించండి',
+    'poll.opt3': 'స్లాగ్ స్వీప్ కోసం బౌండరీ స్వీపర్‌ను రక్షించండి',
+    'poll.total_votes': 'మొత్తం కమ్యూనిటీ ఓట్లు: 3,489',
+    'poll.sparks_reward': 'ఓటు వేసినందుకు +50 స్పార్క్స్',
+
+    // Multilingual AI Commentary Player
+    'audio.badge': 'బహుభాషా AI వ్యాఖ్యాన సింథసిస్',
+    'audio.dialects': '12 మాండలికాలు సిద్ధం',
+    'audio.title': 'తెలుగు & తమిళ వాయిస్ సింథసిస్: "షార్జాను కదిలించిన ఆ సిక్సర్"',
+    'audio.desc': 'గెలుపు సంభావ్యత మార్పుల ఆధారంగా తీవ్రత మరియు పిచ్‌ను డైనమిక్‌గా స్వీకరించే న్యూరల్ వాయిస్‌ని వినండి.',
+    'audio.preview': 'న్యూరల్ వాయిస్ వినండి',
+    'audio.pause': 'స్ట్రీమ్ ఆపండి',
+    'audio.latency': 'లేటెన్సీ: 280ms',
+
+    // Pillars of Creation
+    'pillars.tag': 'సృష్టి యొక్క స్తంభాలు',
+    'pillars.title': 'మల్టీ-థ్రెడెడ్ AI ఆర్కిటెక్చర్',
+    'pillars.p1_title': 'మల్టీమోడల్ స్టోరీ ఇంజిన్',
+    'pillars.p1_desc': 'వచనం, వాయిస్ వ్యాఖ్యానం, నిలువు వీడియో రీఫ్రేమింగ్ మరియు లైవ్ HUD టెలిమెట్రీ 45 సెకన్లలోపు సిద్ధం.',
+    'pillars.p2_title': 'సహకార వ్యూహాత్మక కో-పైలట్',
+    'pillars.p2_desc': 'సంభాషణాత్మక AI, డైనమిక్ 2D ఫీల్డ్ రాడార్ మరియు 3D WebGL భౌతికశాస్త్రంతో కెప్టెన్సీ ఫీల్డింగ్‌ను వివరిస్తుంది.',
+    'pillars.p3_title': 'గ్రాస్‌రూట్స్ ఫ్యూచర్ స్టార్స్ ఫండ్',
+    'pillars.p3_desc': 'అభిమానులు మహిళా అథ్లెట్లకు మైక్రో-టోకెన్లను అంకితం చేస్తారు, ఇందులో 15% అసోసియేట్ దేశాల అకాడమీల కోసం కేటాయించబడింది.',
+
+    // Relic Codex
+    'codex.tag': 'ఆర్కైవ్స్ & అవశేషాలు',
+    'codex.title': 'కానానికల్ క్రీడా కళాఖండాలు & కాలక్రమ రేఖలు',
+    'codex.total': 'మొత్తం కళాఖండాలు: 1,420',
+    'codex.card1_title': 'వాట్-ఇఫ్ బ్రాంచ్ #44',
+    'codex.card1_desc': 'సోఫీ డివైన్ లెగ్-స్పిన్‌తో బౌలింగ్ ప్రారంభించిన ప్రత్యామ్నాయ చరిత్ర.',
+    'codex.card2_title': 'హాక్-ఐ స్పిన్ అవశేషం',
+    'codex.card2_desc': 'ICC టెలిమెట్రిక్ ఫీడ్ ద్వారా సంతకం చేయబడిన 3D గణిత పథం టోకెన్.',
+    'codex.card3_title': 'క్లచ్ ఓవర్ మాస్టర్',
+    'codex.card3_desc': '19వ ఓవర్ యార్కర్‌ను సరిగ్గా అంచనా వేసినందుకు అభిమానులకు ఇచ్చే బ్యాడ్జ్.',
+    'codex.card4_title': 'క్వాంటం ఫిజిక్స్ నోడ్',
+    'codex.card4_desc': 'ఏదైనా చారిత్రక డెలివరీపై భౌతికశాస్త్ర-ఆధారిత న్యూరల్ నెట్‌వర్క్ పరీక్షలను అమలు చేయండి.',
+
+    // Community Stats
+    'community.creators': 'ప్రపంచవ్యాప్తంగా 140,000+ సహ-సృష్టికర్తలు',
+    'community.active_desc': '850+ మహిళా క్రికెట్ టోర్నమెంట్లు & కథనాలలో చురుకుగా ఉన్నారు',
+    'community.verified': 'ధృవీకరించబడిన ICC కానన్ లెడ్జర్ #8802',
+    'community.enter': 'ఇప్పుడే ప్రవేశించండి',
+
+    // Shorts & Vertical Reels
+    'shorts.badge': 'స్వయంప్రతిపత్త మల్టీమోడల్ ముఖ్యాంశాల పైప్‌లైన్',
+    'shorts.title': 'నిలువు సూక్ష్మ-కథలు & బహుభాషా వాయిస్ సంశ్లేషణ',
+    'shorts.desc': '45 సెకన్లలోపు ముడి ICC ప్రసార వీడియోను 9:16 నిలువు రీల్స్‌గా మార్చండి, ఇందులో ఆటోమేటెడ్ బంతి డేటా మరియు 12+ భాషలలో వ్యాఖ్యానం ఉంటాయి.',
+    'shorts.edge_ingestion': 'ఎడ్జ్ ఇంగెషన్: 38s',
+    'shorts.tab_shorts': '9:16 షార్ట్స్',
+    'shorts.tab_long': '16:9 ప్రసారం',
+    'shorts.exit_velocity': 'ఎగ్జిట్ వేగం',
+    'shorts.launch_angle': 'లాంచ్ కోణం',
+    'shorts.distance': 'దూరం',
+    'shorts.win_prob_delta': 'గెలుపు సంభావ్యత మార్పు',
+    'shorts.tactical_breakdown': 'వ్యూహాత్మక విశ్లేషణ',
+    'shorts.ai_commentary': 'AI న్యూరల్ వ్యాఖ్యానం',
+    'shorts.play_audio': 'వాయిస్‌లో వినండి',
+    'shorts.stop_audio': 'వాయిస్ ఆపండి',
+    'shorts.share': 'రీల్ షేర్ చేయండి',
+    'shorts.all': 'అన్నీ',
+    'shorts.cat_masterclass': 'మాస్టర్‌క్లాస్',
+    'shorts.cat_pace': 'పేస్ ఎటాక్',
+    'shorts.cat_clutch': 'క్లచ్ డిఫెన్స్',
+    'shorts.cat_captaincy': 'కెప్టెన్సీ',
+    'shorts.cat_fielding': 'ఫీల్డింగ్',
+    'shorts.cat_spin': 'స్పిన్ మ్యాజిక్',
+    'shorts.cat_power': 'పవర్ హిట్టింగ్',
+    'shorts.cat_death': 'డెత్ ఓవర్ల బౌలింగ్',
+    'shorts.cat_grassroots': 'గ్రాస్‌రూట్స్ ప్రతిభ',
+    'shorts.cat_wicketkeeping': 'వికెట్‌కీపింగ్',
+    'shorts.cat_final': 'తుది క్షణాలు',
+
+    // Athlete Digital Passport
+    'athletes.badge': 'సాధికారత & అట్టడుగు వర్గాల సమగ్రత',
+    'athletes.title': 'అథ్లెట్ డిజిటల్ పాస్‌పోర్ట్ & మైక్రో-స్పాన్సర్‌షిప్ హబ్',
+    'athletes.desc': 'క్రీడాకారులకు నిధుల కొరతను తొలగించడం. అభిమానులు నేరుగా మహిళా అథ్లెట్లకు మద్దతు ఇస్తారు, కిట్లు మరియు ప్రయాణానికి నిధులు సమకూరుస్తారు.',
+    'athletes.balance': 'మీ ఫ్యాన్ బ్యాలెన్స్',
+    'athletes.tokens': 'ఫ్యాన్ టోకెన్లు',
+    'athletes.back_athlete': '50 టోకెన్లతో మద్దతు ఇవ్వండి',
+    'athletes.backed_success': 'అథ్లెట్‌కు మద్దతు ఇచ్చారు! +50 స్పార్క్స్',
+    'athletes.funded': 'సమకూరిన నిధులు',
+    'athletes.target': 'లక్ష్యం',
+    'athletes.strike_rate': 'స్ట్రైక్ రేట్',
+    'athletes.matches': 'మ్యాచ్‌లు',
+    'athletes.wickets': 'వికెట్లు',
+    'athletes.journey': 'క్రీడాకారిణి ప్రయాణం',
+    'athletes.fund_purpose': 'గ్రాంట్ ప్రయోజనం',
+
+    // Deep RL Simulator
+    'rl.badge': 'డీప్ Q-లెర్నింగ్ & పాలసీ గ్రేడియంట్ ఆర్కిటెక్చర్',
+    'rl.title': 'డీప్ రీఇన్‌ఫోర్స్‌మెంట్ లెర్నింగ్ పిచ్ సిమ్యులేటర్',
+    'rl.desc': 'వేలాది మ్యాచ్ దృశ్యాలపై శిక్షణ పొందిన మార్కోవ్ నిర్ణయ ప్రక్రియ (MDP) విధానాలతో కెప్టెన్సీ నిర్ణయాల అనుకరణ.',
+    'rl.train_step': 'RL ఆప్టిమైజేషన్ దశను అమలు చేయండి (+50 యుగాలు)',
+    'rl.training': 'Q-విధానాన్ని ఆప్టిమైజ్ చేస్తోంది...',
+    'rl.episodes': 'శిక్షణ ఎపిసోడ్‌లు',
+    'rl.reward': 'సంచిత బహుమతి',
+    'rl.epsilon': 'అన్వేషణ రేటు (ε)',
+    'rl.confidence': 'విధాన విశ్వాసం',
+    'rl.optimal_action': 'సిఫార్సు చేయబడిన సరైన చర్య',
+    'rl.batter_type': 'బ్యాటర్ ప్రొఫైల్',
+    'rl.bowler_type': 'బౌలర్ ప్రొఫైల్',
+    'rl.phase': 'మ్యాచ్ దశ',
+
+    // Cyber Security Shield
+    'cyber.badge': 'జీరో-ట్రస్ట్ భద్రత & HMAC క్రిప్టోగ్రాఫిక్ మెష్',
+    'cyber.title': 'సైబర్ షీల్డ్ & AI ప్రాంప్ట్ రక్షణ కేంద్రం',
+    'cyber.desc': 'నిజ-సమయ ప్రసార డేటాను హానికరమైన దాడులు మరియు డేటా ట్యాంపరింగ్ నుండి రక్షించడం.',
+    'cyber.firewall_title': 'ప్రాంప్ట్ ఇంజెక్షన్ ఫైర్‌వాల్',
+    'cyber.test_prompt': 'ఫైర్‌వాల్ పరీక్ష కోసం ప్రశ్నను నమోదు చేయండి',
+    'cyber.inspect_btn': 'జీరో-ట్రస్ట్ గార్డ్‌తో పరిశీలించండి',
+    'cyber.tamper_telemetry': 'ట్యాంపర్డ్ డేటాను అనుకరించండి',
+    'cyber.restore_telemetry': 'క్రిప్టోగ్రాఫిక్ సంతకాన్ని పునరుద్ధరించండి',
+    'cyber.clean': 'క్లీన్ — ప్రామాణీకరించబడింది',
+    'cyber.blocked': 'బ్లాక్ చేయబడింది — హానికరమైన ముప్పు గుర్తించబడింది',
+    'cyber.signature_valid': 'క్రిప్టోగ్రాఫిక్ HMAC సంతకం ధృవీకరించబడింది',
+    'cyber.signature_invalid': 'ట్యాంపరింగ్ గుర్తించబడింది: సంతకం సరిపోలడం లేదు',
+
+    // User Profile
+    'profile.title': 'ఫ్యాన్ సహ-సృష్టికర్త సినాప్స్ ప్రొఫైల్',
+    'profile.handle': 'లోర్‌కీపర్ ID',
+    'profile.sparks_balance': 'ఫ్యాన్ స్పార్క్స్ నిల్వ',
+    'profile.credentials': 'ధృవీకరించబడిన ICC ఆధారాలు',
+    'profile.achievements': 'అన్‌లాక్ చేయబడిన విజయాలు',
+    'profile.connected': 'సినాప్స్ కనెక్ట్ చేయబడింది',
+    'profile.logout': 'ఫ్యాన్‌వర్స్ నుండి నిష్క్రమించండి',
+
+    // Authentication Modal
+    'auth.title': 'ఆరా లోర్‌కీపర్ యాక్సెస్',
+    'auth.subtitle': 'క్రిప్టోగ్రాఫిక్ కీపాస్ లేదా ఇమెయిల్ ధృవీకరణతో సైన్ ఇన్ చేయండి',
+    'auth.email_label': 'సృష్టికర్త ఇమెయిల్ లేదా Web3 హ్యాండిల్',
+    'auth.email_placeholder': 'lorekeeper@auraverse.io',
+    'auth.send_code': 'ధృవీకరణ సైఫర్‌ను రూపొందించండి',
+    'auth.otp_title': '6-అంకెల ధృవీకరణ సైఫర్‌ను నమోదు చేయండి',
+    'auth.otp_desc': 'మీ హ్యాండిల్‌కు ఒక-సారి ఉపయోగించే క్రిప్టోగ్రాఫిక్ టోకెన్ పంపబడింది.',
+    'auth.biometric': 'బయోమెట్రిక్ పాస్‌కీని ఉపయోగించండి',
+    'auth.verifying': 'క్రిప్టోగ్రాఫిక్ సైఫర్ ధృవీకరించబడుతోంది...',
+    'auth.success': 'ప్రామాణీకరణ విజయవంతమైంది! ఫ్యాన్‌వర్స్‌లోకి ప్రవేశిస్తోంది...',
+    'auth.back': 'వెనుకకు',
+  },
+
   ta: {
     // Nav Tabs
     'nav.discover': 'கண்டறிக',
@@ -712,7 +1008,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'ribbon.fans_synced': '8.4M ரசிகர்கள் நேரலையில் இணைந்தனர்',
     'ribbon.streams': '12 பிராந்திய AI ஸ்ட்ரீம்கள்',
     'ribbon.zerotrust': 'ஜீரோ-டிரஸ்ட் பாதுகாப்பு: இயங்குகிறது',
-    'ribbon.sync_langs': '5 மொழிகள் ஒருங்கிணைக்கப்பட்டுள்ளன',
+    'ribbon.sync_langs': '6 மொழிகள் ஒருங்கிணைக்கப்பட்டுள்ளன',
     'brand.tagline': 'மல்டிமாடல் கேனான் • 3D அரங்கம் • நேரலை ரசிகர்கள்',
 
     // Hero Section
@@ -804,6 +1100,102 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'community.active_desc': '850+ மகளிர் கிரிக்கெட் போட்டிகள் மற்றும் கதை சுழற்சிகளில் செயலில் உள்ளனர்',
     'community.verified': 'சரிபார்க்கப்பட்ட ICC கேனான் லெட்ஜர் #8802',
     'community.enter': 'இப்போதே நுழையுங்கள்',
+
+    // Shorts & Vertical Reels
+    'shorts.badge': 'சுயாட்சி மல்டிமாடல் ஹைலைட் பைப்லைன்',
+    'shorts.title': 'செங்குத்து மைக்ரோ-கதைகள் & பலமொழி குரல் தொகுப்பு',
+    'shorts.desc': 'நேரலை ஐசிசி ஒளிபரப்பு வீடியோவை 45 வினாடிகளுக்குள் 9:16 செங்குத்து ரீல்களாக மாற்றவும், தானியங்கி பந்து தரவு மற்றும் 12+ மொழிகளில் வர்ணனையுடன்.',
+    'shorts.edge_ingestion': 'எட்ஜ் உட்கொள்ளல்: 38s',
+    'shorts.tab_shorts': '9:16 குறும்படங்கள்',
+    'shorts.tab_long': '16:9 ஒளிபரப்பு',
+    'shorts.exit_velocity': 'வெளியேறும் வேகம்',
+    'shorts.launch_angle': 'ஏவுதல் கோணம்',
+    'shorts.distance': 'தூரம்',
+    'shorts.win_prob_delta': 'வெற்றி வாய்ப்பு மாற்றம்',
+    'shorts.tactical_breakdown': 'தந்திரோபாய முறிவு',
+    'shorts.ai_commentary': 'AI நியூரல் வர்ணனை',
+    'shorts.play_audio': 'குரலில் கேட்கவும்',
+    'shorts.stop_audio': 'குரலை நிறுத்தவும்',
+    'shorts.share': 'ரீலைப் பகிரவும்',
+    'shorts.all': 'அனைத்தும்',
+    'shorts.cat_masterclass': 'மாஸ்டர்கிளாஸ்',
+    'shorts.cat_pace': 'வேகப்பந்து தாக்குதல்',
+    'shorts.cat_clutch': 'நெருக்கடி தற்காப்பு',
+    'shorts.cat_captaincy': 'கேப்டன்சி',
+    'shorts.cat_fielding': 'பீல்டிங்',
+    'shorts.cat_spin': 'சுழற்பந்து மந்திரம்',
+    'shorts.cat_power': 'சக்திவாய்ந்த பேட்டிங்',
+    'shorts.cat_death': 'கடைசி ஓவர் பந்துவீச்சு',
+    'shorts.cat_grassroots': 'அடிப்படை திறமை',
+    'shorts.cat_wicketkeeping': 'விக்கெட் கீப்பிங்',
+    'shorts.cat_final': 'இறுதி தருணங்கள்',
+
+    // Athlete Digital Passport
+    'athletes.badge': 'அதிகாரமளித்தல் & உள்ளடக்கம்',
+    'athletes.title': 'வீரர் டிஜிட்டல் பாஸ்போர்ட் & மைக்ரோ-ஸ்பான்சர்ஷிப்',
+    'athletes.desc': 'விளையாட்டு வீராங்கனைகளுக்கு நேரடியாக ரசிகர்கள் ஆதரவளித்து, உபகரணங்கள் மற்றும் பயிற்சிகளுக்கு நிதியளிக்கின்றனர்.',
+    'athletes.balance': 'உங்கள் ரசிகர் இருப்பு',
+    'athletes.tokens': 'ரசிகர் டோக்கன்கள்',
+    'athletes.back_athlete': '50 டோக்கன்களுடன் ஆதரிக்கவும்',
+    'athletes.backed_success': 'வீரர் ஆதரிக்கப்பட்டார்! +50 ஸ்பார்க்ஸ்',
+    'athletes.funded': 'நிதி கிடைத்தது',
+    'athletes.target': 'இலக்கு',
+    'athletes.strike_rate': 'ஸ்ட்ரைக் ரேட்',
+    'athletes.matches': 'போட்டிகள்',
+    'athletes.wickets': 'விக்கெட்டுகள்',
+    'athletes.journey': 'வீரர் பயணம்',
+    'athletes.fund_purpose': 'மானிய நோக்கம்',
+
+    // Deep RL Simulator
+    'rl.badge': 'டீப் Q-லேர்னிங் & கொள்கை சாய்வு கட்டமைப்பு',
+    'rl.title': 'டீப் வலுவூட்டல் கற்றல் பிட்ச் சிமுலேட்டர்',
+    'rl.desc': 'ஆயிரக்கணக்கான போட்டி சூழ்நிலைகளில் பயிற்சியளிக்கப்பட்ட மார்கோவ் முடிவெடுக்கும் கொள்கைகளுடன் கேப்டன்சி உருவகப்படுத்துதல்.',
+    'rl.train_step': 'RL உகப்பாக்க படியை இயக்கவும் (+50 சகாப்தங்கள்)',
+    'rl.training': 'Q-கொள்கையை மேம்படுத்துகிறது...',
+    'rl.episodes': 'பயிற்சி அத்தியாயங்கள்',
+    'rl.reward': 'குவிந்த வெகுமதி',
+    'rl.epsilon': 'ஆய்வு விகிதம் (ε)',
+    'rl.confidence': 'கொள்கை நம்பிக்கை',
+    'rl.optimal_action': 'பரிந்துரைக்கப்பட்ட உகந்த செயல்',
+    'rl.batter_type': 'பேட்டர் சுயவிவரம்',
+    'rl.bowler_type': 'பந்துவீச்சாளர் சுயவிவரம்',
+    'rl.phase': 'போட்டி கட்டம்',
+
+    // Cyber Security Shield
+    'cyber.badge': 'ஜீரோ-டிரஸ்ட் பாதுகாப்பு & HMAC கிரிப்டோகிராபிக் மெஷ்',
+    'cyber.title': 'சைபர் கவசம் & AI பிராம்ப்ட் பாதுகாப்பு மையம்',
+    'cyber.desc': 'நேரலை ஒளிபரப்பு தரவை தீங்கிழைக்கும் ஊடுருவல் மற்றும் தரவு சிதைவுகளிலிருந்து பாதுகாக்கிறது.',
+    'cyber.firewall_title': 'பிராம்ப்ட் ஊடுருவல் ஃபயர்வால்',
+    'cyber.test_prompt': 'ஃபயர்வாலை சோதிக்க வினவலை உள்ளிடவும்',
+    'cyber.inspect_btn': 'ஜீரோ-டிரஸ்ட் காவலருடன் ஆய்வு செய்க',
+    'cyber.tamper_telemetry': 'சிதைக்கப்பட்ட தரவை உருவகப்படுத்துக',
+    'cyber.restore_telemetry': 'கிரிப்டோகிராபிக் கையொப்பத்தை மீட்டமைக்கவும்',
+    'cyber.clean': 'தூய்மையானது — அங்கீகரிக்கப்பட்டது',
+    'cyber.blocked': 'தடுக்கப்பட்டது — அச்சுறுத்தல் கண்டறியப்பட்டது',
+    'cyber.signature_valid': 'HMAC கையொப்பம் சரிபார்க்கப்பட்டது',
+    'cyber.signature_invalid': 'சிதைவு கண்டறியப்பட்டது: கையொப்ப பொருத்தமின்மை',
+
+    // User Profile
+    'profile.title': 'ரசிகர் இணை-படைப்பாளர் சினாப்ஸ் சுயவிவரம்',
+    'profile.handle': 'லோர்கீப்பர் ஐடி',
+    'profile.sparks_balance': 'ரசிகர் ஸ்பார்க்ஸ் இருப்பு',
+    'profile.credentials': 'சரிபார்க்கப்பட்ட ICC சான்றுகள்',
+    'profile.achievements': 'திறக்கப்பட்ட சாதனைகள்',
+    'profile.connected': 'சினாப்ஸ் இணைக்கப்பட்டது',
+    'profile.logout': 'ஃபேன்வர்ஸிலிருந்து வெளியேறவும்',
+
+    // Authentication Modal
+    'auth.title': 'ஆரா லோர்கீப்பர் அணுகல்',
+    'auth.subtitle': 'கிரிப்டோகிராபிக் கீபாஸ் அல்லது மின்னஞ்சல் மூலம் உள்நுழைக',
+    'auth.email_label': 'படைப்பாளர் மின்னஞ்சல் அல்லது Web3 ஹேண்டில்',
+    'auth.email_placeholder': 'lorekeeper@auraverse.io',
+    'auth.send_code': 'சரிபார்ப்பு மறைமுகக்குறியீட்டை உருவாக்கு',
+    'auth.otp_title': '6-இலக்க சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்',
+    'auth.otp_desc': 'உங்கள் முகவரிக்கு ஒற்றைப் பயன்பாட்டு டோக்கன் அனுப்பப்பட்டுள்ளது.',
+    'auth.biometric': 'பயோமெட்ரிக் பாஸ்கீயைப் பயன்படுத்தவும்',
+    'auth.verifying': 'கிரிப்டோகிராபிக் குறியீடு சரிபார்க்கப்படுகிறது...',
+    'auth.success': 'அங்கீகாரம் வெற்றிகரமானது! ஃபேன்வர்ஸில் நுழைகிறது...',
+    'auth.back': 'பின்செல்',
   },
 
   es: {
@@ -910,7 +1302,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'ribbon.fans_synced': '8.4M Fans Conectados en Vivo',
     'ribbon.streams': '12 Transmisiones Regionales de IA',
     'ribbon.zerotrust': 'Guardia Zero-Trust: Activo',
-    'ribbon.sync_langs': '5 Idiomas Sincronizados',
+    'ribbon.sync_langs': '6 Idiomas Sincronizados',
     'brand.tagline': 'Canon Multimodal • Estadio 3D • Fandom en Vivo',
 
     // Hero Section
@@ -1204,7 +1596,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'ribbon.fans_synced': '8.4M مشجع متصلون مباشرة',
     'ribbon.streams': '12 بث إقليمي للذكاء الاصطناعي',
     'ribbon.zerotrust': 'درع انعدام الثقة: نشط',
-    'ribbon.sync_langs': '5 لغات متزامنة',
+    'ribbon.sync_langs': '6 لغات متزامنة',
     'brand.tagline': 'كانون متعدد الوسائط • ملعب ثلاثي الأبعاد • جماهير مباشرة',
 
     // Hero Section
@@ -1296,6 +1688,102 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'community.active_desc': 'نشطون في أكثر من 850 بطولة ورواية كريكيت نسائية',
     'community.verified': 'سجل كانون المعتمد من ICC #8802',
     'community.enter': 'دخول الآن',
+
+    // Shorts & Vertical Reels
+    'shorts.badge': 'خط إنتاج اللقطات البارزة متعدد الوسائط',
+    'shorts.title': 'قصص مصغرة رأسية وتوليف صوتي متعدد اللغات',
+    'shorts.desc': 'تحويل فيديو بث ICC المباشر إلى مقاطع رأسية 9:16 في أقل من 45 ثانية مع بيانات تتبع الكرة والتعليق بأكثر من 12 لغة.',
+    'shorts.edge_ingestion': 'معالجة الحافة: 38 ثانية',
+    'shorts.tab_shorts': 'مقاطع قصيرة 9:16',
+    'shorts.tab_long': 'بث مباشر 16:9',
+    'shorts.exit_velocity': 'سرعة الانطلاق',
+    'shorts.launch_angle': 'زاوية الانطلاق',
+    'shorts.distance': 'المسافة',
+    'shorts.win_prob_delta': 'تغير احتمالية الفوز',
+    'shorts.tactical_breakdown': 'التحليل التكتيكي',
+    'shorts.ai_commentary': 'تعليق الذكاء الاصطناعي العصبي',
+    'shorts.play_audio': 'استمع بالصوت',
+    'shorts.stop_audio': 'إيقاف الصوت',
+    'shorts.share': 'مشاركة المقطع',
+    'shorts.all': 'الكل',
+    'shorts.cat_masterclass': 'درس متقدم',
+    'shorts.cat_pace': 'هجوم سريع',
+    'shorts.cat_clutch': 'دفاع حاسم',
+    'shorts.cat_captaincy': 'القيادة',
+    'shorts.cat_fielding': 'حراسة الميدان',
+    'shorts.cat_spin': 'سحر الدوران',
+    'shorts.cat_power': 'ضربات قوية',
+    'shorts.cat_death': 'رميات الأشواط الأخيرة',
+    'shorts.cat_grassroots': 'مواهب واعدة',
+    'shorts.cat_wicketkeeping': 'حراسة الويكيت',
+    'shorts.cat_final': 'اللحظات الأخيرة',
+
+    // Athlete Digital Passport
+    'athletes.badge': 'التمكين والشمولية المجتمعية',
+    'athletes.title': 'جواز السفر الرقمي للاعبة ومنصة الرعاية المصغرة',
+    'athletes.desc': 'سد فجوة التمويل الرياضي. يدعم المشجعون الرياضيات مباشرة مع تمويل المعدات والسفر والمعسكرات التدريبية.',
+    'athletes.balance': 'رصيد المشجع الخاص بك',
+    'athletes.tokens': 'رموز المشجعين',
+    'athletes.back_athlete': 'ادعم بـ 50 رمزاً',
+    'athletes.backed_success': 'تم دعم اللاعبة! +50 شرارة',
+    'athletes.funded': 'تم التمويل',
+    'athletes.target': 'الهدف',
+    'athletes.strike_rate': 'معدل الضربات',
+    'athletes.matches': 'المباريات',
+    'athletes.wickets': 'الويكيت',
+    'athletes.journey': 'مسيرة اللاعبة',
+    'athletes.fund_purpose': 'الغرض من المنحة',
+
+    // Deep RL Simulator
+    'rl.badge': 'بنية التعلم المعزز العميق Q-Learning وتدرج السياسات',
+    'rl.title': 'محاكي رميات التعلم المعزز العميق',
+    'rl.desc': 'محاكاة قرارات القيادة التكتيكية باستخدام سياسات عمليات اتخاذ القرار لماركوف (MDP) المدربة على آلاف سيناريوهات المباريات.',
+    'rl.train_step': 'تشغيل خطوة تحسين RL (+50 دورة)',
+    'rl.training': 'تحسين سياسة Q جارية...',
+    'rl.episodes': 'حلقات التدريب',
+    'rl.reward': 'المكافأة التراكمية',
+    'rl.epsilon': 'معدل الاستكشاف (ε)',
+    'rl.confidence': 'ثقة السياسة',
+    'rl.optimal_action': 'الإجراء الأمثل الموصى به',
+    'rl.batter_type': 'ملف الضاربة',
+    'rl.bowler_type': 'ملف الرامية',
+    'rl.phase': 'مرحلة المباراة',
+
+    // Cyber Security Shield
+    'cyber.badge': 'أمان انعدام الثقة والشبكة المشفرة HMAC',
+    'cyber.title': 'الدرع السيبراني ومركز الدفاع ضد هجمات الذكاء الاصطناعي',
+    'cyber.desc': 'حماية بيانات البث في الوقت الفعلي وحوكمة الجماهير من حقن الأوامر الضارة والتلاعب بالبيانات.',
+    'cyber.firewall_title': 'جدار حماية ضد حقن الأوامر',
+    'cyber.test_prompt': 'أدخل استعلاماً لاختبار جدار الحماية',
+    'cyber.inspect_btn': 'فحص بواسطة حارس انعدام الثقة',
+    'cyber.tamper_telemetry': 'محاكاة بيانات متلاعب بها',
+    'cyber.restore_telemetry': 'استعادة التوقيع المشفر',
+    'cyber.clean': 'سليم — موثق',
+    'cyber.blocked': 'محظور — تم اكتشاف تهديد ضار',
+    'cyber.signature_valid': 'تم التحقق من توقيع HMAC المشفر',
+    'cyber.signature_invalid': 'تم اكتشاف تلاعب: عدم تطابق التوقيع',
+
+    // User Profile
+    'profile.title': 'الملف الشخصي للمشارك المشجع',
+    'profile.handle': 'معرف حارس الكانون',
+    'profile.sparks_balance': 'رصيد شرارات المشجع',
+    'profile.credentials': 'شهادات ICC المعتمدة',
+    'profile.achievements': 'الإنجازات المفتوحة',
+    'profile.connected': 'المشتبك متصل',
+    'profile.logout': 'تسجيل الخروج من FanVerse',
+
+    // Authentication Modal
+    'auth.title': 'دخول حراس أورا',
+    'auth.subtitle': 'سجل الدخول باستخدام المفتاح المشفر أو التحقق بالبريد',
+    'auth.email_label': 'بريد المبدع أو معرف Web3',
+    'auth.email_placeholder': 'lorekeeper@auraverse.io',
+    'auth.send_code': 'إنشاء شفرة التحقق',
+    'auth.otp_title': 'أدخل شفرة التحقق المكونة من 6 أرقام',
+    'auth.otp_desc': 'تم إرسال رمز مشفر للاستخدام لمرة واحدة إلى معرفك.',
+    'auth.biometric': 'استخدام مفتاح المرور البيومتري',
+    'auth.verifying': 'جاري التحقق من الشفرة المشفرة...',
+    'auth.success': 'تم التحقق من المصادقة! جاري الدخول إلى FanVerse...',
+    'auth.back': 'رجوع',
   }
 };
 
@@ -1313,7 +1801,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<LanguageCode>(() => {
     const saved = localStorage.getItem('aura_fanverse_lang');
-    if (saved && ['en', 'hi', 'ta', 'es', 'ar'].includes(saved)) {
+    if (saved && ['en', 'hi', 'te', 'ta', 'es', 'ar'].includes(saved)) {
       return saved as LanguageCode;
     }
     return 'en';
@@ -1342,6 +1830,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const getSpeechLangCode = (): string => {
     switch (language) {
       case 'hi': return 'hi-IN';
+      case 'te': return 'te-IN';
       case 'ta': return 'ta-IN';
       case 'es': return 'es-ES';
       case 'ar': return 'ar-SA';

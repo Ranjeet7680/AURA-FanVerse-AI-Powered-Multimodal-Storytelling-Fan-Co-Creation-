@@ -15,6 +15,8 @@ import { CyberSecurityCenter } from './components/CyberSecurityCenter';
 import { soundFX } from './services/soundFX';
 import { Trophy, Globe, Flame, Zap, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { FloatingLanguageSwitcher } from './components/FloatingLanguageSwitcher';
+import { AnimationDiagramModal } from './components/AnimationDiagramModal';
 
 // Unique AI-generated aesthetic background wallpapers per page
 const PAGE_BACKGROUNDS: Record<ActiveTabType, { bgImage: string; glowFrom: string; glowTo: string }> = {
@@ -70,6 +72,7 @@ function AppContent() {
   const [showLoadingSplash, setShowLoadingSplash] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<ActiveTabType>('discover');
   const [isAuthOpen, setIsAuthOpen] = useState<boolean>(false);
+  const [isDiagramOpen, setIsDiagramOpen] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{
     name: string;
     handle: string;
@@ -132,6 +135,7 @@ function AppContent() {
         setActiveTab={setActiveTab}
         user={currentUser}
         onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenDiagram={() => setIsDiagramOpen(true)}
       />
 
       {/* Live Match Dynamic Broadcast Ribbon & Animated Ticker */}
@@ -274,6 +278,15 @@ function AppContent() {
           }}
         />
       )}
+
+      {/* Real-Time System & Animation Diagram Modal */}
+      <AnimationDiagramModal
+        isOpen={isDiagramOpen}
+        onClose={() => setIsDiagramOpen(false)}
+      />
+
+      {/* Floating Quick Language Switcher */}
+      <FloatingLanguageSwitcher />
     </div>
   );
 }

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AURA FanVerse — Live System & Animation Architecture Diagram</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.8)) drop-shadow(0 0 16px rgba(168, 85, 247, 0.4)); }
+      50% { filter: drop-shadow(0 0 14px rgba(236, 72, 153, 0.9)) drop-shadow(0 0 28px rgba(6, 182, 212, 0.6)); }
+    }
+    @keyframes dashMove {
+      to { stroke-dashoffset: -40; }
+    }
+    @keyframes ripple {
+      0% { transform: scale(0.8); opacity: 0.9; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .flow-dash {
+      stroke-dasharray: 6 6;
+      animation: dashMove 1.4s linear infinite;
+    }
+    .flow-dash-fast {
+      stroke-dasharray: 5 5;
+      animation: dashMove 0.8s linear infinite;
+    }
+    .node-glow {
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    .ripple-ring {
+      transform-origin: center;
+      animation: ripple 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-3 sm:p-4 select-none">
+  <div class="bg-[var(--card,#100a26)] text-[var(--foreground,#f8fafc)] border border-[var(--border,rgba(168,85,247,0.35))] rounded-2xl p-4 sm:p-5 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+    <!-- Header with Live Pulse and Mode Switcher -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border,rgba(168,85,247,0.2))]">
+      <div class="flex items-center gap-2.5">
+        <div class="relative w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 via-purple-600 to-pink-500 p-0.5 flex items-center justify-center shadow-lg">
+          <div class="w-full h-full bg-[#100a26] rounded-[10px] flex items-center justify-center">
+            <span class="text-cyan-400 text-sm animate-pulse">⚡</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-black text-sm sm:text-base tracking-tight text-white flex items-center gap-1.5">
+              <span>AURA Real-Time Animation & Telemetry Engine</span>
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">
+                60 FPS LIVE
+              </span>
+            </h3>
+          </div>
+          <p class="text-[11px] text-[var(--muted-foreground,#94a3b8)] font-mono">
+            Interactive Signal Flow & 6-Language Reactive Synapse Topology
+          </p>
+        </div>
+      </div>
+
+      <!-- Mode Selector Pills -->
+      <div class="flex items-center gap-1.5 bg-[#180f38] p-1 rounded-xl border border-purple-500/30 text-xs font-mono">
+        <button id="btn-flow" onclick="setMode('flow')" class="px-2.5 py-1 rounded-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md transition-all">
+          Dataflow
+        </button>
+        <button id="btn-stadium" onclick="setMode('stadium')" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all">
+          3D Stadium
+        </button>
+        <button id="btn-lang" onclick="setMode('lang')" class="px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all">
+          6-Lang Mesh
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Animated Canvas / SVG Workspace -->
+    <div class="relative my-3 rounded-xl bg-[#090518] border border-purple-500/20 p-2 overflow-hidden flex items-center justify-center min-h-[300px]">
+      <svg id="diagram-svg" viewBox="0 0 880 340" class="w-full h-auto max-h-[340px] drop-shadow-md">
+        <!-- Definitions: Gradients & Markers -->
+        <defs>
+          <linearGradient id="grad-cyan-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#06b6d4" />
+            <stop offset="100%" stop-color="#a855f7" />
+          </linearGradient>
+          <linearGradient id="grad-purple-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#a855f7" />
+            <stop offset="100%" stop-color="#ec4899" />
+          </linearGradient>
+          <linearGradient id="grad-pink-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ec4899" />
+            <stop offset="100%" stop-color="#f59e0b" />
+          </linearGradient>
+          <linearGradient id="grad-emerald-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#10b981" />
+            <stop offset="100%" stop-color="#06b6d4" />
+          </linearGradient>
+
+          <!-- Marker Arrowheads -->
+          <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#06b6d4" />
+          </marker>
+          <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7" />
+          </marker>
+          <marker id="arrow-pink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#ec4899" />
+          </marker>
+        </defs>
+
+        <!-- Dynamic Content injected via JS for the active mode -->
+        <g id="diagram-content"></g>
+      </svg>
+
+      <!-- Particle Packet Dots moving across canvas -->
+      <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
+    </div>
+
+    <!-- Active Node Telemetry Readout & Control Bar -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2 border-t border-[var(--border,rgba(168,85,247,0.2))] text-xs font-mono">
+      <div id="status-readout" class="flex items-center gap-2 text-cyan-300">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span id="readout-text" class="text-slate-300">
+          <strong class="text-cyan-300">Live Status:</strong> Active 60 FPS Telemetry Ingestion • Click any node to inspect.
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2 self-end sm:self-auto">
+        <button onclick="toggleAnimation()" id="btn-pause" class="px-3 py-1 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 font-bold transition-all flex items-center gap-1.5">
+          <span id="pause-icon">⏸️</span>
+          <span id="pause-text">Pause</span>
+        </button>
+        <button onclick="changeSpeed()" id="btn-speed" class="px-2.5 py-1 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold transition-all">
+          1.0x Speed
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentMode = 'flow';
+    let isPlaying = true;
+    let animSpeed = 1.0;
+    let animationFrameId = null;
+
+    const MODES = {
+      flow: `
+        <!-- Background Network Grid Lines -->
+        <path d="M 120 70 L 280 170 M 120 170 L 280 170 M 120 270 L 280 170" stroke="rgba(6,182,212,0.3)" stroke-width="2" class="flow-dash" />
+        <path d="M 280 170 L 460 170" stroke="rgba(168,85,247,0.5)" stroke-width="3" class="flow-dash-fast" marker-end="url(#arrow-purple)" />
+        <path d="M 460 170 L 640 90 M 460 170 L 640 170 M 460 170 L 640 250" stroke="rgba(236,72,153,0.4)" stroke-width="2" class="flow-dash" />
+        <path d="M 640 90 L 780 170 M 640 170 L 780 170 M 640 250 L 780 170" stroke="rgba(16,185,129,0.3)" stroke-width="2" class="flow-dash" />
+
+        <!-- Layer 1: Stadium Edge Sensing (3 Nodes) -->
+        <g class="cursor-pointer" onclick="inspectNode('4K 60FPS Broadcast Cam', 'RTSP Video stream ingested with zero frame drops at sub-45s latency.')">
+          <circle cx="120" cy="70" r="26" fill="#160e33" stroke="#06b6d4" stroke-width="2.5" class="node-glow" />
+          <text x="120" y="74" text-anchor="middle" font-size="18">📡</text>
+          <text x="120" y="112" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="monospace" font-weight="bold">4K RTSP Video</text>
+        </g>
+
+        <g class="cursor-pointer" onclick="inspectNode('Hawk-Eye 3D Radar', 'Captures ball spin RPM, exit velocity, and 3D bounce coordinate vector.')">
+          <circle cx="120" cy="170" r="26" fill="#160e33" stroke="#06b6d4" stroke-width="2.5" class="node-glow" />
+          <text x="120" y="174" text-anchor="middle" font-size="18">⚡</text>
+          <text x="120" y="212" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="monospace" font-weight="bold">Hawk-Eye Radar</text>
+        </g>
+
+        <g class="cursor-pointer" onclick="inspectNode('Micro-Acoustic Sensors', 'Mic array in pitch stumps for millisecond snickometer & bat-impact detection.')">
+          <circle cx="120" cy="270" r="26" fill="#160e33" stroke="#06b6d4" stroke-width="2.5" class="node-glow" />
+          <text x="120" y="274" text-anchor="middle" font-size="18">🎙️</text>
+          <text x="120" y="312" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="monospace" font-weight="bold">Stump Acoustics</text>
+        </g>
+
+        <!-- Layer 2: Zero-Trust Gateway -->
+        <g class="cursor-pointer" onclick="inspectNode('Zero-Trust Cryptographic Shield', 'HMAC-SHA256 signature verification & Adversarial Prompt Injection firewall.')">
+          <circle cx="280" cy="170" r="32" fill="#201147" stroke="#a855f7" stroke-width="3" class="node-glow" />
+          <text x="280" y="176" text-anchor="middle" font-size="22">🛡️</text>
+          <text x="280" y="220" text-anchor="middle" fill="#c084fc" font-size="11" font-family="monospace" font-weight="bold">Zero-Trust Shield</text>
+          <text x="280" y="234" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">HMAC-SHA256</text>
+        </g>
+
+        <!-- Layer 3: Central AI & ML Engine -->
+        <g class="cursor-pointer" onclick="inspectNode('Central AI / ML Engine', 'PINN Physics Engine, 98.2% accurate ML Win Predictor, and Q-Learning RL Tactical Agent.')">
+          <circle cx="460" cy="170" r="42" fill="#2b145a" stroke="url(#grad-cyan-purple)" stroke-width="3.5" class="node-glow" />
+          <text x="460" y="176" text-anchor="middle" font-size="26">🧠</text>
+          <text x="460" y="230" text-anchor="middle" fill="#38bdf8" font-size="12" font-family="monospace" font-weight="bold">AURA AI Engine</text>
+          <text x="460" y="244" text-anchor="middle" fill="#e879f9" font-size="9" font-family="monospace">Ensemble ML + RL</text>
+        </g>
+
+        <!-- Layer 4: Consumer Outputs -->
+        <g class="cursor-pointer" onclick="inspectNode('Three.js 3D Stadium', 'Procedural turf, dynamic lighting (Day/Sunset/Night), and animated player rigs at 60 FPS.')">
+          <circle cx="640" cy="90" r="28" fill="#1b103b" stroke="#ec4899" stroke-width="2.5" class="node-glow" />
+          <text x="640" y="96" text-anchor="middle" font-size="19">🏟️</text>
+          <text x="640" y="132" text-anchor="middle" fill="#f472b6" font-size="11" font-family="monospace" font-weight="bold">3D WebGL Arena</text>
+        </g>
+
+        <g class="cursor-pointer" onclick="inspectNode('Autonomous 9:16 Shorts', 'Computer vision automated vertical storytelling reels published in under 45 seconds.')">
+          <circle cx="640" cy="170" r="28" fill="#1b103b" stroke="#ec4899" stroke-width="2.5" class="node-glow" />
+          <text x="640" y="176" text-anchor="middle" font-size="19">📱</text>
+          <text x="640" y="212" text-anchor="middle" fill="#f472b6" font-size="11" font-family="monospace" font-weight="bold">9:16 Micro-Reels</text>
+        </g>
+
+        <g class="cursor-pointer" onclick="inspectNode('Conversational Tactical Co-Pilot', '2D pitch radar visualizer and conversational captaincy guidance in 6 languages.')">
+          <circle cx="640" cy="250" r="28" fill="#1b103b" stroke="#ec4899" stroke-width="2.5" class="node-glow" />
+          <text x="640" y="256" text-anchor="middle" font-size="19">🧭</text>
+          <text x="640" y="292" text-anchor="middle" fill="#f472b6" font-size="11" font-family="monospace" font-weight="bold">Tactical Co-Pilot</text>
+        </g>
+
+        <!-- Layer 5: 6-Language Synapse & Fan Clients -->
+        <g class="cursor-pointer" onclick="inspectNode('6-Language Synapse Hub', 'Synchronized real-time localization across Telugu (తెలుగు), Tamil (தமிழ்), Hindi, English, Spanish, and Arabic.')">
+          <circle cx="790" cy="170" r="34" fill="#1c1642" stroke="#10b981" stroke-width="3" class="node-glow" />
+          <text x="790" y="176" text-anchor="middle" font-size="22">🌐</text>
+          <text x="790" y="222" text-anchor="middle" fill="#34d399" font-size="11" font-family="monospace" font-weight="bold">6-Lang Synapse</text>
+          <text x="790" y="236" text-anchor="middle" fill="#38bdf8" font-size="9" font-family="monospace">TE • TA • HI • EN • ES • AR</text>
+        </g>
+      `,
+
+      stadium: `
+        <!-- 3D Stadium Field Oval -->
+        <ellipse cx="440" cy="170" rx="360" ry="120" fill="#0d1f18" stroke="#10b981" stroke-width="3" />
+        <ellipse cx="440" cy="170" rx="240" ry="80" fill="#0c1815" stroke="rgba(16,185,129,0.5)" stroke-width="1.5" stroke-dasharray="6 4" />
+        <!-- Pitch Rectangle -->
+        <rect x="390" y="110" width="100" height="120" fill="#422e1b" stroke="#d97706" stroke-width="2" rx="4" />
+        <line x1="390" y1="130" x2="490" y2="130" stroke="#fef08a" stroke-width="2" />
+        <line x1="390" y1="210" x2="490" y2="210" stroke="#fef08a" stroke-width="2" />
+
+        <!-- Parabolic Ball Flight Path -->
+        <path d="M 440 210 Q 560 30, 680 120" fill="none" stroke="#ec4899" stroke-width="3.5" class="flow-dash-fast" marker-end="url(#arrow-pink)" />
+        <circle cx="680" cy="120" r="7" fill="#f43f5e" class="node-glow" />
+        <text x="680" y="105" text-anchor="middle" fill="#f43f5e" font-size="11" font-family="monospace" font-weight="bold">6 Runs (88.6m)</text>
+
+        <!-- Player Position Nodes -->
+        <g class="cursor-pointer" onclick="inspectNode('Bowler Run-Up Rig', '4-stage kinematic stride: 18m approach acceleration, gather, 360° release, off-pitch follow through.')">
+          <circle cx="440" cy="130" r="16" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2" />
+          <text x="440" y="135" text-anchor="middle" font-size="12">🏃</text>
+          <text x="440" y="160" text-anchor="middle" fill="#38bdf8" font-size="10" font-family="monospace">Bowler</text>
+        </g>
+
+        <g class="cursor-pointer" onclick="inspectNode('Batter Stance & Shot', 'Pre-delivery tap, high backlift, cover drive / pull shot / upper cut with flying bails physics.')">
+          <circle cx="440" cy="210" r="16" fill="#1e1b4b" stroke="#f472b6" stroke-width="2" />
+          <text x="440" y="215" text-anchor="middle" font-size="12">🏏</text>
+          <text x="440" y="240" text-anchor="middle" fill="#f472b6" font-size="10" font-family="monospace">Batter</text>
+        </g>
+
+        <!-- Dynamic Camera Controls Orbit -->
+        <g class="cursor-pointer" onclick="inspectNode('Broadcaster Cam', 'Preset 1: Elevated 38m high-angle overview of stadium dynamics.')">
+          <circle cx="160" cy="80" r="18" fill="#160e33" stroke="#a855f7" stroke-width="2" />
+          <text x="160" y="85" text-anchor="middle" font-size="12">📹</text>
+          <text x="160" y="112" text-anchor="middle" fill="#c084fc" font-size="10" font-family="monospace">Broadcast Cam</text>
+        </g>
+
+        <g class="cursor-pointer" onclick="inspectNode('Hawk-Eye Cam', 'Preset 2: Hawk-Eye dynamic wicket-to-wicket ball tracking corridor.')">
+          <circle cx="160" cy="260" r="18" fill="#160e33" stroke="#a855f7" stroke-width="2" />
+          <text x="160" y="265" text-anchor="middle" font-size="12">🦅</text>
+          <text x="160" y="292" text-anchor="middle" fill="#c084fc" font-size="10" font-family="monospace">Hawk-Eye Cam</text>
+        </g>
+
+        <!-- Quad Floodlight Beams -->
+        <g class="cursor-pointer" onclick="inspectNode('Volumetric Floodlights', '4 corner towers with volumetric light cone scattering and realistic spectator flashes.')">
+          <circle cx="760" cy="60" r="16" fill="#1e293b" stroke="#facc15" stroke-width="2" />
+          <text x="760" y="65" text-anchor="middle" font-size="12">💡</text>
+          <text x="760" y="90" text-anchor="middle" fill="#fef08a" font-size="10" font-family="monospace">Floodlight Pylons</text>
+        </g>
+      `,
+
+      lang: `
+        <!-- Central Reactive Synapse Hub -->
+        <circle cx="440" cy="170" r="54" fill="#241454" stroke="#a855f7" stroke-width="3.5" class="node-glow" />
+        <text x="440" y="165" text-anchor="middle" font-size="28">🌐</text>
+        <text x="440" y="195" text-anchor="middle" fill="#e879f9" font-size="12" font-family="monospace" font-weight="bold">LanguageContext</text>
+        <text x="440" y="210" text-anchor="middle" fill="#38bdf8" font-size="9" font-family="monospace">React 19 Reactive Engine</text>
+
+        <!-- Connecting Lines to 6 Languages -->
+        <line x1="440" y1="170" x2="220" y2="70" stroke="rgba(255,140,0,0.6)" stroke-width="2.5" class="flow-dash-fast" />
+        <line x1="440" y1="170" x2="660" y2="70" stroke="rgba(6,182,212,0.6)" stroke-width="2.5" class="flow-dash-fast" />
+        <line x1="440" y1="170" x2="160" y2="170" stroke="rgba(236,72,153,0.6)" stroke-width="2.5" class="flow-dash-fast" />
+        <line x1="440" y1="170" x2="720" y2="170" stroke="rgba(16,185,129,0.6)" stroke-width="2.5" class="flow-dash-fast" />
+        <line x1="440" y1="170" x2="220" y2="270" stroke="rgba(245,158,11,0.6)" stroke-width="2.5" class="flow-dash-fast" />
+        <line x1="440" y1="170" x2="660" y2="270" stroke="rgba(139,92,246,0.6)" stroke-width="2.5" class="flow-dash-fast" />
+
+        <!-- 6 Language Satellites -->
+        <!-- 1. Telugu (Highlighted) -->
+        <g class="cursor-pointer" onclick="inspectNode('Telugu (తెలుగు)', 'Newly added with 150+ translation keys, te-IN speech synthesis, and native reel captions!')">
+          <circle cx="220" cy="70" r="30" fill="#2d1600" stroke="#ff8c00" stroke-width="3" class="node-glow" />
+          <text x="220" y="72" text-anchor="middle" font-size="16">🇮🇳</text>
+          <text x="220" y="112" text-anchor="middle" fill="#ffedd5" font-size="12" font-family="monospace" font-weight="bold">తెలుగు (Telugu)</text>
+          <text x="220" y="126" text-anchor="middle" fill="#fb923c" font-size="9" font-family="monospace">te-IN • 150+ Keys</text>
+        </g>
+
+        <!-- 2. English -->
+        <g class="cursor-pointer" onclick="inspectNode('English (en-US)', 'Primary default international dialect with 100% full key coverage.')">
+          <circle cx="660" cy="70" r="28" fill="#160e33" stroke="#06b6d4" stroke-width="2.5" class="node-glow" />
+          <text x="660" y="74" text-anchor="middle" font-size="16">🇬🇧</text>
+          <text x="660" y="112" text-anchor="middle" fill="#e0f2fe" font-size="11" font-family="monospace" font-weight="bold">English</text>
+          <text x="660" y="126" text-anchor="middle" fill="#38bdf8" font-size="9" font-family="monospace">en-US • Base</text>
+        </g>
+
+        <!-- 3. Hindi -->
+        <g class="cursor-pointer" onclick="inspectNode('Hindi (हिंदी)', 'Full native commentary synthesis and cricket vocabulary parity.')">
+          <circle cx="160" cy="170" r="28" fill="#160e33" stroke="#ec4899" stroke-width="2.5" class="node-glow" />
+          <text x="160" y="174" text-anchor="middle" font-size="16">🇮🇳</text>
+          <text x="160" y="212" text-anchor="middle" fill="#fce7f3" font-size="11" font-family="monospace" font-weight="bold">हिंदी (Hindi)</text>
+          <text x="160" y="226" text-anchor="middle" fill="#f472b6" font-size="9" font-family="monospace">hi-IN</text>
+        </g>
+
+        <!-- 4. Tamil -->
+        <g class="cursor-pointer" onclick="inspectNode('Tamil (தமிழ்)', 'Complete coverage with custom font rendering and ta-IN neural audio narration.')">
+          <circle cx="720" cy="170" r="28" fill="#160e33" stroke="#10b981" stroke-width="2.5" class="node-glow" />
+          <text x="720" y="174" text-anchor="middle" font-size="16">🇮🇳</text>
+          <text x="720" y="212" text-anchor="middle" fill="#d1fae5" font-size="11" font-family="monospace" font-weight="bold">தமிழ் (Tamil)</text>
+          <text x="720" y="226" text-anchor="middle" fill="#34d399" font-size="9" font-family="monospace">ta-IN</text>
+        </g>
+
+        <!-- 5. Spanish -->
+        <g class="cursor-pointer" onclick="inspectNode('Spanish (Español)', 'Global outreach localization with es-ES voice synthesis and full terminology.')">
+          <circle cx="220" cy="270" r="28" fill="#160e33" stroke="#f59e0b" stroke-width="2.5" class="node-glow" />
+          <text x="220" y="274" text-anchor="middle" font-size="16">🇪🇸</text>
+          <text x="220" y="312" text-anchor="middle" fill="#fef3c7" font-size="11" font-family="monospace" font-weight="bold">Español</text>
+          <text x="220" y="326" text-anchor="middle" fill="#fbbf24" font-size="9" font-family="monospace">es-ES</text>
+        </g>
+
+        <!-- 6. Arabic -->
+        <g class="cursor-pointer" onclick="inspectNode('Arabic (العربية)', 'Dubai AI Festival regional showcase with bidirectional RTL layout flipping.')">
+          <circle cx="660" cy="270" r="28" fill="#160e33" stroke="#8b5cf6" stroke-width="2.5" class="node-glow" />
+          <text x="660" y="274" text-anchor="middle" font-size="16">🇦🇪</text>
+          <text x="660" y="312" text-anchor="middle" fill="#ede9fe" font-size="11" font-family="monospace" font-weight="bold">العربية (Arabic)</text>
+          <text x="660" y="326" text-anchor="middle" fill="#a78bfa" font-size="9" font-family="monospace">ar-SA • RTL</text>
+        </g>
+      `
+    };
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('diagram-content').innerHTML = MODES[mode];
+      
+      // Update buttons
+      ['flow', 'stadium', 'lang'].forEach(m => {
+        const btn = document.getElementById('btn-' + m);
+        if (m === mode) {
+          btn.className = "px-2.5 py-1 rounded-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md transition-all";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-lg font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all";
+        }
+      });
+
+      document.getElementById('readout-text').innerHTML = 
+        `<strong class="text-cyan-300">Switched Mode:</strong> Active ${mode.toUpperCase()} view. Click any node to inspect telemetry.`;
+    }
+
+    function inspectNode(title, detail) {
+      document.getElementById('readout-text').innerHTML = 
+        `<strong class="text-cyan-300">${title}:</strong> <span class="text-slate-200">${detail}</span>`;
+    }
+
+    function toggleAnimation() {
+      isPlaying = !isPlaying;
+      document.getElementById('pause-icon').textContent = isPlaying ? '⏸️' : '▶️';
+      document.getElementById('pause-text').textContent = isPlaying ? 'Pause' : 'Resume';
+      
+      const paths = document.querySelectorAll('.flow-dash, .flow-dash-fast');
+      paths.forEach(p => {
+        p.style.animationPlayState = isPlaying ? 'running' : 'paused';
+      });
+    }
+
+    function changeSpeed() {
+      if (animSpeed === 1.0) animSpeed = 2.0;
+      else if (animSpeed === 2.0) animSpeed = 0.5;
+      else animSpeed = 1.0;
+
+      document.getElementById('btn-speed').textContent = animSpeed.toFixed(1) + 'x Speed';
+      
+      const paths = document.querySelectorAll('.flow-dash, .flow-dash-fast');
+      paths.forEach(p => {
+        p.style.animationDuration = (1.4 / animSpeed) + 's';
+      });
+    }
+
+    // Particle flow canvas simulation in background
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * (canvas.width * 0.2);
+        this.y = Math.random() * canvas.height;
+        this.targetX = canvas.width;
+        this.speed = (Math.random() * 2 + 1) * animSpeed;
+        this.radius = Math.random() * 2 + 1.2;
+        this.color = ['#06b6d4', '#a855f7', '#ec4899', '#10b981'][Math.floor(Math.random() * 4)];
+        this.alpha = Math.random() * 0.7 + 0.3;
+      }
+      update() {
+        if (!isPlaying) return;
+        this.x += this.speed * animSpeed;
+        if (this.x > canvas.width) this.reset();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.alpha;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    for (let i = 0; i < 35; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateLoop);
+    }
+    animateLoop();
+
+    // Initialize Default View
+    setMode('flow');
+  </script>
+</body>
+</html>

@@ -4,20 +4,21 @@
   <img src="https://img.shields.io/badge/ICC_Global_Hackathon-Dubai_AI_Festival_2026-8A2BE2?style=for-the-badge&logo=cricket" alt="ICC Global Hackathon 2026" />
   <img src="https://img.shields.io/badge/Platform_Version-v5.2_Flagship_Pilot-06B6D4?style=for-the-badge" alt="Platform Version" />
   <img src="https://img.shields.io/badge/UI_Engine-Framer_Motion_+_WebGL_60FPS-EC4899?style=for-the-badge&logo=framer" alt="UI Engine" />
-  <img src="https://img.shields.io/badge/i18n-5_Languages_+_Bidirectional_RTL-10B981?style=for-the-badge&logo=google-translate" alt="i18n" />
+  <img src="https://img.shields.io/badge/i18n-6_Languages_+_Bidirectional_RTL-10B981?style=for-the-badge&logo=google-translate" alt="i18n" />
+  <img src="https://img.shields.io/badge/Telugu-Native_Localization-FF8C00?style=for-the-badge" alt="Telugu" />
   <img src="https://img.shields.io/badge/Security-Zero_Trust_HMAC_SHA256-EF4444?style=for-the-badge&logo=security" alt="Cybersecurity" />
   <img src="https://img.shields.io/badge/AI_Engine-Ensemble_ML_(98.2%25_Acc)-F59E0B?style=for-the-badge&logo=python" alt="AI Engine" />
-  <img src="https://img.shields.io/badge/Architecture-20_System_&_3D_Diagrams-10B981?style=for-the-badge" alt="Diagrams" />
+  <img src="https://img.shields.io/badge/Architecture-22_System_&_Animation_Diagrams-10B981?style=for-the-badge" alt="Diagrams" />
 </p>
 
-> **AURA FanVerse** is a next-generation sports-tech platform combining **Three.js WebGL 3D Stadium Visualization**, **Autonomous 9:16 Multimodal Vertical Storytelling**, **Conversational AI Tactical Co-Piloting**, **Big Data Match Analytics (trained on 2,896 matches & 90k players)**, **5-Language Synchronized Internationalization**, and **Direct Female Athlete Micro-Sponsorship** built for the **ICC Global Hackathon 2026 (Dubai AI Festival Showcase)**.
+> **AURA FanVerse** is a next-generation sports-tech platform combining **Three.js WebGL 3D Stadium Visualization**, **Autonomous 9:16 Multimodal Vertical Storytelling**, **Conversational AI Tactical Co-Piloting**, **Big Data Match Analytics (trained on 2,896 matches & 90k players)**, **6-Language Synchronized Internationalization (with Telugu, Tamil, Hindi, English, Spanish, Arabic)**, and **Direct Female Athlete Micro-Sponsorship** built for the **ICC Global Hackathon 2026 (Dubai AI Festival Showcase)**.
 > 
 > Targeting **Problem Statement 1 (Sport Visibility & Engagement)** and **Problem Statement 2 (Next-Gen Fan Experiences)** with a core mission to elevate **Women in Sport**.
 
 ---
 
 ## 📑 Table of Contents
-1. [Architectural & Animation Flow Diagrams (20 Exhaustive System Diagrams)](#-20-architectural--animation-flow-diagrams)
+1. [Architectural & Animation Flow Diagrams (22 Exhaustive System Diagrams)](#-22-architectural--animation-flow-diagrams)
    - [Diagram 1: 3D System Topology & Ingestion Pipeline](#diagram-1-high-level-3d-system-topology--ingestion-pipeline)
    - [Diagram 2: Multimodal Real-Time Play-by-Play Sequence](#diagram-2-multimodal-real-time-play-by-play-sequence)
    - [Diagram 3: Reinforcement Learning Bellman Optimization Loop](#diagram-3-reinforcement-learning-bellman-optimization-loop)
@@ -38,15 +39,21 @@
    - [Diagram 18: 3D Camera Projection & Frustum Transform Animation Pipeline](#diagram-18-3d-camera-projection--frustum-transform-animation-pipeline)
    - [Diagram 19: 3D Biomechanical Skeletal Animation & Bowler Run-Up Rig](#diagram-19-3d-biomechanical-skeletal-animation--bowler-run-up-rig)
    - [Diagram 20: 3D WebGL Shader Pipeline & Multi-Tier Stadium Lighting Architecture](#diagram-20-3d-webgl-shader-pipeline--multi-tier-stadium-lighting-architecture)
+   - [Diagram 21: Real-Time Multilingual Synapse & RTL Layout Flipping Flow](#diagram-21-real-time-multilingual-synapse--rtl-layout-flipping-flow)
+   - [Diagram 22: Complete 60 FPS Visual Animation Choreography & Keyframe Timeline](#diagram-22-complete-60-fps-visual-animation-choreography--keyframe-timeline)
 2. [🌟 Key Platform Modules & Innovations](#-key-platform-modules--innovations)
-3. [🌐 5-Language Synchronized Internationalization (i18n & RTL)](#-5-language-synchronized-internationalization-i18n--rtl)
+3. [🌐 6-Language Synchronized Internationalization (i18n & RTL)](#-6-language-synchronized-internationalization-i18n--rtl)
 4. [🤖 Machine Learning & Data Studio Telemetry](#-machine-learning--data-studio-telemetry)
 5. [📂 Repository Contents & Documentation](#-repository-contents--documentation)
 6. [🚀 Quickstart Guide](#-quickstart-guide)
 
----
+# 📐 22 Architectural & Animation Flow Diagrams
 
-# 📐 20 Architectural & Animation Flow Diagrams
+<p align="center">
+  <img src="docs/aura_animation_diagram.svg" alt="AURA FanVerse Live System & Animation Architecture" width="100%" />
+</p>
+
+> ⚡ **Live Interactive 60 FPS Engine**: In addition to the visual animated SVG circuit above and the 22 exhaustive architectural diagrams below, fans and judges can launch the interactive 60 FPS animation diagram directly inside the live client by clicking the **`Diagram ⚡`** button in the header console or opening `http://localhost:5173/animation_diagram.html`.
 
 ---
 
@@ -105,7 +112,7 @@ sequenceDiagram
     DL->>DL: Compute Seam Drift, Launch Angle & Exit Velocity
     DL->>DL: Classify Moment (Boundary Four / Wicket / Dot Ball)
     DL->>TTS: Generate 20-Sec Play-by-Play Narrative Script
-    TTS-->>UI: Stream 9:16 Reel with Synthesized Commentary (English/Hindi/Spanish/Arabic/Tamil)
+    TTS-->>UI: Stream 9:16 Reel with Synthesized Commentary (English/Hindi/Telugu/Tamil/Spanish/Arabic)
     
     Note over Fan,UI: Fan asks: "Why did the captain set a deep backward square leg?"
     UI->>Gateway: Submit Tactical Question
@@ -270,12 +277,14 @@ sequenceDiagram
         LangSelect->>NeuralTTS: Synthesize English (en-US / en-IN)
     and Hindi Synthesis
         LangSelect->>NeuralTTS: Synthesize Hindi (hi-IN)
+    and Telugu Synthesis
+        LangSelect->>NeuralTTS: Synthesize తెలుగు (te-IN)
+    and Tamil Synthesis
+        LangSelect->>NeuralTTS: Synthesize தமிழ் (ta-IN)
     and Spanish Synthesis
         LangSelect->>NeuralTTS: Synthesize Español (es-ES)
     and Arabic Synthesis
         LangSelect->>NeuralTTS: Synthesize العربية (ar-SA)
-    and Tamil Synthesis
-        LangSelect->>NeuralTTS: Synthesize தமிழ் (ta-IN)
     end
     
     NeuralTTS-->>AudioStream: Synchronize with 9:16 Video Millisecond Timestamps
@@ -614,34 +623,111 @@ flowchart LR
 
 ---
 
+### Diagram 21: Real-Time Multilingual Synapse & RTL Layout Flipping Flow
+```mermaid
+flowchart TD
+    subgraph UserAction["👤 Language Selection Trigger"]
+        HeaderDropdown["Navbar 3D Beveled Language Popover"]
+        FloatingSwitch["Floating Quick-Switch Glassmorphic Pill (Bottom-Right)"]
+        MobileDrawer["Mobile Drawer 6-Language Grid"]
+    end
+
+    UserAction --> ActionDispatcher["soundFX.playClick() + setLanguage(code)"]
+    
+    subgraph SynapseCore["⚡ LanguageContext Reactive State Engine"]
+        ActionDispatcher --> LocalStorageSave["localStorage.setItem('aura_fanverse_lang', code)"]
+        ActionDispatcher --> DOMSync["DOM Attribute Updates:<br/>• document.documentElement.lang = code<br/>• document.documentElement.dir = dir ('ltr' | 'rtl')"]
+        ActionDispatcher --> StateBroadcast["React 19 Context Value Dispatch { language, dir, t, currentOption }"]
+    end
+
+    subgraph ResponsiveHeader["🧭 Adaptive Navbar & Overflow Shield"]
+        StateBroadcast --> NavWidthRecompute["Nav Flex Container (min-w-0 flex-1 max-w-full)"]
+        NavWidthRecompute --> HorizontalScroll["Auto-Scroll Buffer: Never pushes Right Controls off-screen"]
+        NavWidthRecompute --> PinnedControls["Right Controls Pinned (flex-shrink-0 ml-auto z-20)"]
+    end
+
+    subgraph MultimodalConsumers["🌐 Synchronized UI Consumers"]
+        StateBroadcast --> TransKeys["All 150+ Translation Keys Recomputed Instantly"]
+        StateBroadcast --> SpeechSynthesis["SpeechSynthesisUtterance.lang = getSpeechLangCode()<br/>(en-US, hi-IN, te-IN, ta-IN, es-ES, ar-SA)"]
+        StateBroadcast --> ReelCaptions["Micro-Reel Video Captions Switched to Native Dialect"]
+        StateBroadcast --> ToastAlert["Floating Toast Notification: 'Language Synced: <Native Name>'"]
+    end
+```
+
+---
+
+### Diagram 22: Complete 60 FPS Visual Animation Choreography & Keyframe Timeline
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Fan as 👤 Fan Viewport
+    participant FM as 🎨 Framer Motion Engine
+    participant CSS as ✨ CSS3 Hardware Keyframe Engine
+    participant WebGL as 🎮 Three.js 60 FPS Canvas
+    participant Audio as 🔊 Web Audio SFX Synth
+    participant Confetti as 🎊 Canvas Particle Confetti
+
+    Fan->>FM: Page Tab Switch (e.g. Discover → 3D Stadium)
+    par Framer Motion Page Transition
+        FM->>Fan: Animate Out previous tab (opacity: 1→0, y: 0→-14px, blur: 3px, 280ms)
+        FM->>Fan: Animate In new tab (opacity: 0→1, y: 14px→0, blur: 0px, ease: [0.22, 1, 0.36, 1])
+    and Audio SFX Sweep
+        Audio->>Fan: Synthesize portal transition frequency sweep (120Hz → 840Hz)
+    end
+
+    loop Infinite 60 FPS WebGL Animation Loop
+        WebGL->>WebGL: Quaternion Camera Slerp towards selected preset (Broadcaster / Batter POV)
+        WebGL->>WebGL: Bowler 4-Stage Run-Up & 360° Windmill Release Rig
+        WebGL->>WebGL: Parabolic Ball Trajectory ODE Integration + Magnus Air Drift
+        WebGL->>WebGL: Dynamic Clay Pitch Scuff & Volumetric Light Beam Scatter
+        WebGL-->>Fan: Render 60 FPS Framebuffer Output
+    end
+
+    loop Background GPU Keyframe Animations
+        CSS-->>Fan: Marquee Ticker 28s continuous horizontal scroll (paused on hover)
+        CSS-->>Fan: Holographic 3D Coin levitation floatSlow (4.5s ease-in-out infinite)
+        CSS-->>Fan: 360° Tactical Radar Beam circular rotation (3s infinite)
+        CSS-->>Fan: 5-Bar Dancing Audio Equalizer wavebar heights (staggered keyframes)
+    end
+
+    Fan->>Confetti: Cast Governance Poll Vote or Back Female Athlete
+    Confetti->>Fan: Burst 75 multi-colored particles across 65° spread with gravity physics
+    Audio->>Fan: Play triumphant harmonic victory chime
+```
+
+---
+
 ## 🌟 Key Platform Modules & Innovations
 
 | Module | Technologies | Key Highlights |
 |---|---|---|
 | **🏟️ 3D Cricket Stadium** | Three.js WebGL, Canvas Procedural Textures, Forward Kinematics, Web Audio SFX | Fully interactive 3D stadium modeled after Dubai International Stadium. Features articulated 3D player rigs: 4-stage bowling biomechanics (18m accelerated run-up, gather bound, 360° high-arm windmill release, danger area clearance) and dynamic shot-specific batting actions (pre-delivery crease tap, high backlift, high-elbow cover drive, back-foot swivel pull, straight drive, upper cut ramp, and cartwheeling bowled stumps with flying bails physics), paired with procedural bat-on-leather acoustic synthesis, luminous contact shockwaves, and 3D kinematics telemetry. |
-| **📱 Micro-Narratives Hub** | Framer Motion, Web Speech API, CSS3 Keyframes | Autonomous 9:16 vertical storytelling reels in under 45s. Features 16:9 full-match toggle, animated multi-bar frequency audio equalizer, telemetry HUD overlays, and voice commentary in 5 languages. |
-| **🧭 Tactical AI Co-Pilot** | Gradient Boosting ML, Web Speech API, Polar Geometry | Conversational strategy assistant with 360° rotating radar sweep on the 2D cricket pitch. Real-time Monte Carlo tactical recommendations and voice readout in English, Hindi, Tamil, Spanish, and Arabic. |
+| **📱 Micro-Narratives Hub** | Framer Motion, Web Speech API, CSS3 Keyframes | Autonomous 9:16 vertical storytelling reels in under 45s. Features 16:9 full-match toggle, animated multi-bar frequency audio equalizer, telemetry HUD overlays, and voice commentary in 6 languages (including native Telugu & Tamil). |
+| **🧭 Tactical AI Co-Pilot** | Gradient Boosting ML, Web Speech API, Polar Geometry | Conversational strategy assistant with 360° rotating radar sweep on the 2D cricket pitch. Real-time Monte Carlo tactical recommendations and voice readout in English, Hindi, Telugu, Tamil, Spanish, and Arabic. |
 | **📊 Match Analytics & Model Studio** | Recharts, HistGradientBoosting, RandomForest | Big data analytics trained on **2,896 historical matches** and **90,000+ players**. Features win-probability flow, phase quantiles (P10/P90), team ELO powers, and batter-vs-bowler matchup matrix. |
 | **🤖 RL Tactical Sandbox** | Q-Learning, Markov Decision Process (MDP) | Real-time reinforcement learning simulation optimizing 11-player fielder placements against high-danger batter shot distributions. |
 | **🛡️ Cybersecurity SOC** | HMAC-SHA256, Regex Firewall, Token Bucket Rate Limiter | Zero-Trust defense center verifying stadium sensor telemetry integrity and protecting tactical AI from adversarial prompt injections. |
 | **💖 Athlete Digital Passport** | Canvas Confetti, Web3 DID, Gamification | Direct micro-sponsorship portal empowering emerging female cricketers with 15% dedicated to the **ICC Future Stars Grassroots Fund**. |
+| **🌐 Floating Quick-Language Switcher** | Glassmorphic 3D UI, Web Audio SFX, LocalStorage | Persistent floating pill widget in bottom-right corner offering guaranteed 1-click language toggling anywhere on the page, backed by an adaptive overflow-proof header navigation strip. |
+| **⚡ Header Animation Diagram Console** | SVG Animated Circuits, HTML5 Canvas 60 FPS, Framer Motion Modal | Built-in 3D tactical header launcher (`Diagram ⚡`) opening the interactive multi-mode system & animation diagram modal (Dataflow Circuit, 3D Stadium Radar, and 6-Language Synapse), also available as standalone `/animation_diagram.html`. |
 | **🎨 60 FPS Animation Suite** | Framer Motion, Canvas Confetti, CSS3 Keyframes | App-wide fluid page transitions, 28s continuous tournament marquee ticker, 3D levitating badges, shimmer buttons, and celebratory confetti. |
 
 ---
 
-## 🌐 5-Language Synchronized Internationalization (i18n & RTL)
+## 🌐 6-Language Synchronized Internationalization (i18n & RTL)
 
-Every component, tactical query, narrative card, modal, and live tournament ribbon is localized in real-time across 5 global languages with full bidirectional RTL support:
+Every component, tactical query, narrative card, modal, and live tournament ribbon is localized in real-time across 6 global languages with full bidirectional RTL support:
 
 | Code | Language | Native Script | Direction | Flag | BCP 47 Voice Code |
 |---|---|---|---|---|---|
 | `en` | English | English | LTR | 🇬🇧 | `en-US` |
 | `hi` | Hindi | हिंदी | LTR | 🇮🇳 | `hi-IN` |
+| `te` | Telugu | తెలుగు | LTR | 🇮🇳 | `te-IN` |
 | `ta` | Tamil | தமிழ் | LTR | 🇮🇳 | `ta-IN` |
 | `es` | Spanish | Español | LTR | 🇪🇸 | `es-ES` |
 | `ar` | Arabic | العربية | RTL | 🇦🇪 | `ar-SA` |
 
-*Featuring a custom 3D glassmorphic language switcher with instant feedback toast notifications (`Language Synced: <Native Name>`).*
+*Featuring dual synchronized access points: a 3D glassmorphic header popover and a persistent bottom-right floating quick-switcher pill, backed by instant feedback toast notifications (`Language Synced: <Native Name>`).*
 
 ---
 

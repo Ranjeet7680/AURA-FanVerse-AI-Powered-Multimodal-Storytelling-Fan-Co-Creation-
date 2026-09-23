@@ -1,0 +1,283 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg3D" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090417"/>
+      <stop offset="40%" stop-color="#12092e"/>
+      <stop offset="80%" stop-color="#180c3b"/>
+      <stop offset="100%" stop-color="#070213"/>
+    </linearGradient>
+
+    <!-- 3D Glass Layer Gradients -->
+    <linearGradient id="layerTier1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <linearGradient id="layerTier2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#160d33" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <linearGradient id="layerTier3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#0e231e" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <linearGradient id="layerTier4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#280f2d" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <!-- Pitch Turf Gradient -->
+    <linearGradient id="turfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+
+    <linearGradient id="pitchClay" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+
+    <!-- Border Gradients -->
+    <linearGradient id="neonBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="50%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+
+    <!-- Bloom Filters -->
+    <filter id="glow3D" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="ambientLight" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="25"/>
+    </filter>
+  </defs>
+
+  <style>
+    .font-heavy { font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 800; }
+    .font-semi { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; font-weight: 600; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="1080" height="680" rx="26" fill="url(#bg3D)" stroke="url(#neonBorder)" stroke-width="2.5" />
+
+  <!-- Ambient Glow Orbs -->
+  <circle cx="250" cy="180" r="160" fill="#06B6D4" opacity="0.14" filter="url(#ambientLight)" />
+  <circle cx="850" cy="500" r="180" fill="#EC4899" opacity="0.15" filter="url(#ambientLight)" />
+  <circle cx="550" cy="350" r="190" fill="#A855F7" opacity="0.12" filter="url(#ambientLight)" />
+
+  <!-- 3D Isometric Base Grid Pattern -->
+  <g stroke="#3b1d6b" stroke-opacity="0.25" stroke-width="1">
+    <path d="M 150 560 L 550 660 L 950 560 L 550 460 Z" fill="none" />
+    <path d="M 230 540 L 550 620 L 870 540 L 550 460 Z" fill="none" />
+    <path d="M 310 520 L 550 580 L 790 520 L 550 460 Z" fill="none" />
+  </g>
+
+  <!-- Title Header -->
+  <g transform="translate(45, 36)">
+    <rect x="0" y="0" width="40" height="40" rx="12" fill="#1e1142" stroke="#A855F7" stroke-width="1.8" />
+    <text x="10" y="27" font-size="18">📐</text>
+    <text x="54" y="20" fill="#FFFFFF" class="font-heavy" font-size="18" letter-spacing="0.5">
+      3D System Topology &amp; Ingestion Pipeline Architecture
+    </text>
+    <text x="54" y="38" fill="#94A3B8" class="font-semi" font-size="12">
+      Master 3D Isometric Architecture • Edge Telemetry Ingest &rarr; Zero-Trust Guard &rarr; PINN AI Engine &rarr; 60 FPS WebGL
+    </text>
+
+    <!-- Top Right 3D Status Chips -->
+    <g transform="translate(730, 2)">
+      <rect x="0" y="0" width="135" height="26" rx="13" fill="#06b6d4" fill-opacity="0.15" stroke="#06b6d4" stroke-width="1.2" />
+      <circle cx="14" cy="13" r="4" fill="#06b6d4">
+        <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite" />
+      </circle>
+      <text x="26" y="17" fill="#67E8F9" class="font-mono" font-weight="700">3D ISOMETRIC</text>
+
+      <rect x="145" y="0" width="130" height="26" rx="13" fill="#ec4899" fill-opacity="0.15" stroke="#ec4899" stroke-width="1.2" />
+      <circle cx="159" cy="13" r="4" fill="#ec4899">
+        <animate attributeName="opacity" values="0.2;1;0.2" dur="1.2s" repeatCount="indefinite" />
+      </circle>
+      <text x="170" y="17" fill="#F472B6" class="font-mono" font-weight="700">20 DIAGRAMS</text>
+    </g>
+  </g>
+
+  <!-- Top Specular Scanline -->
+  <line x1="45" y1="92" x2="1055" y2="92" stroke="#2a164d" stroke-width="1.2" />
+  <line y1="92" y2="92" stroke="url(#neonBorder)" stroke-width="3" stroke-linecap="round">
+    <animate attributeName="x1" values="45;800;45" dur="6s" repeatCount="indefinite" />
+    <animate attributeName="x2" values="250;1055;250" dur="6s" repeatCount="indefinite" />
+  </line>
+
+  <!-- ==================================================================== -->
+  <!-- 3D ISOMETRIC STACK: 4 TIERS ELEVATED ALONG Z-AXIS                   -->
+  <!-- ==================================================================== -->
+
+  <!-- VERTICAL CONNECTING 3D LASER CONDUITS -->
+  <g stroke-dasharray="6 6" stroke-linecap="round">
+    <!-- Pillar Left (Edge -> Security -> Core -> Client) -->
+    <line x1="220" y1="560" x2="220" y2="180" stroke="#06B6D4" stroke-width="2.5">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.2s" repeatCount="indefinite" />
+    </line>
+
+    <!-- Pillar Center (Sync & Telemetry Bus) -->
+    <line x1="550" y1="580" x2="550" y2="170" stroke="#A855F7" stroke-width="3">
+      <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1s" repeatCount="indefinite" />
+    </line>
+
+    <!-- Pillar Right (Client Feedback & Audio loop) -->
+    <line x1="880" y1="560" x2="880" y2="180" stroke="#EC4899" stroke-width="2.5">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.2s" repeatCount="indefinite" />
+    </line>
+  </g>
+
+  <!-- Ascending Light Packets traveling along vertical conduits -->
+  <circle cx="220" r="5" fill="#22D3EE" filter="url(#glow3D)">
+    <animate attributeName="cy" values="560;180" dur="2s" repeatCount="indefinite" />
+  </circle>
+
+  <circle cx="550" r="6" fill="#D8B4FE" filter="url(#glow3D)">
+    <animate attributeName="cy" values="580;170" dur="1.6s" repeatCount="indefinite" />
+  </circle>
+
+  <circle cx="880" r="5" fill="#F472B6" filter="url(#glow3D)">
+    <animate attributeName="cy" values="560;180" dur="2.2s" repeatCount="indefinite" />
+  </circle>
+
+
+  <!-- TIER 1 (BOTTOM): 🏟️ STADIUM EDGE LAYER (Y-Center: 560) -->
+  <g id="tier1_stadium">
+    <!-- Isometric Floating Slab -->
+    <polygon points="120,530 550,640 980,530 550,420" fill="url(#layerTier1)" stroke="#06B6D4" stroke-width="2" />
+    
+    <!-- 3D Cricket Ground Turf Oval -->
+    <ellipse cx="550" cy="530" rx="160" ry="50" fill="url(#turfGrad)" stroke="#10b981" stroke-width="1.5" />
+    
+    <!-- 22-Yard Pitch Strip -->
+    <polygon points="530,510 570,520 570,550 530,540" fill="url(#pitchClay)" stroke="#f59e0b" stroke-width="1.2" />
+
+    <!-- 3D Ball Parabolic Arc -->
+    <path d="M 535,540 Q 550,470 565,515" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" filter="url(#glow3D)">
+      <animate attributeName="stroke-dashoffset" from="0" to="-30" dur="0.8s" repeatCount="indefinite" />
+    </path>
+    <circle cx="550" cy="485" r="4.5" fill="#FFFFFF" filter="url(#glow3D)">
+      <animate attributeName="cy" values="540;480;515" dur="1.2s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Tier 1 Badge & Labels -->
+    <g transform="translate(135, 490)">
+      <rect x="0" y="0" width="190" height="34" rx="10" fill="#0b172e" stroke="#06B6D4" stroke-width="1.2" />
+      <text x="10" y="22" font-size="14">🏟️</text>
+      <text x="32" y="17" fill="#67E8F9" class="font-heavy" font-size="11">TIER 1: STADIUM EDGE LAYER</text>
+      <text x="32" y="28" fill="#94A3B8" class="font-mono" font-size="9">4K RTSP • Hawk-Eye • Acoustics</text>
+    </g>
+
+    <text x="730" y="525" fill="#A5F3FC" class="font-semi" font-size="11">
+      📡 4K RTSP 60FPS Video Feed &amp; 3D Seam Tracking
+    </text>
+    <text x="730" y="542" fill="#94A3B8" class="font-mono" font-size="10">
+      Micro-Acoustic Stump Impact Sensors (Sub-5ms)
+    </text>
+  </g>
+
+
+  <!-- TIER 2: 🛡️ ZERO-TRUST SECURITY GATEWAY (Y-Center: 430) -->
+  <g id="tier2_security">
+    <!-- Isometric Floating Slab -->
+    <polygon points="140,400 550,500 960,400 550,300" fill="url(#layerTier2)" stroke="#A855F7" stroke-width="2" />
+
+    <!-- Center Security Node / Shield -->
+    <polygon points="530,400 550,385 570,400 550,425" fill="#3b0764" stroke="#c084fc" stroke-width="2" filter="url(#glow3D)" />
+    <circle cx="550" cy="402" r="5" fill="#F472B6" />
+
+    <!-- Tier 2 Badge & Labels -->
+    <g transform="translate(155, 365)">
+      <rect x="0" y="0" width="200" height="34" rx="10" fill="#1e0c38" stroke="#A855F7" stroke-width="1.2" />
+      <text x="10" y="22" font-size="14">🛡️</text>
+      <text x="32" y="17" fill="#D8B4FE" class="font-heavy" font-size="11">TIER 2: ZERO-TRUST SHIELD</text>
+      <text x="32" y="28" fill="#94A3B8" class="font-mono" font-size="9">HMAC-SHA256 • Prompt WAF</text>
+    </g>
+
+    <text x="710" y="395" fill="#E9D5FF" class="font-semi" font-size="11">
+      🔐 HMAC-SHA256 Telemetry Anti-Tamper Verification
+    </text>
+    <text x="710" y="412" fill="#94A3B8" class="font-mono" font-size="10">
+      Adversarial LLM Prompt WAF &amp; Immutable SOC Ledger
+    </text>
+  </g>
+
+
+  <!-- TIER 3: ⚙️ FASTAPI CORE & AI/ML ENGINE (Y-Center: 300) -->
+  <g id="tier3_aiml">
+    <!-- Isometric Floating Slab -->
+    <polygon points="160,270 550,360 940,270 550,180" fill="url(#layerTier3)" stroke="#10B981" stroke-width="2" />
+
+    <!-- Core Neural Network Matrix Hub -->
+    <polygon points="535,270 550,258 565,270 550,285" fill="#064e3b" stroke="#34d399" stroke-width="2" filter="url(#glow3D)" />
+    
+    <!-- Radiating Tensor Flow Rays -->
+    <line x1="550" y1="270" x2="480" y2="250" stroke="#34D399" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="550" y1="270" x2="620" y2="250" stroke="#34D399" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="550" y1="270" x2="550" y2="310" stroke="#34D399" stroke-width="1.5" stroke-dasharray="3 3" />
+
+    <!-- Tier 3 Badge & Labels -->
+    <g transform="translate(175, 235)">
+      <rect x="0" y="0" width="195" height="34" rx="10" fill="#0c241c" stroke="#10B981" stroke-width="1.2" />
+      <text x="10" y="22" font-size="14">🧠</text>
+      <text x="32" y="17" fill="#6EE7B7" class="font-heavy" font-size="11">TIER 3: FASTAPI AI ENGINE</text>
+      <text x="32" y="28" fill="#94A3B8" class="font-mono" font-size="9">PINN Trajectory • Q-Learning</text>
+    </g>
+
+    <text x="690" y="265" fill="#A7F3D0" class="font-semi" font-size="11">
+      ⚡ PINN Physics ODE &amp; Sub-15ms Action Softmax
+    </text>
+    <text x="690" y="282" fill="#94A3B8" class="font-mono" font-size="10">
+      MDP Q-Learning Optimizer • 2,896 Match Big Data Studio
+    </text>
+  </g>
+
+
+  <!-- TIER 4 (TOP): 📱 REACT 19 + THREE.JS 60 FPS CLIENT (Y-Center: 170) -->
+  <g id="tier4_client">
+    <!-- Isometric Floating Slab -->
+    <polygon points="180,140 550,225 920,140 550,55" fill="url(#layerTier4)" stroke="#EC4899" stroke-width="2.5" />
+
+    <!-- Isometric Client Screen Pod -->
+    <polygon points="460,130 550,165 640,130 550,95" fill="#1f0729" stroke="#f472b6" stroke-width="1.8" filter="url(#glow3D)" />
+    <text x="522" y="135" fill="#FFFFFF" class="font-heavy" font-size="12">60 FPS</text>
+
+    <!-- Tier 4 Badge & Labels -->
+    <g transform="translate(195, 105)">
+      <rect x="0" y="0" width="195" height="34" rx="10" fill="#2d0b30" stroke="#EC4899" stroke-width="1.2" />
+      <text x="10" y="22" font-size="14">📱</text>
+      <text x="32" y="17" fill="#F472B6" class="font-heavy" font-size="11">TIER 4: REACT 19 CLIENT</text>
+      <text x="32" y="28" fill="#94A3B8" class="font-mono" font-size="9">WebGL 60FPS • 6-Lang Synapse</text>
+    </g>
+
+    <text x="670" y="135" fill="#FBCFE8" class="font-semi" font-size="11">
+      🎮 Three.js WebGL Stadium &amp; 9:16 Micro-Narratives
+    </text>
+    <text x="670" y="152" fill="#94A3B8" class="font-mono" font-size="10">
+      6-Lang Synapse (Telugu / Tamil / Hindi / EN / ES / AR)
+    </text>
+  </g>
+
+  <!-- ==================================================================== -->
+  <!-- BOTTOM TELEMETRY FOOTER                                             -->
+  <!-- ==================================================================== -->
+  <g transform="translate(45, 642)">
+    <rect x="0" y="0" width="1010" height="38" rx="12" fill="#140b2b" stroke="#3b1d6b" stroke-width="1.2" />
+    <text x="16" y="24" fill="#E2E8F0" class="font-semi" font-size="11">
+      ⚡ End-to-End Pipeline: Stadium RTSP (120 FPS) &rarr; HMAC Gateway &rarr; PINN Physics ODE &rarr; Three.js Canvas &rarr; 6-Language Synapse
+    </text>
+    <text x="890" y="24" fill="#06B6D4" class="font-mono" font-weight="700">60 FPS VERIFIED</text>
+  </g>
+</svg>

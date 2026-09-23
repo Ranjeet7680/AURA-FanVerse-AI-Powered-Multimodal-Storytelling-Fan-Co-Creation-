@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 460" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="kinematicsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b061c"/>
+      <stop offset="50%" stop-color="#140b2e"/>
+      <stop offset="100%" stop-color="#070314"/>
+    </linearGradient>
+
+    <linearGradient id="trajectoryArc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="30%" stop-color="#A855F7"/>
+      <stop offset="60%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <linearGradient id="neonLine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="50%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <filter id="glowBall" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .k-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .k-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .k-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+  </style>
+
+  <!-- Container -->
+  <rect x="10" y="10" width="980" height="440" rx="22" fill="url(#kinematicsBg)" stroke="url(#neonLine)" stroke-width="2" />
+
+  <!-- Title Bar -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="32" height="32" rx="8" fill="#1b103b" stroke="#06B6D4" stroke-width="1.5" />
+    <text x="8" y="22" font-size="16">🏏</text>
+    <text x="44" y="18" fill="#FFFFFF" class="k-title" font-size="16">3D Ball Kinematics &amp; Parabolic Flight Vector Trajectory</text>
+    <text x="44" y="32" fill="#94A3B8" class="k-body" font-size="11">Numerical ODE Integration • Aerodynamic Drag &amp; Magnus Deviation • Pitch Restitution • Exit Velocity Vector</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(770, 28)">
+    <rect x="0" y="0" width="195" height="26" rx="13" fill="#06B6D4" fill-opacity="0.12" stroke="#06B6D4" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#06B6D4">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite" />
+    </circle>
+    <text x="26" y="17" fill="#67E8F9" class="k-mono">PINN RUNGE-KUTTA ODE</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#251647" stroke-width="1" />
+
+  <!-- 3D Pitch Ground Plane (Perspective Polygon) -->
+  <polygon points="60,370 940,370 860,400 140,400" fill="#15271d" stroke="#10b981" stroke-width="1" stroke-opacity="0.4" />
+  
+  <!-- Pitch Crease & Stumps Left (Bowler End) -->
+  <line x1="180" y1="360" x2="180" y2="395" stroke="#f59e0b" stroke-width="2" />
+  <rect x="176" y="310" width="4" height="50" rx="1" fill="#fcd34d" />
+  <rect x="182" y="310" width="4" height="50" rx="1" fill="#fcd34d" />
+  <rect x="188" y="310" width="4" height="50" rx="1" fill="#fcd34d" />
+
+  <!-- Pitch Crease & Stumps Right (Batter Striker End) -->
+  <line x1="720" y1="360" x2="720" y2="395" stroke="#f59e0b" stroke-width="2" />
+  <rect x="716" y="310" width="4" height="50" rx="1" fill="#fcd34d" />
+  <rect x="722" y="310" width="4" height="50" rx="1" fill="#fcd34d" />
+  <rect x="728" y="310" width="4" height="50" rx="1" fill="#fcd34d" />
+
+  <!-- 3D Parabolic Trajectory Flight Path (Delivery Release -> Pitch Bounce -> Bat Impact -> Six Launch) -->
+  <path id="ballPath" d="M 120 180 Q 320 220 480 370 Q 560 330 720 280 Q 820 120 920 150" fill="none" stroke="url(#trajectoryArc)" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round">
+    <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1.2s" repeatCount="indefinite" />
+  </path>
+
+  <!-- Flight Milestone Nodes -->
+  <!-- 1. Release Point -->
+  <circle cx="120" cy="180" r="7" fill="#06B6D4" filter="url(#glowBall)" />
+  <text x="75" y="155" fill="#67E8F9" class="k-title" font-size="11">1. Bowler Release</text>
+  <text x="75" y="168" fill="#94A3B8" class="k-mono" font-size="9">v0 = 142 km/h (y0=2.15m)</text>
+
+  <!-- 2. Magnus Aerodynamic Vectors -->
+  <g transform="translate(300, 200)">
+    <!-- Magnus Force Arrow (Up-Left) -->
+    <line x1="0" y1="0" x2="-25" y2="-35" stroke="#06B6D4" stroke-width="2.5" marker-end="url(#arrow)" />
+    <text x="-70" y="-40" fill="#67E8F9" class="k-mono" font-size="9">F_Magnus (Spin Lift)</text>
+
+    <!-- Drag Force Arrow (Opposite motion) -->
+    <line x1="0" y1="0" x2="-40" y2="10" stroke="#EC4899" stroke-width="2" />
+    <text x="-95" y="25" fill="#F472B6" class="k-mono" font-size="9">F_Drag (Air Resistance)</text>
+
+    <!-- Gravity Vector (Down) -->
+    <line x1="0" y1="0" x2="0" y2="40" stroke="#FBBF24" stroke-width="2" />
+    <text x="8" y="38" fill="#FBBF24" class="k-mono" font-size="9">g = 9.81 m/s²</text>
+  </g>
+
+  <!-- 3. Pitch Bounce & Restitution Impact -->
+  <circle cx="480" cy="370" r="7" fill="#F59E0B" filter="url(#glowBall)" />
+  <!-- Contact Shockwave Ripple Rings -->
+  <ellipse cx="480" cy="370" rx="16" ry="6" fill="none" stroke="#F59E0B" stroke-width="1.5">
+    <animate attributeName="rx" values="6;26" dur="1s" repeatCount="indefinite" />
+    <animate attributeName="ry" values="2;9" dur="1s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="1;0" dur="1s" repeatCount="indefinite" />
+  </ellipse>
+  <text x="420" y="415" fill="#FCD34D" class="k-title" font-size="11">2. Pitch Restitution Bounce</text>
+  <text x="420" y="428" fill="#94A3B8" class="k-mono" font-size="9">Coeff e = 0.58 • Seam Drift μ=0.32</text>
+
+  <!-- 4. Bat Willow Contact & Exit Velocity Vector -->
+  <circle cx="720" cy="280" r="8" fill="#EC4899" filter="url(#glowBall)" />
+  <text x="660" y="250" fill="#F472B6" class="k-title" font-size="11">3. Bat Willow Impact</text>
+  <text x="660" y="263" fill="#94A3B8" class="k-mono" font-size="9">Exit v = 156 km/h • Launch 24.8°</text>
+
+  <!-- 5. Parabolic 6-Run Boundary Landing -->
+  <circle cx="920" cy="150" r="7" fill="#10B981" filter="url(#glowBall)" />
+  <text x="840" y="125" fill="#6EE7B7" class="k-title" font-size="11">4. Maximum 6-Run Apex</text>
+  <text x="840" y="138" fill="#94A3B8" class="k-mono" font-size="9">Apex h=18.4m &rarr; Distance 88.6m</text>
+
+  <!-- Animated Flying Cricket Ball traveling along flight path -->
+  <circle r="7" fill="#FF0055" filter="url(#glowBall)">
+    <animateMotion path="M 120 180 Q 320 220 480 370 Q 560 330 720 280 Q 820 120 920 150" dur="2.4s" repeatCount="indefinite" />
+  </circle>
+</svg>

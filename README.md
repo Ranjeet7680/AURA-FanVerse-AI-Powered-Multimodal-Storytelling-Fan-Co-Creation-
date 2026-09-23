@@ -54,6 +54,11 @@
 ---
 
 ### Diagram 1: High-Level 3D System Topology & Ingestion Pipeline
+
+<p align="center">
+  <img src="docs/aura_3d_system_topology.svg" alt="Diagram 1: 3D System Topology & Ingestion Pipeline Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 graph TD
     subgraph Stadium["🏟️ STADIUM EDGE LAYER (3D SENSING & BROADCAST)"]
@@ -487,6 +492,11 @@ stateDiagram-v2
 ---
 
 ### Diagram 17: 3D Ball Kinematics & Parabolic Flight Physics Vector Diagram
+
+<p align="center">
+  <img src="docs/aura_3d_ball_kinematics.svg" alt="Diagram 17: 3D Ball Kinematics & Parabolic Flight Vector Trajectory" width="100%" />
+</p>
+
 ```mermaid
 flowchart TD
     subgraph CoordinateSpace["🌐 3D CARTESIAN STADIUM SPACE (R^3)"]

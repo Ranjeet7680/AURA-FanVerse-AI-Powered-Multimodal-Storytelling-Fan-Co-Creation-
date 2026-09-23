@@ -120,6 +120,62 @@ class SoundFXEngine {
     osc.stop(this.ctx.currentTime + 0.12);
   }
 
+  // 5. Authentic Willow Bat-on-Leather "Crack"
+  public playBatHit() {
+    if (this.isMuted) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(140, this.ctx.currentTime + 0.09);
+
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1150, this.ctx.currentTime);
+    filter.Q.setValueAtTime(3.2, this.ctx.currentTime);
+
+    gain.gain.setValueAtTime(0.24, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.12);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.12);
+  }
+
+  // 6. Wicket Stumps & Flying Bails Shatter
+  public playWicketShatter() {
+    if (this.isMuted) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    [640, 520, 780, 340].forEach((freq, idx) => {
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.03);
+      osc.frequency.exponentialRampToValueAtTime(110, now + idx * 0.03 + 0.09);
+
+      gain.gain.setValueAtTime(0.14, now + idx * 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.03 + 0.1);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now + idx * 0.03);
+      osc.stop(now + idx * 0.03 + 0.1);
+    });
+  }
+
   // Convenient aliases
   public playPortal() {
     this.playPortalSweep();

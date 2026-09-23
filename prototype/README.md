@@ -9,7 +9,7 @@
 </p>
 
 ## 🚀 Key Client Features
-- **🏟️ 3D Cricket Stadium (Three.js WebGL):** Procedural turf mower stripes, clay pitch wear with bowler scuff marks, city skyline, bowler run-up path, player bat, spectator stands, day/dusk/night lighting, and 4 animated camera angles.
+- **🏟️ 3D Cricket Stadium (Three.js WebGL):** Fully articulated 3D character rigs with 4-stage bowling biomechanics (18m accelerated run-up, gather bound, 360° high-arm windmill release, off-pitch danger clearance) and dynamic shot-specific batting actions (crease tap, backlift, high-elbow cover drive, back-foot swivel pull, straight drive, upper cut ramp, and cartwheeling bowled dismissals with flying bails physics), paired with procedural bat-on-leather acoustic synthesis and 3D kinematics telemetry.
 - **📱 Autonomous 9:16 Shorts & 16:9 Broadcast:** Live reel feed with video switcher, real-time ball telemetry HUD, and animated frequency equalizer.
 - **🧭 Tactical AI Co-Pilot:** Conversational tactics assistant with 360° rotating radar sweep on the 2D pitch oval and multilingual Web Speech synthesis.
 - **📊 Match Analytics & Model Studio:** Big Data visualizations powered by Recharts, trained on 2,896 matches and 90,000+ players.

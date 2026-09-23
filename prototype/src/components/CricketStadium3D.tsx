@@ -16,7 +16,8 @@ import {
   Sunset,
   Camera,
   Layers,
-  Target
+  Target,
+  Flame
 } from 'lucide-react';
 import { soundFX } from '../services/soundFX';
 import { useLanguage } from '../context/LanguageContext';
@@ -189,6 +190,502 @@ function createLedBoardTexture(): THREE.CanvasTexture {
   return texture;
 }
 
+// ─── ARTICULATED PLAYER RIG TYPES & BUILDERS ─────────────────────────────────
+export interface BowlerRig {
+  root: THREE.Group;
+  hips: THREE.Group;
+  torso: THREE.Group;
+  head: THREE.Group;
+  leftShoulder: THREE.Group;
+  leftElbow: THREE.Group;
+  rightShoulder: THREE.Group;
+  rightElbow: THREE.Group;
+  rightHand: THREE.Mesh;
+  leftHip: THREE.Group;
+  leftKnee: THREE.Group;
+  rightHip: THREE.Group;
+  rightKnee: THREE.Group;
+}
+
+export interface BatsmanRig {
+  root: THREE.Group;
+  hips: THREE.Group;
+  torso: THREE.Group;
+  head: THREE.Group;
+  helmet: THREE.Mesh;
+  grill: THREE.Mesh;
+  leftShoulder: THREE.Group;
+  leftElbow: THREE.Group;
+  rightShoulder: THREE.Group;
+  rightElbow: THREE.Group;
+  batGroup: THREE.Group;
+  leftHip: THREE.Group;
+  leftKnee: THREE.Group;
+  leftPad: THREE.Group;
+  rightHip: THREE.Group;
+  rightKnee: THREE.Group;
+  rightPad: THREE.Group;
+}
+
+export interface WicketRig {
+  group: THREE.Group;
+  offStump: THREE.Mesh;
+  middleStump: THREE.Mesh;
+  legStump: THREE.Mesh;
+  bail1: THREE.Mesh;
+  bail2: THREE.Mesh;
+}
+
+function buildBowlerRig(): BowlerRig {
+  const root = new THREE.Group();
+
+  // Hips
+  const hips = new THREE.Group();
+  hips.position.y = 0.96;
+  root.add(hips);
+
+  const pelvisMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.6 });
+  const pelvisMesh = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.18, 0.22), pelvisMat);
+  hips.add(pelvisMesh);
+
+  // Torso
+  const torso = new THREE.Group();
+  torso.position.y = 0.09;
+  hips.add(torso);
+
+  const jerseyMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.5 });
+  const torsoMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.17, 0.48, 16), jerseyMat);
+  torsoMesh.position.y = 0.24;
+  torsoMesh.castShadow = true;
+  torso.add(torsoMesh);
+
+  // Chest sponsor stripe
+  const stripeMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+  const stripeMesh = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.08, 0.24), stripeMat);
+  stripeMesh.position.set(0, 0.28, 0);
+  torso.add(stripeMesh);
+
+  // Collar
+  const collarMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.03, 6, 16), collarMat);
+  collar.position.set(0, 0.48, 0);
+  collar.rotation.x = Math.PI / 2;
+  torso.add(collar);
+
+  // Head
+  const head = new THREE.Group();
+  head.position.set(0, 0.62, 0);
+  torso.add(head);
+
+  const skinMat = new THREE.MeshStandardMaterial({ color: 0xc68642, roughness: 0.65 });
+  const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.14, 16, 16), skinMat);
+  headMesh.castShadow = true;
+  head.add(headMesh);
+
+  // Cricket Cap with forward peak
+  const capMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.4 });
+  const capCrown = new THREE.Mesh(new THREE.SphereGeometry(0.145, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2), capMat);
+  capCrown.position.y = 0.04;
+  head.add(capCrown);
+
+  const capPeak = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.02, 0.12), capMat);
+  capPeak.position.set(0, 0.06, 0.14);
+  capPeak.rotation.x = 0.18;
+  head.add(capPeak);
+
+  // Left Arm (Counterbalance Arm)
+  const leftShoulder = new THREE.Group();
+  leftShoulder.position.set(-0.25, 0.42, 0);
+  torso.add(leftShoulder);
+
+  const leftUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.05, 0.28, 12), jerseyMat);
+  leftUpperArm.position.y = -0.14;
+  leftUpperArm.castShadow = true;
+  leftShoulder.add(leftUpperArm);
+
+  const leftElbow = new THREE.Group();
+  leftElbow.position.set(0, -0.28, 0);
+  leftShoulder.add(leftElbow);
+
+  const leftForearm = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.042, 0.26, 12), skinMat);
+  leftForearm.position.y = -0.13;
+  leftForearm.castShadow = true;
+  leftElbow.add(leftForearm);
+
+  const leftHand = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 8), skinMat);
+  leftHand.position.set(0, -0.27, 0);
+  leftElbow.add(leftHand);
+
+  // Right Arm (Bowling Arm - full 360 circumduction)
+  const rightShoulder = new THREE.Group();
+  rightShoulder.position.set(0.25, 0.42, 0);
+  torso.add(rightShoulder);
+
+  const rightUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.05, 0.30, 12), jerseyMat);
+  rightUpperArm.position.y = -0.15;
+  rightUpperArm.castShadow = true;
+  rightShoulder.add(rightUpperArm);
+
+  const rightElbow = new THREE.Group();
+  rightElbow.position.set(0, -0.30, 0);
+  rightShoulder.add(rightElbow);
+
+  const rightForearm = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.042, 0.28, 12), skinMat);
+  rightForearm.position.y = -0.14;
+  rightForearm.castShadow = true;
+  rightElbow.add(rightForearm);
+
+  const rightHand = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), skinMat);
+  rightHand.position.set(0, -0.29, 0);
+  rightHand.castShadow = true;
+  rightElbow.add(rightHand);
+
+  // Legs (Trousers & Spiked Boots)
+  const pantsMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.6 });
+  const bootMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4 });
+  const soleMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8 });
+
+  // Left Leg
+  const leftHip = new THREE.Group();
+  leftHip.position.set(-0.12, 0, 0);
+  hips.add(leftHip);
+
+  const leftThigh = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.065, 0.42, 12), pantsMat);
+  leftThigh.position.y = -0.21;
+  leftThigh.castShadow = true;
+  leftHip.add(leftThigh);
+
+  const leftKnee = new THREE.Group();
+  leftKnee.position.set(0, -0.42, 0);
+  leftHip.add(leftKnee);
+
+  const leftCalf = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.055, 0.42, 12), pantsMat);
+  leftCalf.position.y = -0.21;
+  leftCalf.castShadow = true;
+  leftKnee.add(leftCalf);
+
+  const leftBoot = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 0.22), bootMat);
+  leftBoot.position.set(0, -0.42, 0.04);
+  leftBoot.castShadow = true;
+  leftKnee.add(leftBoot);
+
+  const leftSole = new THREE.Mesh(new THREE.BoxGeometry(0.125, 0.02, 0.225), soleMat);
+  leftSole.position.set(0, -0.46, 0.04);
+  leftKnee.add(leftSole);
+
+  // Right Leg
+  const rightHip = new THREE.Group();
+  rightHip.position.set(0.12, 0, 0);
+  hips.add(rightHip);
+
+  const rightThigh = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.065, 0.42, 12), pantsMat);
+  rightThigh.position.y = -0.21;
+  rightThigh.castShadow = true;
+  rightHip.add(rightThigh);
+
+  const rightKnee = new THREE.Group();
+  rightKnee.position.set(0, -0.42, 0);
+  rightHip.add(rightKnee);
+
+  const rightCalf = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.055, 0.42, 12), pantsMat);
+  rightCalf.position.y = -0.21;
+  rightCalf.castShadow = true;
+  rightKnee.add(rightCalf);
+
+  const rightBoot = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 0.22), bootMat);
+  rightBoot.position.set(0, -0.42, 0.04);
+  rightBoot.castShadow = true;
+  rightKnee.add(rightBoot);
+
+  const rightSole = new THREE.Mesh(new THREE.BoxGeometry(0.125, 0.02, 0.225), soleMat);
+  rightSole.position.set(0, -0.46, 0.04);
+  rightKnee.add(rightSole);
+
+  return {
+    root,
+    hips,
+    torso,
+    head,
+    leftShoulder,
+    leftElbow,
+    rightShoulder,
+    rightElbow,
+    rightHand,
+    leftHip,
+    leftKnee,
+    rightHip,
+    rightKnee,
+  };
+}
+
+function buildBatsmanRig(): BatsmanRig {
+  const root = new THREE.Group();
+
+  // Hips
+  const hips = new THREE.Group();
+  hips.position.y = 0.96;
+  root.add(hips);
+
+  const whitesMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.5 });
+  const pelvisMesh = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.18, 0.24), whitesMat);
+  hips.add(pelvisMesh);
+
+  // Torso
+  const torso = new THREE.Group();
+  torso.position.y = 0.09;
+  hips.add(torso);
+
+  const torsoMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.18, 0.50, 16), whitesMat);
+  torsoMesh.position.y = 0.25;
+  torsoMesh.castShadow = true;
+  torso.add(torsoMesh);
+
+  // Team insignia crest
+  const crestMat = new THREE.MeshBasicMaterial({ color: 0x0284c7 });
+  const crest = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.02), crestMat);
+  crest.position.set(0.08, 0.36, 0.12);
+  torso.add(crest);
+
+  // Collar
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.025, 6, 16), whitesMat);
+  collar.position.set(0, 0.50, 0);
+  collar.rotation.x = Math.PI / 2;
+  torso.add(collar);
+
+  // Head & Helmet
+  const head = new THREE.Group();
+  head.position.set(0, 0.65, 0);
+  torso.add(head);
+
+  const skinMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.6 });
+  const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.14, 16, 16), skinMat);
+  head.add(headMesh);
+
+  // Navy Cricket Helmet Shell
+  const helmetMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.35, metalness: 0.3 });
+  const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.155, 16, 16), helmetMat);
+  helmet.position.set(0, 0.03, -0.01);
+  helmet.castShadow = true;
+  head.add(helmet);
+
+  // Steel Visor Grill
+  const grillMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.95, roughness: 0.15 });
+  const grill = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.015, 6, 16, Math.PI), grillMat);
+  grill.position.set(0, -0.04, 0.13);
+  grill.rotation.x = Math.PI / 2;
+  head.add(grill);
+
+  // Grill horizontal safety bars
+  [-0.03, -0.06].forEach((yOff) => {
+    const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.18, 6), grillMat);
+    bar.rotation.z = Math.PI / 2;
+    bar.position.set(0, yOff, 0.14);
+    head.add(bar);
+  });
+
+  // Left Arm (Top Hand - High Elbow)
+  const leftShoulder = new THREE.Group();
+  leftShoulder.position.set(-0.25, 0.44, 0);
+  torso.add(leftShoulder);
+
+  const leftUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.052, 0.30, 12), whitesMat);
+  leftUpperArm.position.y = -0.15;
+  leftUpperArm.castShadow = true;
+  leftShoulder.add(leftUpperArm);
+
+  const leftElbow = new THREE.Group();
+  leftElbow.position.set(0, -0.30, 0);
+  leftShoulder.add(leftElbow);
+
+  const leftForearm = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.045, 0.28, 12), whitesMat);
+  leftForearm.position.y = -0.14;
+  leftForearm.castShadow = true;
+  leftElbow.add(leftForearm);
+
+  const gloveMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
+  const leftGlove = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), gloveMat);
+  leftGlove.position.set(0, -0.28, 0);
+  leftGlove.castShadow = true;
+  leftElbow.add(leftGlove);
+
+  // Right Arm (Bottom Hand)
+  const rightShoulder = new THREE.Group();
+  rightShoulder.position.set(0.25, 0.44, 0);
+  torso.add(rightShoulder);
+
+  const rightUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.052, 0.30, 12), whitesMat);
+  rightUpperArm.position.y = -0.15;
+  rightUpperArm.castShadow = true;
+  rightShoulder.add(rightUpperArm);
+
+  const rightElbow = new THREE.Group();
+  rightElbow.position.set(0, -0.30, 0);
+  rightShoulder.add(rightElbow);
+
+  const rightForearm = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.045, 0.28, 12), whitesMat);
+  rightForearm.position.y = -0.14;
+  rightForearm.castShadow = true;
+  rightElbow.add(rightForearm);
+
+  const rightGlove = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), gloveMat);
+  rightGlove.position.set(0, -0.28, 0);
+  rightGlove.castShadow = true;
+  rightElbow.add(rightGlove);
+
+  // Bat Group
+  const batGroup = new THREE.Group();
+  const handleMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
+  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 0.38, 12), handleMat);
+  handle.position.y = 0.42;
+  batGroup.add(handle);
+
+  const bladeMat = new THREE.MeshStandardMaterial({ color: 0xfde68a, roughness: 0.45 });
+  const blade = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.72, 0.075), bladeMat);
+  blade.position.y = -0.05;
+  blade.castShadow = true;
+  batGroup.add(blade);
+
+  const stickerMat = new THREE.MeshBasicMaterial({ color: 0xd97706 });
+  const sticker = new THREE.Mesh(new THREE.BoxGeometry(0.132, 0.22, 0.077), stickerMat);
+  sticker.position.y = 0.12;
+  batGroup.add(sticker);
+
+  batGroup.position.set(0.18, 0.22, 0.25);
+  torso.add(batGroup);
+
+  // Batting Pads
+  const padMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.4 });
+  const strapMat = new THREE.MeshStandardMaterial({ color: 0x64748b });
+
+  const createBattingPad = () => {
+    const padGroup = new THREE.Group();
+    const padShin = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.50, 0.12), padMat);
+    padShin.position.set(0, -0.24, 0.04);
+    padShin.castShadow = true;
+    padGroup.add(padShin);
+
+    const kneeRoll = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.09, 0.12, 12), padMat);
+    kneeRoll.position.set(0, 0.02, 0.05);
+    kneeRoll.rotation.x = Math.PI / 2;
+    padGroup.add(kneeRoll);
+
+    [-0.12, -0.32].forEach((sy) => {
+      const strap = new THREE.Mesh(new THREE.BoxGeometry(0.21, 0.025, 0.13), strapMat);
+      strap.position.set(0, sy, 0.04);
+      padGroup.add(strap);
+    });
+
+    return padGroup;
+  };
+
+  // Left Leg (Front Pad)
+  const leftHip = new THREE.Group();
+  leftHip.position.set(-0.14, 0, 0);
+  hips.add(leftHip);
+
+  const leftThigh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.42, 12), whitesMat);
+  leftThigh.position.y = -0.21;
+  leftThigh.castShadow = true;
+  leftHip.add(leftThigh);
+
+  const leftKnee = new THREE.Group();
+  leftKnee.position.set(0, -0.42, 0);
+  leftHip.add(leftKnee);
+
+  const leftPad = createBattingPad();
+  leftKnee.add(leftPad);
+
+  const leftBoot = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 0.22), whitesMat);
+  leftBoot.position.set(0, -0.48, 0.04);
+  leftBoot.castShadow = true;
+  leftKnee.add(leftBoot);
+
+  // Right Leg (Back Pad)
+  const rightHip = new THREE.Group();
+  rightHip.position.set(0.14, 0, 0);
+  hips.add(rightHip);
+
+  const rightThigh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.42, 12), whitesMat);
+  rightThigh.position.y = -0.21;
+  rightThigh.castShadow = true;
+  rightHip.add(rightThigh);
+
+  const rightKnee = new THREE.Group();
+  rightKnee.position.set(0, -0.42, 0);
+  rightHip.add(rightKnee);
+
+  const rightPad = createBattingPad();
+  rightKnee.add(rightPad);
+
+  const rightBoot = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 0.22), whitesMat);
+  rightBoot.position.set(0, -0.48, 0.04);
+  rightBoot.castShadow = true;
+  rightKnee.add(rightBoot);
+
+  root.position.set(0.35, 0, 9.2);
+  root.rotation.y = Math.PI;
+
+  return {
+    root,
+    hips,
+    torso,
+    head,
+    helmet,
+    grill,
+    leftShoulder,
+    leftElbow,
+    rightShoulder,
+    rightElbow,
+    batGroup,
+    leftHip,
+    leftKnee,
+    leftPad,
+    rightHip,
+    rightKnee,
+    rightPad,
+  };
+}
+
+function buildBattingWickets(zPos: number): WicketRig {
+  const group = new THREE.Group();
+  const stumpMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, roughness: 0.4 });
+  const bailMat = new THREE.MeshStandardMaterial({ color: 0xfde047 });
+
+  const offStump = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.72, 12), stumpMat);
+  offStump.position.set(0.28, 0.36, zPos);
+  offStump.castShadow = true;
+  group.add(offStump);
+
+  const middleStump = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.72, 12), stumpMat);
+  middleStump.position.set(0, 0.36, zPos);
+  middleStump.castShadow = true;
+  group.add(middleStump);
+
+  const legStump = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.72, 12), stumpMat);
+  legStump.position.set(-0.28, 0.36, zPos);
+  legStump.castShadow = true;
+  group.add(legStump);
+
+  const bail1 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.18, 8), bailMat);
+  bail1.position.set(0.14, 0.74, zPos);
+  bail1.rotation.z = Math.PI / 2;
+  group.add(bail1);
+
+  const bail2 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.18, 8), bailMat);
+  bail2.position.set(-0.14, 0.74, zPos);
+  bail2.rotation.z = Math.PI / 2;
+  group.add(bail2);
+
+  return {
+    group,
+    offStump,
+    middleStump,
+    legStump,
+    bail1,
+    bail2,
+  };
+}
+
 export const CricketStadium3D: React.FC = () => {
   const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -201,7 +698,16 @@ export const CricketStadium3D: React.FC = () => {
   const [show3dDiagram, setShow3dDiagram] = useState<boolean>(true);
   const [ballSpeed, setBallSpeed] = useState<number>(142);
   const [ballPhase, setBallPhase] = useState<'bowled' | 'hit' | 'idle'>('idle');
+  const [actionStage, setActionStage] = useState<'runup' | 'gather' | 'release' | 'flight' | 'impact' | 'followThrough'>('runup');
   const [crowdFlashes, setCrowdFlashes] = useState<boolean>(true);
+
+  const actionStageRef = useRef<'runup' | 'gather' | 'release' | 'flight' | 'impact' | 'followThrough'>('runup');
+  const hasPlayedSoundRef = useRef<boolean>(false);
+  const bowlerRigRef = useRef<BowlerRig | null>(null);
+  const batsmanRigRef = useRef<BatsmanRig | null>(null);
+  const battingWicketsRef = useRef<WicketRig | null>(null);
+  const impactShockwaveRef = useRef<THREE.Mesh | null>(null);
+  const impactLightRef = useRef<THREE.PointLight | null>(null);
 
   const animationIdRef = useRef<number | null>(null);
   const ballRef = useRef<THREE.Mesh | null>(null);
@@ -468,7 +974,7 @@ export const CricketStadium3D: React.FC = () => {
     scene.add(createSightScreen(47.5));
     scene.add(createSightScreen(-47.5));
 
-    // ── 10. Stumps + Bails ───────────────────────────────────────────────────
+    // ── 10. Batting End Stumps + Bowling End Stumps ─────────────────────────
     const createWickets = (zPos: number) => {
       const group = new THREE.Group();
       const stumpPositions = [-0.28, 0, 0.28];
@@ -480,7 +986,6 @@ export const CricketStadium3D: React.FC = () => {
         stump.castShadow = true;
         group.add(stump);
       });
-      // 2 Bails
       [-0.14, 0.14].forEach((xOff) => {
         const bGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.18, 8);
         const bMat = new THREE.MeshStandardMaterial({ color: 0xfde047 });
@@ -491,89 +996,41 @@ export const CricketStadium3D: React.FC = () => {
       });
       return group;
     };
-    const battingStumps = createWickets(10.06);
-    scene.add(battingStumps);
-    stumpsGroupRef.current = battingStumps;
+    const battingWickets = buildBattingWickets(10.06);
+    scene.add(battingWickets.group);
+    battingWicketsRef.current = battingWickets;
+    stumpsGroupRef.current = battingWickets.group;
     scene.add(createWickets(-10.06));
 
-    // ── 11. Batsman Model with Willow Bat, Helmet, and Pads ──────────────────
-    const batsmanGroup = new THREE.Group();
-    // Torso / Jersey
-    const torsoMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 });
-    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.36, 1.15, 8, 16), torsoMat);
-    torso.position.y = 1.1;
-    torso.castShadow = true;
-    batsmanGroup.add(torso);
+    // ── 11. Fully Articulated Batsman Model with Willow Bat, Helmet, and Pads ─
+    const batsmanRig = buildBatsmanRig();
+    scene.add(batsmanRig.root);
+    batsmanRigRef.current = batsmanRig;
+    batsmanGroupRef.current = batsmanRig.root;
 
-    // Helmet with Visor Grill
-    const helmetMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.3, metalness: 0.6 });
-    const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 16), helmetMat);
-    helmet.position.y = 1.98;
-    helmet.castShadow = true;
-    batsmanGroup.add(helmet);
+    // ── 12. Fully Articulated Bowler Model with 4-Stage Biomechanics Rig ─────
+    const bowlerRig = buildBowlerRig();
+    scene.add(bowlerRig.root);
+    bowlerRigRef.current = bowlerRig;
+    bowlerGroupRef.current = bowlerRig.root;
 
-    const grillMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.95 });
-    const grill = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.018, 4, 16, Math.PI), grillMat);
-    grill.position.set(0, 1.9, 0.22);
-    grill.rotation.x = Math.PI / 2;
-    batsmanGroup.add(grill);
-
-    // Cricket Bat
-    const batGroup = new THREE.Group();
-    // Cane Handle
-    const handleMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.7 });
-    const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.55, 8), handleMat);
-    handle.position.y = 0.55;
-    batGroup.add(handle);
-    // Willow Blade
-    const bladeMat = new THREE.MeshStandardMaterial({ color: 0xfde68a, roughness: 0.4 });
-    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.62, 0.09), bladeMat);
-    blade.position.y = 0.05;
-    blade.castShadow = true;
-    batGroup.add(blade);
-    // Batting gloves
-    const gloveMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-    const glove = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), gloveMat);
-    glove.position.set(0, 0.52, 0);
-    batGroup.add(glove);
-
-    batGroup.position.set(0.55, 1.1, 0.15);
-    batGroup.rotation.z = -0.35;
-    batsmanGroup.add(batGroup);
-
-    // Batting Pads
-    const padMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.5 });
-    [-0.18, 0.18].forEach((xOff) => {
-      const pad = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.12, 0.65, 8), padMat);
-      pad.position.set(xOff, 0.32, 0.12);
-      pad.castShadow = true;
-      batsmanGroup.add(pad);
+    // ── 12B. Bat-Ball Contact Spark & Dynamic Impact Light ───────────────────
+    const shockwaveGeo = new THREE.RingGeometry(0.15, 0.55, 32);
+    const shockwaveMat = new THREE.MeshBasicMaterial({
+      color: 0xfacc15,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
     });
+    const shockwave = new THREE.Mesh(shockwaveGeo, shockwaveMat);
+    shockwave.rotation.x = -Math.PI / 2;
+    scene.add(shockwave);
+    impactShockwaveRef.current = shockwave;
 
-    batsmanGroup.position.set(0.35, 0, 9.2);
-    batsmanGroup.rotation.y = Math.PI;
-    scene.add(batsmanGroup);
-    batsmanGroupRef.current = batsmanGroup;
-
-    // ── 12. Bowler Model with Run-Up Momentum ────────────────────────────────
-    const bowlerGroup = new THREE.Group();
-    const bTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.34, 1.1, 8, 16), new THREE.MeshStandardMaterial({ color: 0x2563eb }));
-    bTorso.position.y = 1.05;
-    bTorso.castShadow = true;
-    bowlerGroup.add(bTorso);
-
-    const bHead = new THREE.Mesh(new THREE.SphereGeometry(0.24, 16, 16), new THREE.MeshStandardMaterial({ color: 0x92400e }));
-    bHead.position.y = 1.85;
-    bowlerGroup.add(bHead);
-
-    const bArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.72, 8), new THREE.MeshStandardMaterial({ color: 0x2563eb }));
-    bArm.position.set(0.42, 1.5, 0);
-    bArm.rotation.z = -0.85;
-    bowlerGroup.add(bArm);
-
-    bowlerGroup.position.set(0, 0, -9.8);
-    scene.add(bowlerGroup);
-    bowlerGroupRef.current = bowlerGroup;
+    const impactLight = new THREE.PointLight(0xfef08a, 0, 14);
+    scene.add(impactLight);
+    impactLightRef.current = impactLight;
 
     // ── 13. Multi-Tier Stadium Bowl with Cantilever Canopy Roof ───────────────
     const standColor = timeOfDay === 'night' ? 0x1e1b4b : timeOfDay === 'twilight' ? 0x2e1065 : 0x475569;
@@ -824,79 +1281,376 @@ export const CricketStadium3D: React.FC = () => {
         setTimeout(() => scene.remove(flashLight), 60);
       }
 
-      // Ball Trajectory & Physics
+      // ── Ball Trajectory, Biomechanical Kinematics & Physics ────────────────
       if (isPlaying && ballRef.current) {
-        tRef.current += bowlerType === 'spin' ? 0.014 : 0.021;
-        if (tRef.current > 2.4) tRef.current = 0;
+        tRef.current += bowlerType === 'spin' ? 0.013 : 0.018;
+        if (tRef.current > 2.4) {
+          tRef.current = 0;
+          hasPlayedSoundRef.current = false;
+        }
 
         const t = tRef.current;
         let x = 0;
         let y = 1.6;
-        let z = -9.8 + t * 14;
+        let z = -9.8;
 
-        if (t < 1.0) {
-          // Phase 1: Ball Bowled down pitch
-          setBallPhase('bowled');
-          const bounceT = t;
+        const bowler = bowlerRigRef.current;
+        const batsman = batsmanRigRef.current;
+        const wickets = battingWicketsRef.current;
+        const shockwave = impactShockwaveRef.current;
+        const impactLight = impactLightRef.current;
+
+        // Reset Stumps & Bails if starting cycle
+        if (t < 0.04 && wickets) {
+          wickets.offStump.position.set(0.28, 0.36, 10.06);
+          wickets.offStump.rotation.set(0, 0, 0);
+          wickets.middleStump.position.set(0, 0.36, 10.06);
+          wickets.middleStump.rotation.set(0, 0, 0);
+          wickets.legStump.position.set(-0.28, 0.36, 10.06);
+          wickets.legStump.rotation.set(0, 0, 0);
+          wickets.bail1.position.set(0.14, 0.74, 10.06);
+          wickets.bail1.rotation.set(0, 0, Math.PI / 2);
+          wickets.bail2.position.set(-0.14, 0.74, 10.06);
+          wickets.bail2.rotation.set(0, 0, Math.PI / 2);
+        }
+
+        if (t < 0.38) {
+          // ── STAGE 1: RUN-UP & APPROACH (z: -17.2 -> -11.0) ──────────────────
+          if (actionStageRef.current !== 'runup') {
+            actionStageRef.current = 'runup';
+            setActionStage('runup');
+            setBallPhase('idle');
+          }
+          const runP = t / 0.38;
+          const strideAngle = t * 26;
+
+          if (bowler) {
+            bowler.root.position.set(0, 0, -17.2 + runP * 6.2);
+            bowler.hips.position.y = 0.96 + Math.abs(Math.sin(strideAngle)) * 0.08;
+            bowler.torso.rotation.x = 0.22;
+            bowler.torso.rotation.y = Math.sin(strideAngle) * 0.08;
+
+            // Alternating running legs with knee drive
+            bowler.leftHip.rotation.x = Math.sin(strideAngle) * 0.75;
+            bowler.rightHip.rotation.x = -Math.sin(strideAngle) * 0.75;
+            bowler.leftKnee.rotation.x = Math.max(0, -Math.sin(strideAngle) * 1.2);
+            bowler.rightKnee.rotation.x = Math.max(0, Math.sin(strideAngle) * 1.2);
+
+            // Arm pump
+            bowler.leftShoulder.rotation.x = -Math.sin(strideAngle) * 0.7;
+            bowler.leftShoulder.rotation.z = -0.2;
+            bowler.rightShoulder.rotation.x = Math.sin(strideAngle) * 0.7;
+            bowler.rightShoulder.rotation.z = 0.2;
+            bowler.leftElbow.rotation.x = -0.6;
+            bowler.rightElbow.rotation.x = -0.5;
+          }
+
+          // Ball is held in bowler's right hand
+          x = (bowler ? bowler.root.position.x : 0) + 0.30;
+          y = (bowler ? bowler.hips.position.y : 0.96) + 0.35 + Math.sin(strideAngle) * 0.12;
+          z = (bowler ? bowler.root.position.z : -17.2) + 0.22;
+
+          // Batsman ready stance & gentle tap
+          if (batsman) {
+            batsman.root.position.set(0.35, 0, 9.2);
+            batsman.root.rotation.y = Math.PI;
+            batsman.hips.position.y = 0.96;
+            batsman.torso.rotation.set(0.08, 0, 0);
+            batsman.batGroup.position.set(0.18, 0.22 + Math.abs(Math.sin(t * 12)) * 0.08, 0.25);
+            batsman.batGroup.rotation.set(0.15, 0, -0.35);
+            batsman.leftShoulder.rotation.set(-0.3, 0, -0.2);
+            batsman.rightShoulder.rotation.set(-0.25, 0, 0.2);
+            batsman.leftKnee.rotation.x = 0.22;
+            batsman.rightKnee.rotation.x = 0.22;
+          }
+
+          setBallSpeed(24);
+
+          // Hide impacts
+          (impactRing.material as THREE.MeshBasicMaterial).opacity = 0;
+          if (shockwave) (shockwave.material as THREE.MeshBasicMaterial).opacity = 0;
+          if (impactLight) impactLight.intensity = 0;
+
+        } else if (t < 0.48) {
+          // ── STAGE 2: GATHER & DELIVERY BOUND (z: -11.0 -> -10.1) ───────────
+          if (actionStageRef.current !== 'gather') {
+            actionStageRef.current = 'gather';
+            setActionStage('gather');
+          }
+          const gatherP = (t - 0.38) / 0.10;
+
+          if (bowler) {
+            bowler.root.position.set(0, 0, -11.0 + gatherP * 0.9);
+            // Leap apex
+            bowler.hips.position.y = 0.96 + Math.sin(gatherP * Math.PI) * 0.32;
+            bowler.torso.rotation.x = -0.22 * Math.sin(gatherP * Math.PI);
+
+            // Left non-bowling arm reaches high to sky
+            bowler.leftShoulder.rotation.x = -1.8 - gatherP * 0.7;
+            bowler.leftShoulder.rotation.z = -0.3;
+            bowler.leftElbow.rotation.x = -0.3;
+
+            // Right bowling arm cocks back
+            bowler.rightShoulder.rotation.x = 0.8 + gatherP * 0.8;
+            bowler.rightShoulder.rotation.z = 0.3;
+            bowler.rightElbow.rotation.x = -0.7;
+
+            // Stride bound leg tuck
+            bowler.leftHip.rotation.x = -0.4;
+            bowler.rightHip.rotation.x = 0.6;
+            bowler.leftKnee.rotation.x = 0.8;
+            bowler.rightKnee.rotation.x = 0.4;
+          }
+
+          // Ball remains cocked with right hand
+          x = (bowler ? bowler.root.position.x : 0) + 0.32;
+          y = (bowler ? bowler.hips.position.y : 0.96) + 0.58;
+          z = (bowler ? bowler.root.position.z : -10.5) - 0.25;
+
+          // Batsman triggers backlift
+          if (batsman) {
+            batsman.batGroup.position.set(0.18, 0.30 + gatherP * 0.15, 0.25);
+            batsman.batGroup.rotation.set(0.15 + gatherP * 0.25, 0, -0.35 - gatherP * 0.4);
+            batsman.leftShoulder.rotation.x = -0.3 - gatherP * 0.4;
+            batsman.torso.rotation.y = gatherP * 0.12;
+          }
+
+          setBallSpeed(85);
+
+        } else if (t < 0.52) {
+          // ── STAGE 3: FRONT-FOOT PLANT & 360° HIGH RELEASE ──────────────────
+          if (actionStageRef.current !== 'release') {
+            actionStageRef.current = 'release';
+            setActionStage('release');
+            setBallPhase('bowled');
+          }
+          const relP = (t - 0.48) / 0.04;
+
+          if (bowler) {
+            bowler.root.position.set(0, 0, -10.1 + relP * 0.3);
+            bowler.hips.position.y = 0.96;
+            // Trunk snaps forward
+            bowler.torso.rotation.x = 0.15 + relP * 0.42;
+
+            // Left arm pulls down tight against ribs
+            bowler.leftShoulder.rotation.x = 0.35 * relP;
+            bowler.leftElbow.rotation.x = -1.2;
+
+            // Right bowling arm completes 360 windmill overhead
+            bowler.rightShoulder.rotation.x = -Math.PI * 0.35 - relP * Math.PI * 1.15;
+            bowler.rightShoulder.rotation.z = 0.15;
+
+            bowler.leftHip.rotation.x = 0.7; // Front foot plant
+            bowler.rightHip.rotation.x = -0.5; // Drag back leg
+            bowler.leftKnee.rotation.x = 0.1;
+          }
+
+          // Ball releases from hand at highest point (y = 2.38m)
+          x = 0.24;
+          y = 2.38 - relP * 0.15;
+          z = -9.8 + relP * 0.7;
+
+          setBallSpeed(bowlerType === 'pace' ? 142 : bowlerType === 'spin' ? 86 : 148);
+
+        } else if (t < 1.0) {
+          // ── STAGE 4: BALL IN FLIGHT & BOWLER FOLLOW-THROUGH ────────────────
+          if (actionStageRef.current !== 'flight') {
+            actionStageRef.current = 'flight';
+            setActionStage('flight');
+            setBallPhase('bowled');
+          }
+          const tau = (t - 0.52) / 0.48; // 0 to 1
+
+          // Bowler follow-through and clearing the pitch danger area
+          if (bowler) {
+            bowler.root.position.set(-0.55 * Math.min(tau * 2.2, 1), 0, -9.8 + tau * 2.6);
+            bowler.torso.rotation.x = 0.48;
+            bowler.rightShoulder.rotation.x = 2.0;
+            bowler.rightShoulder.rotation.z = 0.6;
+            bowler.leftHip.rotation.x = Math.sin(tau * 14) * 0.4;
+            bowler.rightHip.rotation.x = -Math.sin(tau * 14) * 0.4;
+          }
+
+          // Ball flight dynamics
+          z = -9.1 + tau * 18.3; // Reaches batting crease (z = 9.2)
 
           if (bowlerType === 'yorker') {
-            y = 1.6 - 1.55 * bounceT;
-            x = 0.1 * Math.sin(bounceT * 2);
-            z = -9.8 + bounceT * 19.8;
+            y = 2.23 - tau * 2.05;
+            x = 0.24 * (1 - tau) + 0.1 * Math.sin(tau * 4);
+          } else if (bowlerType === 'spin') {
+            if (tau < 0.52) {
+              const p1 = tau / 0.52;
+              y = 2.23 - p1 * 2.08 + Math.sin(p1 * Math.PI) * 0.95;
+              x = 0.24 * (1 - p1) - Math.sin(p1 * Math.PI) * 0.55;
+            } else {
+              const p2 = (tau - 0.52) / 0.48;
+              y = 0.16 + Math.sin(p2 * Math.PI * 0.7) * 1.05;
+              x = -0.32 + p2 * 0.82; // Sharp break off pitch
+            }
           } else {
-            y = 2.0 - 2.8 * bounceT + 3.4 * Math.sin(bounceT * Math.PI);
-            x = bowlerType === 'spin' ? Math.sin(bounceT * 5) * 1.1 : 0.18 * Math.sin(bounceT * 2);
+            // Pace Seam (142 km/h)
+            if (tau < 0.55) {
+              const p1 = tau / 0.55;
+              y = 2.23 - p1 * 2.09 + Math.sin(p1 * Math.PI) * 0.45;
+              x = 0.24 * (1 - p1) + 0.18 * Math.sin(p1 * Math.PI);
+            } else {
+              const p2 = (tau - 0.55) / 0.45;
+              y = 0.16 + Math.sin(p2 * Math.PI * 0.72) * 1.15;
+              x = 0.18 + p2 * 0.14;
+            }
           }
 
           // Pitch impact splash
-          if (bounceT > 0.42 && bounceT < 0.6) {
+          if (tau > 0.50 && tau < 0.62) {
             impactRing.position.set(x, 0.16, z);
             (impactRing.material as THREE.MeshBasicMaterial).opacity = 0.85;
           } else {
             (impactRing.material as THREE.MeshBasicMaterial).opacity = 0;
           }
 
+          // Batsman downswing to pitch of ball
+          if (batsman) {
+            const stride = Math.sin(tau * Math.PI * 0.5);
+            if (shotType === 'coverDrive' || shotType === 'straightDrive') {
+              batsman.leftKnee.rotation.x = 0.22 + stride * 0.42;
+              batsman.torso.rotation.x = 0.08 + stride * 0.22;
+              batsman.batGroup.rotation.z = -0.75 + stride * 0.5;
+            } else if (shotType === 'pullShot') {
+              batsman.rightKnee.rotation.x = 0.22 + stride * 0.35;
+              batsman.root.rotation.y = Math.PI + stride * 0.5;
+              batsman.batGroup.rotation.x = 0.4 - stride * 0.8;
+            } else if (shotType === 'upperCut') {
+              batsman.torso.rotation.x = 0.08 - stride * 0.25;
+              batsman.batGroup.rotation.z = -0.75 + stride * 0.9;
+            }
+          }
+
           setBallSpeed(bowlerType === 'pace' ? 142 : bowlerType === 'spin' ? 86 : 148);
 
-          // Reset wickets tilt
-          if (stumpsGroupRef.current) {
-            stumpsGroupRef.current.rotation.x = 0;
-            stumpsGroupRef.current.position.y = 0;
+        } else if (t < 1.15) {
+          // ── STAGE 5: BAT-BALL IMPACT / WICKET DISMANTLE ────────────────────
+          if (actionStageRef.current !== 'impact') {
+            actionStageRef.current = 'impact';
+            setActionStage('impact');
+            setBallPhase('hit');
           }
 
-          // Batsman stance backlift
-          if (batsmanGroupRef.current) {
-            batsmanGroupRef.current.rotation.y = Math.PI + Math.sin(bounceT * 2) * 0.06;
+          // Trigger sound once per cycle
+          if (!hasPlayedSoundRef.current) {
+            if (shotType === 'wicket') {
+              soundFX.playWicketShatter();
+            } else {
+              soundFX.playBatHit();
+            }
+            hasPlayedSoundRef.current = true;
           }
+
+          const impactP = (t - 1.0) / 0.15;
+          x = 0.32;
+          y = 1.1;
+          z = 9.2;
+
+          // Luminous impact spark shockwave
+          if (shockwave) {
+            shockwave.position.set(x, y, z);
+            shockwave.scale.setScalar(1 + impactP * 3);
+            (shockwave.material as THREE.MeshBasicMaterial).opacity = Math.max(0, 1 - impactP);
+          }
+          if (impactLight) {
+            impactLight.position.set(x, y, z);
+            impactLight.intensity = Math.max(0, 4.5 * (1 - impactP));
+          }
+
+          (impactRing.material as THREE.MeshBasicMaterial).opacity = 0;
+
         } else {
-          // Phase 2: Post-Bat Trajectory
-          setBallPhase('hit');
-          const hitT = t - 1.0;
+          // ── STAGE 6: SHOT EXECUTION, LAUNCH & POISED FOLLOW-THROUGH ────────
+          if (actionStageRef.current !== 'followThrough') {
+            actionStageRef.current = 'followThrough';
+            setActionStage('followThrough');
+            setBallPhase('hit');
+          }
+          const tauH = (t - 1.15) / 1.25; // 0 to 1
+
+          if (shockwave) (shockwave.material as THREE.MeshBasicMaterial).opacity = 0;
+          if (impactLight) impactLight.intensity = 0;
 
           if (shotType === 'coverDrive') {
-            x = 0.3 + hitT * 25;
-            y = Math.max(0.12, 1.1 + 9.5 * Math.sin(hitT * Math.PI * 0.85) - hitT * 1.7);
-            z = 3.5 + hitT * 22;
+            x = 0.32 + tauH * 26;
+            y = Math.max(0.14, 1.1 + 8.8 * Math.sin(tauH * Math.PI * 0.85) - tauH * 1.5);
+            z = 9.2 - tauH * 22;
           } else if (shotType === 'pullShot') {
-            x = -hitT * 29;
-            y = Math.max(0.12, 1.1 + 8.2 * Math.sin(hitT * Math.PI * 0.85) - hitT * 1.4);
-            z = 3.5 + hitT * 15;
+            x = 0.32 - tauH * 30;
+            y = Math.max(0.14, 1.1 + 7.5 * Math.sin(tauH * Math.PI * 0.88) - tauH * 1.4);
+            z = 9.2 + tauH * 15;
           } else if (shotType === 'straightDrive') {
             x = 0;
-            y = Math.max(0.12, 0.9 + 4.2 * Math.sin(hitT * Math.PI * 0.9) - hitT * 1.1);
-            z = -9.8 + hitT * -36;
+            y = Math.max(0.14, 0.9 + 3.8 * Math.sin(tauH * Math.PI * 0.95) - tauH * 1.0);
+            z = 9.2 - tauH * 36;
           } else if (shotType === 'upperCut') {
-            x = hitT * 19;
-            y = Math.max(0.12, 1.2 + 13.5 * Math.sin(hitT * Math.PI * 0.72) - hitT * 2.2);
-            z = 3.5 - hitT * 21;
+            x = 0.32 + tauH * 20;
+            y = Math.max(0.14, 1.2 + 13.8 * Math.sin(tauH * Math.PI * 0.72) - tauH * 2.0);
+            z = 9.2 + tauH * 20;
           } else {
-            // Wicket Dismantled!
-            x = 0;
-            y = 0.45;
-            z = 10.06;
-            if (stumpsGroupRef.current) {
-              stumpsGroupRef.current.rotation.x = -Math.min(hitT * 4, 1.2);
-              stumpsGroupRef.current.position.y = Math.sin(hitT * 3) * 0.4;
+            // Clean Bowled - Ball hits stumps & rolls
+            x = 0.28;
+            y = 0.24;
+            z = 10.4 + tauH * 2.4;
+
+            // Dismantle stumps & bails with angular physics
+            if (wickets) {
+              wickets.offStump.position.set(0.28, 0.36 + Math.sin(tauH * Math.PI) * 1.3, 10.06 + tauH * 8);
+              wickets.offStump.rotation.set(-tauH * 7, 0, tauH * 4);
+
+              wickets.bail1.position.set(0.14, Math.max(0.08, 0.74 + tauH * 3.5 - 5 * tauH * tauH), 10.06 + tauH * 5);
+              wickets.bail1.rotation.x += delta * 15;
+
+              wickets.bail2.position.set(-0.14, Math.max(0.08, 0.74 + tauH * 4.0 - 5 * tauH * tauH), 10.06 + tauH * 6);
+              wickets.bail2.rotation.z += delta * 18;
+            }
+          }
+
+          // Batsman Biomechanical Pose during follow-through
+          if (batsman) {
+            if (shotType === 'coverDrive') {
+              batsman.root.rotation.y = Math.PI - 0.75;
+              batsman.torso.rotation.set(0.35, 0.3, 0);
+              batsman.leftShoulder.rotation.set(-1.25, 0, -0.85); // Classic high front elbow!
+              batsman.leftKnee.rotation.x = 0.65; // Bent front knee
+              batsman.batGroup.position.set(0.28, 0.45, 0.35);
+              batsman.batGroup.rotation.set(0.45, 0, 1.15); // Upright high finish
+            } else if (shotType === 'pullShot') {
+              batsman.root.rotation.y = Math.PI + 1.25; // Swiveled into leg side
+              batsman.torso.rotation.set(0.1, 0, 0);
+              batsman.rightKnee.rotation.x = 0.55; // Back knee taking weight
+              batsman.batGroup.position.set(-0.15, 0.5, 0.2);
+              batsman.batGroup.rotation.set(-1.4, 0, 0.2); // Horizontal cross-bat wrapped around shoulder
+            } else if (shotType === 'straightDrive') {
+              batsman.root.rotation.y = Math.PI;
+              batsman.torso.rotation.set(0.28, 0, 0);
+              batsman.leftKnee.rotation.x = 0.5;
+              batsman.batGroup.position.set(0.12, 0.6, 0.4);
+              batsman.batGroup.rotation.set(1.4, 0, 0.05); // Vertical bat pointing down pitch
+            } else if (shotType === 'upperCut') {
+              batsman.root.rotation.y = Math.PI - 0.3;
+              batsman.torso.rotation.set(-0.25, 0, 0); // Arched back
+              batsman.batGroup.position.set(0.35, 0.7, 0.1);
+              batsman.batGroup.rotation.set(-0.4, 0, 1.4); // High blade sliced over slips
+            } else {
+              // Wicket: Frozen beaten forward push with lowered head
+              batsman.root.rotation.y = Math.PI;
+              batsman.torso.rotation.set(0.42, 0, 0);
+              batsman.batGroup.position.set(0.12, 0.15, 0.25);
+              batsman.batGroup.rotation.set(0.2, 0, -0.2);
+            }
+          }
+
+          // Wicketkeeper reaction
+          if (wkGroup) {
+            if (shotType === 'wicket') {
+              wkGroup.position.y = Math.sin(tauH * Math.PI * 4) * 0.35; // Celebratory jumping
+            } else {
+              wkGroup.position.y = 0.2; // Upright stance
             }
           }
 
@@ -904,12 +1658,6 @@ export const CricketStadium3D: React.FC = () => {
             shotType === 'coverDrive' ? 158 : shotType === 'pullShot' ? 152 :
             shotType === 'straightDrive' ? 164 : shotType === 'upperCut' ? 144 : 0
           );
-
-          // Batsman swing follow-through
-          if (batsmanGroupRef.current) {
-            const swing = Math.min(hitT * 3.5, 1.3);
-            batsmanGroupRef.current.rotation.y = Math.PI - swing * 0.85;
-          }
         }
 
         ballRef.current.position.set(x, Math.max(0.15, y), z);
@@ -1058,7 +1806,7 @@ export const CricketStadium3D: React.FC = () => {
           </div>
 
           {/* Telemetry HUD */}
-          <div className="flex items-center gap-3 bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono shadow-lg pointer-events-auto">
+          <div className="flex items-center gap-3 bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono shadow-lg pointer-events-auto flex-wrap">
             <div className="flex items-center gap-1.5">
               <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
               <span>60 FPS</span>
@@ -1069,6 +1817,26 @@ export const CricketStadium3D: React.FC = () => {
               <span>{ballSpeed} km/h</span>
             </div>
             <div className="w-px h-4 bg-slate-700" />
+            {/* Live Action Stage Pill */}
+            <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-slate-900 border border-slate-700 text-[11px] font-bold">
+              <Flame className="w-3 h-3 text-amber-400 animate-pulse" />
+              <span className={`uppercase tracking-wide ${
+                actionStage === 'runup' ? 'text-blue-400' :
+                actionStage === 'gather' ? 'text-indigo-400' :
+                actionStage === 'release' ? 'text-cyan-400' :
+                actionStage === 'flight' ? 'text-amber-400' :
+                actionStage === 'impact' ? 'text-pink-400 animate-bounce' :
+                'text-emerald-400'
+              }`}>
+                {actionStage === 'runup' ? '🏃 18m Run-Up' :
+                 actionStage === 'gather' ? '⚡ Gather & Bound' :
+                 actionStage === 'release' ? '🎯 360° Release' :
+                 actionStage === 'flight' ? '🚀 In Flight' :
+                 actionStage === 'impact' ? '💥 Bat Impact' :
+                 '🌟 Follow-Through'}
+              </span>
+            </div>
+            <div className="w-px h-4 bg-slate-700" />
             <span className={`font-bold ${
               ballPhase === 'bowled' ? 'text-cyan-400' : ballPhase === 'hit' ? 'text-pink-400' : 'text-slate-500'
             }`}>
@@ -1077,17 +1845,38 @@ export const CricketStadium3D: React.FC = () => {
           </div>
         </div>
 
-        {/* Floating 3D Vector Kinematics Diagram HUD */}
+        {/* Floating 3D Vector Kinematics & Biomechanics Diagram HUD */}
         {show3dDiagram && (
-          <div className="absolute top-18 left-4 p-3 rounded-2xl bg-[#0b061e]/90 border border-cyan-400/40 shadow-2xl backdrop-blur-xl text-xs font-mono max-w-xs space-y-2 pointer-events-auto">
+          <div className="absolute top-18 left-4 p-3 rounded-2xl bg-[#0b061e]/90 border border-cyan-400/40 shadow-2xl backdrop-blur-xl text-xs font-mono max-w-sm space-y-2 pointer-events-auto">
             <div className="flex items-center justify-between text-cyan-300 border-b border-cyan-500/20 pb-1.5">
               <span className="font-bold flex items-center gap-1.5 text-[11px]">
                 <Target className="w-3.5 h-3.5 text-pink-400 animate-pulse" />
-                3D KINEMATICS DIAGRAM
+                3D KINEMATICS & BIOMECHANICS
               </span>
               <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">R³ VECTORS</span>
             </div>
             <div className="space-y-1 text-[11px] text-slate-300">
+              <div className="flex justify-between">
+                <span className="text-slate-400">Bowler Biomechanics:</span>
+                <span className="text-emerald-300 font-bold">
+                  {actionStage === 'runup' ? '18m Stride (24 km/h)' :
+                   actionStage === 'gather' ? 'Back-Foot Plant' :
+                   actionStage === 'release' ? '360° Windmill (2.38m)' :
+                   'Danger Crease Clearance'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Batter Stroke Dynamics:</span>
+                <span className="text-pink-300 font-bold">
+                  {actionStage === 'runup' || actionStage === 'gather' ? 'Crease Tap & Backlift' :
+                   actionStage === 'flight' ? 'Stride to Pitch' :
+                   shotType === 'coverDrive' ? 'High-Elbow Cover Drive' :
+                   shotType === 'pullShot' ? 'Horizontal Swivel Pull' :
+                   shotType === 'straightDrive' ? 'Vertical Straight Drive' :
+                   shotType === 'upperCut' ? 'Arched Upper Cut' :
+                   'Beaten Defense (Bowled)'}
+                </span>
+              </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Velocity Vector:</span>
                 <span className="text-cyan-300 font-bold">
@@ -1124,8 +1913,9 @@ export const CricketStadium3D: React.FC = () => {
                 key={d.key}
                 onClick={() => {
                   soundFX.playClick();
-                  setBowlerType(d.key);
+                  hasPlayedSoundRef.current = false;
                   tRef.current = 0;
+                  setBowlerType(d.key);
                 }}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                   bowlerType === d.key ? 'bg-cyan-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
@@ -1154,8 +1944,9 @@ export const CricketStadium3D: React.FC = () => {
                   } else {
                     soundFX.playSuccess();
                   }
-                  setShotType(s.key);
+                  hasPlayedSoundRef.current = false;
                   tRef.current = 0;
+                  setShotType(s.key);
                 }}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                   shotType === s.key ? 'bg-pink-600 text-white shadow-md' : 'text-slate-400 hover:text-white'

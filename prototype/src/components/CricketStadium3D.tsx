@@ -15,7 +15,8 @@ import {
   Moon,
   Sunset,
   Camera,
-  Layers
+  Layers,
+  Target
 } from 'lucide-react';
 import { soundFX } from '../services/soundFX';
 import { useLanguage } from '../context/LanguageContext';
@@ -197,6 +198,7 @@ export const CricketStadium3D: React.FC = () => {
   const [shotType, setShotType] = useState<'coverDrive' | 'pullShot' | 'wicket' | 'straightDrive' | 'upperCut'>('coverDrive');
   const [timeOfDay, setTimeOfDay] = useState<'day' | 'twilight' | 'night'>('night');
   const [showTrajectory, setShowTrajectory] = useState<boolean>(true);
+  const [show3dDiagram, setShow3dDiagram] = useState<boolean>(true);
   const [ballSpeed, setBallSpeed] = useState<number>(142);
   const [ballPhase, setBallPhase] = useState<'bowled' | 'hit' | 'idle'>('idle');
   const [crowdFlashes, setCrowdFlashes] = useState<boolean>(true);
@@ -416,6 +418,27 @@ export const CricketStadium3D: React.FC = () => {
     pitch.position.y = 0.07;
     pitch.receiveShadow = true;
     scene.add(pitch);
+
+    // ── 8B. 3D Tactical Coordinate Diagram & Vectors ─────────────────────────
+    if (show3dDiagram) {
+      // 3D Cartesian Axes Gizmo on Pitch (X: Red, Y: Green, Z: Blue)
+      const axesHelper = new THREE.AxesHelper(6.5);
+      axesHelper.position.set(0, 0.16, 0);
+      scene.add(axesHelper);
+
+      // Pitch Corridor Grid Diagram Lines
+      const gridHelper = new THREE.GridHelper(18, 18, 0x06b6d4, 0xa855f7);
+      gridHelper.position.set(0, 0.13, 0);
+      scene.add(gridHelper);
+
+      // Target Impact Radius Rings
+      const targetRingGeo = new THREE.RingGeometry(0.8, 1.0, 32);
+      const targetRingMat = new THREE.MeshBasicMaterial({ color: 0xec4899, side: THREE.DoubleSide, transparent: true, opacity: 0.65 });
+      const targetRing = new THREE.Mesh(targetRingGeo, targetRingMat);
+      targetRing.rotation.x = Math.PI / 2;
+      targetRing.position.set(0, 0.15, 4.5);
+      scene.add(targetRing);
+    }
 
     // ── 9. Sight Screens at Both Ends ────────────────────────────────────────
     const createSightScreen = (zPos: number) => {
@@ -954,7 +977,7 @@ export const CricketStadium3D: React.FC = () => {
       if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
       renderer.dispose();
     };
-  }, [isPlaying, cameraView, bowlerType, shotType, timeOfDay, showTrajectory, crowdFlashes]);
+  }, [isPlaying, cameraView, bowlerType, shotType, timeOfDay, showTrajectory, crowdFlashes, show3dDiagram]);
 
   return (
     <div className="space-y-6">
@@ -1053,6 +1076,39 @@ export const CricketStadium3D: React.FC = () => {
             </span>
           </div>
         </div>
+
+        {/* Floating 3D Vector Kinematics Diagram HUD */}
+        {show3dDiagram && (
+          <div className="absolute top-18 left-4 p-3 rounded-2xl bg-[#0b061e]/90 border border-cyan-400/40 shadow-2xl backdrop-blur-xl text-xs font-mono max-w-xs space-y-2 pointer-events-auto">
+            <div className="flex items-center justify-between text-cyan-300 border-b border-cyan-500/20 pb-1.5">
+              <span className="font-bold flex items-center gap-1.5 text-[11px]">
+                <Target className="w-3.5 h-3.5 text-pink-400 animate-pulse" />
+                3D KINEMATICS DIAGRAM
+              </span>
+              <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">R³ VECTORS</span>
+            </div>
+            <div className="space-y-1 text-[11px] text-slate-300">
+              <div className="flex justify-between">
+                <span className="text-slate-400">Velocity Vector:</span>
+                <span className="text-cyan-300 font-bold">
+                  [{bowlerType === 'spin' ? '0.35' : '0.12'}, {-2.4}, {ballSpeed} km/h]
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Magnus Seam Drift:</span>
+                <span className="text-pink-300 font-bold">Δx = +{bowlerType === 'spin' ? '1.82°' : '0.45°'}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Pitch Apex / Restitution:</span>
+                <span className="text-amber-300 font-bold">h = 2.45m (e = 0.58)</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Active Camera Matrix:</span>
+                <span className="text-purple-300 font-bold">{cameraView.toUpperCase()} (M_MVP)</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Floating Bottom Delivery & Shot Selectors */}
         <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
@@ -1170,6 +1226,23 @@ export const CricketStadium3D: React.FC = () => {
           >
             <Sparkles className="w-3.5 h-3.5" />
             {t('stadium.flashes')}
+          </button>
+
+          {/* 3D Diagram Mode Toggle */}
+          <button
+            onClick={() => {
+              soundFX.playClick();
+              setShow3dDiagram(!show3dDiagram);
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+              show3dDiagram
+                ? 'bg-pink-600/30 border-pink-400 text-pink-300 shadow-[0_0_12px_rgba(236,72,153,0.35)]'
+                : 'bg-slate-950/85 border-slate-800 text-slate-500'
+            } backdrop-blur-md`}
+            title="Toggle 3D Vector & Kinematics Diagram"
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>3D Diagram</span>
           </button>
         </div>
       </div>

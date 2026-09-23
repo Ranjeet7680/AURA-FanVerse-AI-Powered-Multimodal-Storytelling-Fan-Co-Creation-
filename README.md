@@ -7,6 +7,7 @@
   <img src="https://img.shields.io/badge/i18n-5_Languages_+_Bidirectional_RTL-10B981?style=for-the-badge&logo=google-translate" alt="i18n" />
   <img src="https://img.shields.io/badge/Security-Zero_Trust_HMAC_SHA256-EF4444?style=for-the-badge&logo=security" alt="Cybersecurity" />
   <img src="https://img.shields.io/badge/AI_Engine-Ensemble_ML_(98.2%25_Acc)-F59E0B?style=for-the-badge&logo=python" alt="AI Engine" />
+  <img src="https://img.shields.io/badge/Architecture-20_System_&_3D_Diagrams-10B981?style=for-the-badge" alt="Diagrams" />
 </p>
 
 > **AURA FanVerse** is a next-generation sports-tech platform combining **Three.js WebGL 3D Stadium Visualization**, **Autonomous 9:16 Multimodal Vertical Storytelling**, **Conversational AI Tactical Co-Piloting**, **Big Data Match Analytics (trained on 2,896 matches & 90k players)**, **5-Language Synchronized Internationalization**, and **Direct Female Athlete Micro-Sponsorship** built for the **ICC Global Hackathon 2026 (Dubai AI Festival Showcase)**.
@@ -16,7 +17,7 @@
 ---
 
 ## 📑 Table of Contents
-1. [Architectural & Animation Flow Diagrams (16 Exhaustive System Diagrams)](#-16-architectural--animation-flow-diagrams)
+1. [Architectural & Animation Flow Diagrams (20 Exhaustive System Diagrams)](#-20-architectural--animation-flow-diagrams)
    - [Diagram 1: 3D System Topology & Ingestion Pipeline](#diagram-1-high-level-3d-system-topology--ingestion-pipeline)
    - [Diagram 2: Multimodal Real-Time Play-by-Play Sequence](#diagram-2-multimodal-real-time-play-by-play-sequence)
    - [Diagram 3: Reinforcement Learning Bellman Optimization Loop](#diagram-3-reinforcement-learning-bellman-optimization-loop)
@@ -33,6 +34,10 @@
    - [Diagram 14: Real-Time 3D Cricket Stadium WebGL Scene Graph & Camera Animation](#diagram-14-real-time-3d-cricket-stadium-webgl-scene-graph--camera-animation)
    - [Diagram 15: Live Tournament Marquee & Continuous Telemetry Roll Flow](#diagram-15-live-tournament-marquee--continuous-telemetry-roll-flow)
    - [Diagram 16: Multilingual Audio Commentary & Dancing Equalizer Wavebar State Machine](#diagram-16-multilingual-audio-commentary--dancing-equalizer-wavebar-state-machine)
+   - [Diagram 17: 3D Ball Kinematics & Parabolic Flight Physics Vector Diagram](#diagram-17-3d-ball-kinematics--parabolic-flight-physics-vector-diagram)
+   - [Diagram 18: 3D Camera Projection & Frustum Transform Animation Pipeline](#diagram-18-3d-camera-projection--frustum-transform-animation-pipeline)
+   - [Diagram 19: 3D Biomechanical Skeletal Animation & Bowler Run-Up Rig](#diagram-19-3d-biomechanical-skeletal-animation--bowler-run-up-rig)
+   - [Diagram 20: 3D WebGL Shader Pipeline & Multi-Tier Stadium Lighting Architecture](#diagram-20-3d-webgl-shader-pipeline--multi-tier-stadium-lighting-architecture)
 2. [🌟 Key Platform Modules & Innovations](#-key-platform-modules--innovations)
 3. [🌐 5-Language Synchronized Internationalization (i18n & RTL)](#-5-language-synchronized-internationalization-i18n--rtl)
 4. [🤖 Machine Learning & Data Studio Telemetry](#-machine-learning--data-studio-telemetry)
@@ -41,7 +46,7 @@
 
 ---
 
-# 📐 16 Architectural & Animation Flow Diagrams
+# 📐 20 Architectural & Animation Flow Diagrams
 
 ---
 
@@ -472,6 +477,139 @@ stateDiagram-v2
     }
 
     AudioPlaying --> Idle: Audio playback finishes (onend event) or user toggles Pause
+```
+
+---
+
+### Diagram 17: 3D Ball Kinematics & Parabolic Flight Physics Vector Diagram
+```mermaid
+flowchart TD
+    subgraph CoordinateSpace["🌐 3D CARTESIAN STADIUM SPACE (R^3)"]
+        Origin["Pitch Center Origin: (0, 0, 0)"]
+        XAxis["X-Axis: Lateral Width (-X: Leg Side, +X: Off Side)"]
+        YAxis["Y-Axis: Vertical Elevation (+Y: Stumps/Apex Height)"]
+        ZAxis["Z-Axis: Pitch Longitudinal Corridor (-Z: Bowling End, +Z: Batting End)"]
+    end
+
+    subgraph PhysicsVectorPipeline["⚡ 3D BALL KINEMATICS & MAGNUS DRIFT EQUATIONS"]
+        Release["Bowling Release: (x0=0, y0=2.15m, z0=-9.8m) at v0=142 km/h"]
+        FlightODE["Numerical Trajectory Integration:<br/>d²r/dt² = g + (F_drag + F_Magnus) / m"]
+        MagnusForce["Magnus Aerodynamic Vector:<br/>F_M = 1/2 * C_L * ρ * A * v² * (ω × v)"]
+        SeamPrecession["Seam Axis Precession Drift: θ_seam = 1.82° Spin Tilt"]
+    end
+
+    subgraph BounceCollision["💥 CLAY PITCH CONTACT & RESTITUTION"]
+        ImpactPoint["Impact Coordinate: (x_imp, 0.07m, z_imp=4.82m)"]
+        Restitution["Normal Restitution Coefficient: e = v_y_after / v_y_before = 0.58"]
+        FrictionCoeff["Tangential Friction & Seam Deviation: μ = 0.32"]
+        ReboundVector["Post-Bounce Trajectory: v_rebound = [v_x + Δx, e*v_y, (1-μ)*v_z]"]
+    end
+
+    subgraph BatContact["🏏 BAT IMPACT & 3D EXIT VELOCITY VECTOR"]
+        WillowSweetSpot["Impact on Bat Blade Sweet Spot (y = 0.65m)"]
+        ImpulseExchange["Impulse Momentum Transfer: J = m * Δv"]
+        LaunchVector["3D Exit Vector: v_exit=156 km/h, Launch Angle=24.8°, Azimuth=42°"]
+        ApexDistance["3D Parabolic Apex (h_max=18.4m) → 6-Run Boundary Landing (88.6m)"]
+    end
+
+    CoordinateSpace --> PhysicsVectorPipeline
+    PhysicsVectorPipeline --> BounceCollision
+    BounceCollision --> BatContact
+```
+
+---
+
+### Diagram 18: 3D Camera Projection & Frustum Transform Animation Pipeline
+```mermaid
+flowchart LR
+    subgraph WorldTransforms["🌍 3D WORLD COORDINATE SPACE"]
+        Meshes["Turf, Pitch, Stadium Stands, 3D Players, Cricket Ball"]
+    end
+
+    subgraph ViewTransforms["🎥 4 DYNAMIC CAMERA VIEWPORT MODES"]
+        BCam["1. Broadcaster Elevated (0, 38, 65)"]
+        PCam["2. Pitch Dynamic (0, 6, 22)"]
+        BndCam["3. Boundary Low-Angle (0, 12, 52)"]
+        DrnCam["4. Drone 360° Orbit (r=75, speed=0.25 rad/s)"]
+    end
+
+    subgraph SlerpInterpolation["🔄 QUATERNION SLERP INTERPOLATOR"]
+        QStart["Camera Orientation: q_start = (x1, y1, z1, w1)"]
+        QEnd["Target Orientation: q_target = (x2, y2, z2, w2)"]
+        SlerpFormula["Slerp(q1, q2, t) = sin((1-t)θ)/sin(θ)*q1 + sin(tθ)/sin(θ)*q2"]
+    end
+
+    subgraph MatrixPipeline["📐 MODEL-VIEW-PROJECTION (M_MVP) PIPELINE"]
+        ModelMatrix["M_Model: Local Mesh to World Space"]
+        ViewMatrix["M_View: World Space to Camera Eye Space"]
+        ProjMatrix["M_Proj: Perspective Frustum Matrix (FOV=48°, Aspect=W/H, Near=0.1, Far=1400)"]
+        ClipSpace["Clip Space Coordinates (X_c, Y_c, Z_c, W_c)"]
+        PerspectiveDivide["Perspective Divide: NDC [-1, 1]"]
+        ScreenCanvas["WebGL 2D Viewport Canvas (width × height px)"]
+    end
+
+    WorldTransforms --> ViewTransforms
+    ViewTransforms --> SlerpInterpolation
+    SlerpInterpolation --> ModelMatrix
+    ModelMatrix --> ViewMatrix --> ProjMatrix --> ClipSpace --> PerspectiveDivide --> ScreenCanvas
+```
+
+---
+
+### Diagram 19: 3D Biomechanical Skeletal Animation & Bowler Run-Up Rig
+```mermaid
+flowchart TD
+    subgraph SkeletonRig["🦴 3D BIOMECHANICAL SKELETAL HIERARCHY"]
+        Hips["Root Pelvis (Hips Pivot: x=0, y=1.05m)"]
+        Spine["Spine & Thorax Column (Rotational Flexion ±12°)"]
+        ShoulderGirdle["Clavicle & Shoulder Girdle"]
+        BowlingArm["Bowling Arm (Rotational Circumduction 360°)"]
+        ElbowWrist["Elbow (15° Extension Rule) & Seam Release Wrist"]
+        LegStride["Femur, Tibia & Ankle Stride Delivery Ring"]
+    end
+
+    subgraph RunUpKinematics["🏃 RUN-UP VELOCITY ACCUMULATION"]
+        Approach["Approach Stride: 7-Step Exponential Run-Up Acceleration (v = 0 → 6.2 m/s)"]
+        BackfootImpact["Back-Foot Impact: Kinetic Chain Energy Transfer"]
+        FrontFootStrike["Front-Foot Plant: Ground Reaction Force Vector (F_GRF = 4.8x Body Weight)"]
+        HighArmRelease["High-Arm Release Point: 2.15m - 2.45m Above Pitch Plane"]
+    end
+
+    subgraph ThreeAnimation["🎮 THREE.JS WEBGL BONE MATRIX UPDATES"]
+        QuaternionRotation["Bone.quaternion.slerp(targetQuat, delta * speed)"]
+        PositionDelta["Group.position.z += runUpSpeed * delta"]
+        ShadowUpdate["Dynamic Shadow Casting PCFSoftShadowMap at 60 FPS"]
+    end
+
+    SkeletonRig --> RunUpKinematics
+    RunUpKinematics --> ThreeAnimation
+```
+
+---
+
+### Diagram 20: 3D WebGL Shader Pipeline & Multi-Tier Stadium Lighting Architecture
+```mermaid
+flowchart LR
+    subgraph GeometryStage["📐 GEOMETRY & VERTEX STAGE"]
+        Vertices["Mesh Vertices (Turf, Cantilever Canopies, Floodlights, Ball)"]
+        VertexShader["Three.js Standard Vertex Shader:<br/>• Compute Normal Vectors<br/>• Calculate Directional Shadow Depth<br/>• Transform to Clip Coordinates"]
+    end
+
+    subgraph RasterizationStage["⚡ RASTERIZATION & FRAGMENT SHADING"]
+        Rasterizer["Hardware Rasterizer: Triangle Interpolation"]
+        FragmentShader["PBR (Physically Based Rendering) Shader:<br/>• Albedo Map (1024x1024 Turf Lawn Stripes)<br/>• Roughness/Metalness (Clay Pitch Cracks)<br/>• ACES Filmic Tone Mapping Exposure"]
+    end
+
+    subgraph LightingComponents["☀️ DYNAMIC LIGHTING & VOLUMETRIC SCATTERING"]
+        SunLight["Day: Directional Sun (0xfffbeb, Intensity: 2.8)"]
+        SunsetLight["Dusk: Amber Warm Glare (0xf97316, Intensity: 1.9)"]
+        QuadFloodlights["Night: 4 Quad Floodlight Pylons (0x38bdf8, Volumetric Cones)"]
+        SpectatorFlashes["Random Camera Flash PointLights (0xffffff, Intensity: 4.0)"]
+    end
+
+    GeometryStage --> RasterizationStage
+    LightingComponents --> FragmentShader
+    FragmentShader --> ScreenBuffer["🖥️ 60 FPS WebGL Framebuffer Output"]
 ```
 
 ---

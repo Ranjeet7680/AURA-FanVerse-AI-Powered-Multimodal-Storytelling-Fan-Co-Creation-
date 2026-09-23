@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d15-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080614"/>
+      <stop offset="50%" stop-color="#120c26"/>
+      <stop offset="100%" stop-color="#04030a"/>
+    </linearGradient>
+
+    <linearGradient id="d15-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+
+    <filter id="d15-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .d15-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d15-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d15-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    
+    @keyframes d15Marquee {
+      0% { transform: translateX(0px); }
+      100% { transform: translateX(-480px); }
+    }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d15-bg)" stroke="url(#d15-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#2d131f" stroke="#EC4899" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">📜</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d15-title" font-size="16">Diagram 15: Live Tournament Marquee &amp; Continuous Telemetry Roll Flow</text>
+    <text x="46" y="33" fill="#94A3B8" class="d15-body" font-size="11">Sub-10ms Sensor Streaming • 28s Hardware-Accelerated CSS Marquee • Pause-on-Hover • Instant Quick Actions</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#EC4899" fill-opacity="0.12" stroke="#EC4899" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#F472B6" class="d15-mono">TICKER CYCLE: 28s INFINITE ROLL</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#25163a" stroke-width="1"/>
+
+  <!-- 3-STAGE INGESTION & DISPATCH ARCHITECTURE (Top Row) -->
+  <!-- 1. Stadium Edge Sensor -->
+  <g transform="translate(40, 100)">
+    <rect x="0" y="0" width="280" height="150" rx="12" fill="#0f192b" stroke="#06B6D4" stroke-width="1.5"/>
+    <rect x="15" y="12" width="250" height="26" rx="6" fill="#0c2d47"/>
+    <text x="140" y="29" text-anchor="middle" fill="#67E8F9" class="d15-mono">📡 1. STADIUM RADAR INGESTION</text>
+    <text x="15" y="62" fill="#E2E8F0" class="d12-body">Ball 14.3 Ingested: Harmanpreet Kaur</text>
+    <text x="15" y="80" fill="#94A3B8" class="d15-mono">Exit Velocity: 138.2 km/h</text>
+    <text x="15" y="98" fill="#94A3B8" class="d15-mono">Launch Angle: 28.4° (Boundary Four)</text>
+    <text x="15" y="120" fill="#38BDF8" class="d15-mono">HMAC-SHA256 Verified at Edge</text>
+  </g>
+
+  <!-- 2. Tournament State Engine -->
+  <g transform="translate(360, 100)">
+    <rect x="0" y="0" width="280" height="150" rx="12" fill="#2d1c08" stroke="#F59E0B" stroke-width="1.5"/>
+    <rect x="15" y="12" width="250" height="26" rx="6" fill="#4d2f09"/>
+    <text x="140" y="29" text-anchor="middle" fill="#FBBF24" class="d15-mono">📊 2. STATE &amp; MOMENTUM ENGINE</text>
+    <text x="15" y="62" fill="#E2E8F0" class="d15-body">Win Probability Swing Delta:</text>
+    <text x="15" y="80" fill="#FDE68A" class="d15-mono">+4.2% IND (Now 68.4% Win Chance)</text>
+    <text x="15" y="98" fill="#FDE68A" class="d15-mono">Field Trap: Deep Backward Square Leg</text>
+    <text x="15" y="120" fill="#FBBF24" class="d15-mono">Block Ledger: Block #8,429 Appended</text>
+  </g>
+
+  <!-- 3. Marquee Dispatcher -->
+  <g transform="translate(680, 100)">
+    <rect x="0" y="0" width="280" height="150" rx="12" fill="#2d0f28" stroke="#EC4899" stroke-width="1.5"/>
+    <rect x="15" y="12" width="250" height="26" rx="6" fill="#4d163f"/>
+    <text x="140" y="29" text-anchor="middle" fill="#F472B6" class="d15-mono">📜 3. MARQUEE DISPATCHER</text>
+    <text x="15" y="62" fill="#E2E8F0" class="d15-body">Format Ticker Stream Chunks</text>
+    <text x="15" y="80" fill="#FBCFE8" class="d15-mono">Broadcasting to 34,000+ Viewports</text>
+    <text x="15" y="98" fill="#FBCFE8" class="d15-mono">WebSocket PubSub Chunk: 128 bytes</text>
+    <text x="15" y="120" fill="#EC4899" class="d15-mono">Push to Framer Motion Marquee UI</text>
+  </g>
+
+  <!-- Flow Arrows 1 & 2 -->
+  <line x1="320" y1="175" x2="360" y2="175" stroke="#F59E0B" stroke-width="2.5" stroke-dasharray="4,2"/>
+  <circle r="4" fill="#F59E0B" filter="url(#d15-glow)">
+    <animateMotion path="M 320 175 L 360 175" dur="0.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <line x1="640" y1="175" x2="680" y2="175" stroke="#EC4899" stroke-width="2.5" stroke-dasharray="4,2"/>
+  <circle r="4" fill="#EC4899" filter="url(#d15-glow)">
+    <animateMotion path="M 640 175 L 680 175" dur="0.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- BOTTOM CONTAINER: Interactive 28s Continuous CSS Marquee Simulation -->
+  <g transform="translate(40, 280)">
+    <rect x="0" y="0" width="920" height="175" rx="14" fill="#0d1121" stroke="#38BDF8" stroke-width="1.5"/>
+    <text x="25" y="30" fill="#7DD3FC" class="d15-mono">🖥️ LIVE BROADCAST MARQUEE RIBBON (CSS @keyframes marqueeRoll)</text>
+
+    <!-- Clip Path for Marquee Window -->
+    <g transform="translate(20, 45)">
+      <!-- Outer Border of Marquee Ribbon -->
+      <rect x="0" y="0" width="880" height="54" rx="8" fill="#060913" stroke="#1e293b" stroke-width="1.5"/>
+
+      <!-- Scrolling Ticker Container with Overflow hidden in concept -->
+      <g style="animation: d15Marquee 10s linear infinite;">
+        <!-- Ticker Item 1: Score & Ball -->
+        <g transform="translate(10, 10)">
+          <rect x="0" y="0" width="220" height="34" rx="6" fill="#0c2e47" stroke="#0284c7" stroke-width="1"/>
+          <text x="15" y="21" fill="#67E8F9" class="d15-mono">🏏 14.3: HARMANPREET 4! (156/4)</text>
+        </g>
+
+        <!-- Ticker Item 2: Win Swing -->
+        <g transform="translate(245, 10)">
+          <rect x="0" y="0" width="210" height="34" rx="6" fill="#09382f" stroke="#10B981" stroke-width="1"/>
+          <text x="15" y="21" fill="#6EE7B7" class="d15-mono">📈 WIN PROB: +4.2% IND (68.4%)</text>
+        </g>
+
+        <!-- Ticker Item 3: Trap Fielder -->
+        <g transform="translate(470, 10)">
+          <rect x="0" y="0" width="220" height="34" rx="6" fill="#3b0f1a" stroke="#EF4444" stroke-width="1"/>
+          <text x="15" y="21" fill="#FCA5A5" class="d15-mono">🎯 TRAP: DEEP BACKWARD SQ</text>
+        </g>
+
+        <!-- Ticker Item 4: Block Hash -->
+        <g transform="translate(705, 10)">
+          <rect x="0" y="0" width="210" height="34" rx="6" fill="#2d1d07" stroke="#F59E0B" stroke-width="1"/>
+          <text x="15" y="21" fill="#FDE68A" class="d15-mono">🔐 BLOCK #8,429 VERIFIED</text>
+        </g>
+
+        <!-- Duplicate Loop Elements for Continuous Roll -->
+        <g transform="translate(930, 10)">
+          <rect x="0" y="0" width="220" height="34" rx="6" fill="#0c2e47" stroke="#0284c7" stroke-width="1"/>
+          <text x="15" y="21" fill="#67E8F9" class="d15-mono">🏏 14.3: HARMANPREET 4! (156/4)</text>
+        </g>
+        <g transform="translate(1165, 10)">
+          <rect x="0" y="0" width="210" height="34" rx="6" fill="#09382f" stroke="#10B981" stroke-width="1"/>
+          <text x="15" y="21" fill="#6EE7B7" class="d15-mono">📈 WIN PROB: +4.2% IND (68.4%)</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Interactive Fan Controls Below Ticker -->
+    <g transform="translate(20, 115)">
+      <rect x="0" y="0" width="240" height="42" rx="6" fill="#1e1838" stroke="#8B5CF6" stroke-width="0.8"/>
+      <text x="15" y="26" fill="#DDD6FE" class="d15-mono">🖱️ ON HOVER: animation: paused;</text>
+    </g>
+
+    <g transform="translate(275, 115)">
+      <rect x="0" y="0" width="270" height="42" rx="6" fill="#0c2b22" stroke="#10B981" stroke-width="0.8"/>
+      <text x="15" y="26" fill="#A7F3D0" class="d15-mono">⚡ QUICK ACTION: "View 3D Field Pitch"</text>
+    </g>
+
+    <g transform="translate(560, 115)">
+      <rect x="0" y="0" width="340" height="42" rx="6" fill="#2d1326" stroke="#EC4899" stroke-width="0.8"/>
+      <text x="15" y="26" fill="#FBCFE8" class="d15-mono">💖 QUICK ACTION: "Micro-Pledge to Future Stars"</text>
+    </g>
+  </g>
+</svg>

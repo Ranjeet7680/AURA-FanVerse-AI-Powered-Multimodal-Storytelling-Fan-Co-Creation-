@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d9-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a081a"/>
+      <stop offset="50%" stop-color="#140f2e"/>
+      <stop offset="100%" stop-color="#05030e"/>
+    </linearGradient>
+
+    <linearGradient id="d9-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="35%" stop-color="#EC4899"/>
+      <stop offset="70%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <filter id="d9-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .d9-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d9-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d9-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    
+    @keyframes d9Bar1 { 0%, 100% { height: 10px; y: 25px; } 50% { height: 30px; y: 5px; } }
+    @keyframes d9Bar2 { 0%, 100% { height: 26px; y: 9px; } 50% { height: 12px; y: 23px; } }
+    @keyframes d9Bar3 { 0%, 100% { height: 14px; y: 21px; } 50% { height: 32px; y: 3px; } }
+    @keyframes d9Bar4 { 0%, 100% { height: 30px; y: 5px; } 50% { height: 8px; y: 27px; } }
+    @keyframes d9Bar5 { 0%, 100% { height: 16px; y: 19px; } 50% { height: 28px; y: 7px; } }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d9-bg)" stroke="url(#d9-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#24133b" stroke="#8B5CF6" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">🗣️</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d9-title" font-size="16">Diagram 9: Multilingual Neural Speech &amp; Dialect Synthesis Pipeline</text>
+    <text x="46" y="33" fill="#94A3B8" class="d9-body" font-size="11">6 Parallel Dialects • Web Speech &amp; Neural Audio API • Telugu, Tamil, Hindi, English, Spanish, Arabic</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#8B5CF6" fill-opacity="0.12" stroke="#8B5CF6" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#DDD6FE" class="d9-mono">SYNTHESIS LATENCY: &lt; 38ms</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#251644" stroke-width="1"/>
+
+  <!-- STAGE 1: Match Telemetry Ingestion (Left) -->
+  <g transform="translate(40, 110)">
+    <rect x="0" y="0" width="200" height="330" rx="14" fill="#0f192b" stroke="#06B6D4" stroke-width="1.5"/>
+    <rect x="15" y="15" width="170" height="28" rx="6" fill="#0c2c44"/>
+    <text x="100" y="33" text-anchor="middle" fill="#67E8F9" class="d9-mono">📊 MATCH TELEMETRY</text>
+
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="170" height="70" rx="8" fill="#072033" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#38BDF8" class="d9-mono">BATTER EVENT:</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d9-body">Smriti Mandhana</text>
+      <text x="10" y="52" fill="#94A3B8" class="d9-mono">Exit: 142.4 km/h (SIX!)</text>
+      <text x="10" y="66" fill="#A7F3D0" class="d9-mono">Length: 88.6m Apex</text>
+    </g>
+
+    <g transform="translate(15, 145)">
+      <rect x="0" y="0" width="170" height="90" rx="8" fill="#190e33" stroke="#8B5CF6" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#C084FC" class="d9-mono">LLM SCRIPTWRITER:</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d9-body">"What a majestic strike!</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d9-body">High into the night sky</text>
+      <text x="10" y="68" fill="#E2E8F0" class="d9-body">over long-on for six!"</text>
+      <text x="10" y="84" fill="#F472B6" class="d9-mono">Duration: 20.0s Target</text>
+    </g>
+
+    <g transform="translate(15, 250)">
+      <rect x="0" y="0" width="170" height="60" rx="8" fill="#132438" stroke="#38BDF8" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#7DD3FC" class="d9-mono">DISPATCH ENGINE:</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d9-body">BCP-47 Lang Multiplexer</text>
+      <text x="10" y="50" fill="#67E8F9" class="d9-mono">Parallel Fan-Out 6x</text>
+    </g>
+  </g>
+
+  <!-- Flow Connector 1 -->
+  <line x1="240" y1="275" x2="280" y2="275" stroke="#8B5CF6" stroke-width="3" stroke-dasharray="6,3"/>
+  <circle r="5" fill="#8B5CF6" filter="url(#d9-glow)">
+    <animateMotion path="M 240 275 L 280 275" dur="1s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- STAGE 2: 6 Parallel Dialect Synthesis Tracks (Center) -->
+  <g transform="translate(280, 100)">
+    <rect x="0" y="0" width="410" height="350" rx="14" fill="#140a24" stroke="#8B5CF6" stroke-width="1.8"/>
+    <rect x="20" y="12" width="370" height="26" rx="6" fill="#2d134d"/>
+    <text x="205" y="29" text-anchor="middle" fill="#DDD6FE" class="d9-mono">🌐 PARALLEL NEURAL VOICE SYNTHESIS TRACKS</text>
+
+    <!-- Track 1: English -->
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="370" height="42" rx="6" fill="#191033" stroke="#8B5CF6" stroke-width="0.8"/>
+      <text x="12" y="18" fill="#C084FC" class="d9-mono">🇺🇸/🇮🇳 ENGLISH (en-IN / en-US)</text>
+      <text x="12" y="34" fill="#DDD6FE" class="d9-body">"High into the night sky over long-on for six!"</text>
+      <!-- Equalizer Bars for Track 1 -->
+      <g transform="translate(315, 2)">
+        <rect x="0" width="4" fill="#A855F7" style="animation: d9Bar1 0.7s infinite;"/>
+        <rect x="7" width="4" fill="#A855F7" style="animation: d9Bar2 0.7s infinite;"/>
+        <rect x="14" width="4" fill="#A855F7" style="animation: d9Bar3 0.7s infinite;"/>
+        <rect x="21" width="4" fill="#A855F7" style="animation: d9Bar4 0.7s infinite;"/>
+        <rect x="28" width="4" fill="#A855F7" style="animation: d9Bar5 0.7s infinite;"/>
+      </g>
+    </g>
+
+    <!-- Track 2: Hindi -->
+    <g transform="translate(20, 96)">
+      <rect x="0" y="0" width="370" height="42" rx="6" fill="#2d1520" stroke="#EC4899" stroke-width="0.8"/>
+      <text x="12" y="18" fill="#F472B6" class="d9-mono">🇮🇳 HINDI (hi-IN)</text>
+      <text x="12" y="34" fill="#FBCFE8" class="d9-body">"स्मृति मंधाना का शानदार छक्का! सीधे दर्शकों के बीच!"</text>
+      <g transform="translate(315, 2)">
+        <rect x="0" width="4" fill="#EC4899" style="animation: d9Bar3 0.6s infinite;"/>
+        <rect x="7" width="4" fill="#EC4899" style="animation: d9Bar1 0.6s infinite;"/>
+        <rect x="14" width="4" fill="#EC4899" style="animation: d9Bar4 0.6s infinite;"/>
+        <rect x="21" width="4" fill="#EC4899" style="animation: d9Bar2 0.6s infinite;"/>
+        <rect x="28" width="4" fill="#EC4899" style="animation: d9Bar5 0.6s infinite;"/>
+      </g>
+    </g>
+
+    <!-- Track 3: Telugu (Native Highlight) -->
+    <g transform="translate(20, 144)">
+      <rect x="0" y="0" width="370" height="42" rx="6" fill="#2d1a08" stroke="#F59E0B" stroke-width="1.2"/>
+      <text x="12" y="18" fill="#FBBF24" class="d9-mono">🇮🇳 TELUGU తెలుగు (te-IN) [NATIVE LOCALIZATION]</text>
+      <text x="12" y="34" fill="#FDE68A" class="d9-body">"స్మృతి మంధాన అద్భుతమైన సిక్స్! మైదానం హోరెత్తుతోంది!"</text>
+      <g transform="translate(315, 2)">
+        <rect x="0" width="4" fill="#F59E0B" style="animation: d9Bar4 0.8s infinite;"/>
+        <rect x="7" width="4" fill="#F59E0B" style="animation: d9Bar5 0.8s infinite;"/>
+        <rect x="14" width="4" fill="#F59E0B" style="animation: d9Bar1 0.8s infinite;"/>
+        <rect x="21" width="4" fill="#F59E0B" style="animation: d9Bar3 0.8s infinite;"/>
+        <rect x="28" width="4" fill="#F59E0B" style="animation: d9Bar2 0.8s infinite;"/>
+      </g>
+    </g>
+
+    <!-- Track 4: Tamil -->
+    <g transform="translate(20, 192)">
+      <rect x="0" y="0" width="370" height="42" rx="6" fill="#092921" stroke="#10B981" stroke-width="0.8"/>
+      <text x="12" y="18" fill="#34D399" class="d9-mono">🇮🇳 TAMIL தமிழ் (ta-IN)</text>
+      <text x="12" y="34" fill="#A7F3D0" class="d9-body">"ஸ்மிருதி மந்தனாவின் பிரம்மாண்டமான சிக்ஸர்!"</text>
+      <g transform="translate(315, 2)">
+        <rect x="0" width="4" fill="#10B981" style="animation: d9Bar2 0.65s infinite;"/>
+        <rect x="7" width="4" fill="#10B981" style="animation: d9Bar3 0.65s infinite;"/>
+        <rect x="14" width="4" fill="#10B981" style="animation: d9Bar5 0.65s infinite;"/>
+        <rect x="21" width="4" fill="#10B981" style="animation: d9Bar1 0.65s infinite;"/>
+        <rect x="28" width="4" fill="#10B981" style="animation: d9Bar4 0.65s infinite;"/>
+      </g>
+    </g>
+
+    <!-- Track 5: Spanish -->
+    <g transform="translate(20, 240)">
+      <rect x="0" y="0" width="370" height="42" rx="6" fill="#101d36" stroke="#38BDF8" stroke-width="0.8"/>
+      <text x="12" y="18" fill="#7DD3FC" class="d9-mono">🇪🇸 ESPAÑOL (es-ES)</text>
+      <text x="12" y="34" fill="#BAE6FD" class="d9-body">"¡Impresionante golpe de seis! Directo a la grada."</text>
+      <g transform="translate(315, 2)">
+        <rect x="0" width="4" fill="#38BDF8" style="animation: d9Bar5 0.75s infinite;"/>
+        <rect x="7" width="4" fill="#38BDF8" style="animation: d9Bar4 0.75s infinite;"/>
+        <rect x="14" width="4" fill="#38BDF8" style="animation: d9Bar2 0.75s infinite;"/>
+        <rect x="21" width="4" fill="#38BDF8" style="animation: d9Bar3 0.75s infinite;"/>
+        <rect x="28" width="4" fill="#38BDF8" style="animation: d9Bar1 0.75s infinite;"/>
+      </g>
+    </g>
+
+    <!-- Track 6: Arabic (RTL) -->
+    <g transform="translate(20, 288)">
+      <rect x="0" y="0" width="370" height="42" rx="6" fill="#2d1538" stroke="#D946EF" stroke-width="0.8"/>
+      <text x="12" y="18" fill="#E879F9" class="d9-mono">🇦🇪 ARABIC العربية (ar-SA) [DUBAI RTL]</text>
+      <text x="12" y="34" fill="#F5D0FE" class="d9-body">"ضربة رائعة بست نقاط! ترتفع عالياً فوق الملعب!"</text>
+      <g transform="translate(315, 2)">
+        <rect x="0" width="4" fill="#D946EF" style="animation: d9Bar1 0.7s infinite;"/>
+        <rect x="7" width="4" fill="#D946EF" style="animation: d9Bar3 0.7s infinite;"/>
+        <rect x="14" width="4" fill="#D946EF" style="animation: d9Bar5 0.7s infinite;"/>
+        <rect x="21" width="4" fill="#D946EF" style="animation: d9Bar2 0.7s infinite;"/>
+        <rect x="28" width="4" fill="#D946EF" style="animation: d9Bar4 0.7s infinite;"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- STAGE 3: Web Audio Sync & Fan Audio Stream (Right) -->
+  <g transform="translate(720, 110)">
+    <rect x="0" y="0" width="240" height="330" rx="14" fill="#091b1a" stroke="#10B981" stroke-width="1.8"/>
+    <rect x="15" y="15" width="210" height="28" rx="6" fill="#0d3b38"/>
+    <text x="120" y="33" text-anchor="middle" fill="#6EE7B7" class="d9-mono">🔊 AUDIO ENGINE STREAM</text>
+
+    <!-- Millisecond Sync Node -->
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="210" height="65" rx="8" fill="#092925" stroke="#10B981" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#34D399" class="d9-mono">TIME-CODE SYNC:</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d9-body">Aligned with 9:16 Video</text>
+      <text x="10" y="52" fill="#A7F3D0" class="d9-mono">Tolerance: ±5 milliseconds</text>
+    </g>
+
+    <!-- Dancing Master Equalizer -->
+    <g transform="translate(15, 140)">
+      <rect x="0" y="0" width="210" height="85" rx="8" fill="#0e2f2a" stroke="#34D399" stroke-width="1"/>
+      <text x="105" y="22" text-anchor="middle" fill="#6EE7B7" class="d9-mono">MASTER SPECTRUM (60 FPS)</text>
+      
+      <!-- Big Master Dancing Equalizer -->
+      <g transform="translate(35, 30)">
+        <rect x="0" width="8" rx="2" fill="#10B981" style="animation: d9Bar1 0.5s infinite;"/>
+        <rect x="15" width="8" rx="2" fill="#06B6D4" style="animation: d9Bar3 0.6s infinite;"/>
+        <rect x="30" width="8" rx="2" fill="#3B82F6" style="animation: d9Bar2 0.55s infinite;"/>
+        <rect x="45" width="8" rx="2" fill="#8B5CF6" style="animation: d9Bar4 0.7s infinite;"/>
+        <rect x="60" width="8" rx="2" fill="#EC4899" style="animation: d9Bar1 0.45s infinite;"/>
+        <rect x="75" width="8" rx="2" fill="#F59E0B" style="animation: d9Bar5 0.65s infinite;"/>
+        <rect x="90" width="8" rx="2" fill="#10B981" style="animation: d9Bar2 0.5s infinite;"/>
+        <rect x="105" width="8" rx="2" fill="#06B6D4" style="animation: d9Bar4 0.6s infinite;"/>
+        <rect x="120" width="8" rx="2" fill="#EC4899" style="animation: d9Bar3 0.55s infinite;"/>
+        <rect x="135" width="8" rx="2" fill="#3B82F6" style="animation: d9Bar1 0.7s infinite;"/>
+      </g>
+    </g>
+
+    <!-- Fan Headset Node -->
+    <g transform="translate(15, 240)">
+      <rect x="0" y="0" width="210" height="70" rx="8" fill="#0a1f26" stroke="#06B6D4" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#67E8F9" class="d9-mono">LISTENER VIEWPORT:</text>
+      <text x="10" y="38" fill="#E2E8F0" class="d9-body">Dynamic Lang Toggle</text>
+      <text x="10" y="54" fill="#38BDF8" class="d9-mono">Pitch/Rate/Gain Auto-Tuned</text>
+    </g>
+  </g>
+
+  <!-- Flow Connector 2 -->
+  <line x1="690" y1="275" x2="720" y2="275" stroke="#10B981" stroke-width="3" stroke-dasharray="6,3"/>
+  <circle r="5" fill="#10B981" filter="url(#d9-glow)">
+    <animateMotion path="M 690 275 L 720 275" dur="1s" repeatCount="indefinite"/>
+  </circle>
+</svg>

@@ -116,7 +116,7 @@
   <!-- 5. Parabolic 6-Run Boundary Landing -->
   <circle cx="920" cy="150" r="7" fill="#10B981" filter="url(#glowBall)" />
   <text x="840" y="125" fill="#6EE7B7" class="k-title" font-size="11">4. Maximum 6-Run Apex</text>
-  <text x="840" y="138" fill="#94A3B8" class="k-mono" font-size="9">Apex h=18.4m &rarr; Distance 88.6m</text>
+  <text x="840" y="138" fill="#94A3B8" class="k-mono" font-size="9">Apex h=18.4m → Distance 88.6m</text>
 
   <!-- Animated Flying Cricket Ball traveling along flight path -->
   <circle r="7" fill="#FF0055" filter="url(#glowBall)">

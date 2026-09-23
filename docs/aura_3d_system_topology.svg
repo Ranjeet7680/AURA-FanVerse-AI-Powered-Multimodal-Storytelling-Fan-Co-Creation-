@@ -91,7 +91,7 @@
       3D System Topology &amp; Ingestion Pipeline Architecture
     </text>
     <text x="54" y="38" fill="#94A3B8" class="font-semi" font-size="12">
-      Master 3D Isometric Architecture • Edge Telemetry Ingest &rarr; Zero-Trust Guard &rarr; PINN AI Engine &rarr; 60 FPS WebGL
+      Master 3D Isometric Architecture • Edge Telemetry Ingest → Zero-Trust Guard → PINN AI Engine → 60 FPS WebGL
     </text>
 
     <!-- Top Right 3D Status Chips -->
@@ -276,7 +276,7 @@
   <g transform="translate(45, 642)">
     <rect x="0" y="0" width="1010" height="38" rx="12" fill="#140b2b" stroke="#3b1d6b" stroke-width="1.2" />
     <text x="16" y="24" fill="#E2E8F0" class="font-semi" font-size="11">
-      ⚡ End-to-End Pipeline: Stadium RTSP (120 FPS) &rarr; HMAC Gateway &rarr; PINN Physics ODE &rarr; Three.js Canvas &rarr; 6-Language Synapse
+      ⚡ End-to-End Pipeline: Stadium RTSP (120 FPS) → HMAC Gateway → PINN Physics ODE → Three.js Canvas → 6-Language Synapse
     </text>
     <text x="890" y="24" fill="#06B6D4" class="font-mono" font-weight="700">60 FPS VERIFIED</text>
   </g>

@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d5-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0514"/>
+      <stop offset="50%" stop-color="#150821"/>
+      <stop offset="100%" stop-color="#05020c"/>
+    </linearGradient>
+
+    <linearGradient id="d5-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="35%" stop-color="#8B5CF6"/>
+      <stop offset="70%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <filter id="d5-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .d5-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d5-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d5-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d5-bg)" stroke="url(#d5-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#300d14" stroke="#EF4444" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">🛡️</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d5-title" font-size="16">Diagram 5: Zero-Trust Telemetry Anti-Tamper &amp; Cryptographic Shield</text>
+    <text x="46" y="33" fill="#94A3B8" class="d5-body" font-size="11">HMAC-SHA256 Packet Digest • Real-Time Tamper Detection • Edge Cloud Ingestion • Zero-Trust Quarantine</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#EF4444" fill-opacity="0.12" stroke="#EF4444" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#FCA5A5" class="d5-mono">INTEGRITY CHECK: ACTIVE 100%</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#231433" stroke-width="1"/>
+
+  <!-- Left: Stadium Sensor Node (Signing) -->
+  <g transform="translate(40, 100)">
+    <rect x="0" y="0" width="280" height="350" rx="14" fill="#0d1424" stroke="#06B6D4" stroke-width="1.5"/>
+    <rect x="20" y="15" width="240" height="28" rx="6" fill="#0c2338"/>
+    <text x="140" y="33" text-anchor="middle" fill="#67E8F9" class="d5-mono">🏟️ STADIUM SENSOR NODE</text>
+
+    <!-- Hawk-Eye Raw Payload -->
+    <g transform="translate(20, 60)">
+      <rect x="0" y="0" width="240" height="75" rx="8" fill="#061928" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="12" y="18" fill="#38BDF8" class="d5-mono">RAW TELEMETRY PACKET:</text>
+      <text x="12" y="36" fill="#94A3B8" class="d5-mono">{ speed: 142.4, seam: 2.15,</text>
+      <text x="12" y="52" fill="#94A3B8" class="d5-mono">  apex: 18.4, spin: 2240 }</text>
+      <text x="12" y="68" fill="#38BDF8" class="d5-mono">ts: 1774345200.82</text>
+    </g>
+
+    <!-- Key Injection -->
+    <g transform="translate(20, 150)">
+      <rect x="0" y="0" width="240" height="42" rx="8" fill="#2d1b06" stroke="#F59E0B" stroke-width="1"/>
+      <text x="12" y="18" fill="#FBBF24" class="d5-mono">🔑 SHARED SECRET KEY (K)</text>
+      <text x="12" y="34" fill="#FDE68A" class="d5-mono">SHA256: 0x9f4a...88c2 (256-bit)</text>
+    </g>
+
+    <!-- HMAC-SHA256 Signer -->
+    <g transform="translate(20, 208)">
+      <rect x="0" y="0" width="240" height="60" rx="8" fill="#1e1038" stroke="#8B5CF6" stroke-width="1.2"/>
+      <text x="12" y="22" fill="#C084FC" class="d5-mono">⚙️ HMAC-SHA256 GENERATOR</text>
+      <text x="12" y="42" fill="#E2E8F0" class="d5-body">H((K ⊕ opad) || H((K ⊕ ipad) || M))</text>
+    </g>
+
+    <!-- Signed Packet Result -->
+    <g transform="translate(20, 282)">
+      <rect x="0" y="0" width="240" height="52" rx="8" fill="#082b20" stroke="#10B981" stroke-width="1"/>
+      <text x="12" y="18" fill="#34D399" class="d5-mono">SIGNED PACKET &amp; DIGEST:</text>
+      <text x="12" y="34" fill="#A7F3D0" class="d5-mono">Sig: c5b2e94a8d...f3</text>
+      <circle cx="225" cy="25" r="4" fill="#10B981">
+        <animate attributeName="opacity" values="1;0.2;1" dur="0.8s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+  <!-- Center Transit Pipeline -->
+  <g transform="translate(340, 220)">
+    <rect x="0" y="0" width="130" height="65" rx="10" fill="#131c31" stroke="#38BDF8" stroke-width="1.2"/>
+    <text x="65" y="24" text-anchor="middle" fill="#7DD3FC" class="d5-mono">🌐 IN-TRANSIT</text>
+    <text x="65" y="44" text-anchor="middle" fill="#94A3B8" class="d5-body">TLS 1.3 / mTLS</text>
+    <text x="65" y="58" text-anchor="middle" fill="#67E8F9" class="d5-mono">&lt; 12ms Latency</text>
+    
+    <!-- Laser line and moving packet -->
+    <line x1="-20" y1="32" x2="0" y2="32" stroke="#06B6D4" stroke-width="2"/>
+    <line x1="130" y1="32" x2="150" y2="32" stroke="#06B6D4" stroke-width="2"/>
+    <circle r="4" fill="#06B6D4" filter="url(#d5-glow)">
+      <animateMotion path="M -20 32 L 150 32" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Right: AURA Security Gateway (Verification & Fork) -->
+  <g transform="translate(490, 100)">
+    <rect x="0" y="0" width="470" height="350" rx="14" fill="#140c24" stroke="#8B5CF6" stroke-width="1.5"/>
+    <rect x="20" y="15" width="430" height="28" rx="6" fill="#291442"/>
+    <text x="235" y="33" text-anchor="middle" fill="#D8B4FE" class="d5-mono">🛡️ AURA ZERO-TRUST SECURITY GATEWAY</text>
+
+    <!-- Verifier Engine -->
+    <g transform="translate(20, 60)">
+      <rect x="0" y="0" width="260" height="85" rx="8" fill="#180e30" stroke="#A855F7" stroke-width="1"/>
+      <text x="15" y="20" fill="#C084FC" class="d5-mono">HMAC CONSTANT-TIME VERIFIER</text>
+      <text x="15" y="40" fill="#E2E8F0" class="d5-body">Recomputes HMAC(K, Payload)</text>
+      <text x="15" y="58" fill="#94A3B8" class="d5-mono">Timing-Attack Resistant Compare:</text>
+      <text x="15" y="74" fill="#A78BFA" class="d5-mono">hmac.compare_digest(sig_calc, sig_rx)</text>
+    </g>
+
+    <!-- Shared Key Replica -->
+    <g transform="translate(300, 60)">
+      <rect x="0" y="0" width="150" height="85" rx="8" fill="#2d1b06" stroke="#F59E0B" stroke-width="1"/>
+      <text x="12" y="22" fill="#FBBF24" class="d5-mono">KEY STORE (K)</text>
+      <text x="12" y="45" fill="#E2E8F0" class="d5-body">HSM Vault</text>
+      <text x="12" y="65" fill="#FDE68A" class="d5-mono">Zero Exposure</text>
+    </g>
+
+    <!-- Branch A: SUCCESS (Green Path) -->
+    <g transform="translate(20, 170)">
+      <rect x="0" y="0" width="430" height="70" rx="10" fill="#082b1e" stroke="#10B981" stroke-width="1.5"/>
+      <text x="15" y="24" fill="#34D399" class="d5-mono">✅ VALID SIGNATURE: DIGEST MATCH</text>
+      <text x="15" y="44" fill="#E2E8F0" class="d5-body">Integrity Confirmed • Ingest into Deep Learning PINN &amp; Q-Learning</text>
+      <rect x="310" y="15" width="105" height="24" rx="4" fill="#065f46"/>
+      <text x="362" y="31" text-anchor="middle" fill="#6EE7B7" class="d5-mono">FORWARD ML</text>
+      
+      <!-- Green pulse indicator -->
+      <circle cx="400" cy="52" r="5" fill="#10B981" filter="url(#d5-glow)">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Branch B: TAMPER DETECTED (Red Alert Path) -->
+    <g transform="translate(20, 255)">
+      <rect x="0" y="0" width="430" height="75" rx="10" fill="#310a11" stroke="#EF4444" stroke-width="1.5"/>
+      <text x="15" y="24" fill="#F87171" class="d5-mono">🚨 TAMPER / SPOOF DETECTED: DIGEST MISMATCH</text>
+      <text x="15" y="44" fill="#E2E8F0" class="d5-body">Signature Invalid or Timestamp Out-of-Bounds (&gt;2.5s drift)</text>
+      <text x="15" y="62" fill="#FCA5A5" class="d5-mono">ACTION: Instant Packet Drop + SOC Incident Alert Dispatched</text>
+
+      <rect x="330" y="15" width="85" height="24" rx="4" fill="#7f1d1d"/>
+      <text x="372" y="31" text-anchor="middle" fill="#FECACA" class="d5-mono">DROP 400</text>
+      
+      <!-- Red pulse indicator -->
+      <circle cx="400" cy="55" r="5" fill="#EF4444" filter="url(#d5-glow)">
+        <animate attributeName="opacity" values="0.2;1;0.2" dur="0.8s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+</svg>

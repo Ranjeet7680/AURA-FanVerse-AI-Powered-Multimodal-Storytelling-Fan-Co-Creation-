@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d20-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080718"/>
+      <stop offset="50%" stop-color="#110d29"/>
+      <stop offset="100%" stop-color="#04030d"/>
+    </linearGradient>
+
+    <linearGradient id="d20-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="75%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <filter id="d20-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Volumetric Light Beam Gradient -->
+    <linearGradient id="d20-lightCone" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <style>
+    .d20-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d20-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d20-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    
+    @keyframes d20BeamPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d20-bg)" stroke="url(#d20-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#141d3b" stroke="#38BDF8" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">⚡</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d20-title" font-size="16">Diagram 20: 3D WebGL Shader Pipeline &amp; Multi-Tier Stadium Lighting Architecture</text>
+    <text x="46" y="33" fill="#94A3B8" class="d20-body" font-size="11">Vertex &amp; PBR Fragment Shaders • ACES Filmic Tone Mapping • Quad Floodlight Volumetric Pylons • 60 FPS Framebuffer</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#38BDF8" fill-opacity="0.12" stroke="#38BDF8" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#7DD3FC" class="d20-mono">GPU SHADER PASS: 16.6ms BUDGET</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#251644" stroke-width="1"/>
+
+  <!-- COLUMN 1: Geometry & Vertex Stage (Left) -->
+  <g transform="translate(40, 105)">
+    <rect x="0" y="0" width="220" height="345" rx="12" fill="#081426" stroke="#38BDF8" stroke-width="1.5"/>
+    <rect x="15" y="15" width="190" height="28" rx="6" fill="#0c2b47"/>
+    <text x="110" y="33" text-anchor="middle" fill="#7DD3FC" class="d20-mono">1. VERTEX SHADER</text>
+
+    <!-- Mesh Vertices -->
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="190" height="70" rx="8" fill="#0c2138" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#38BDF8" class="d20-mono">INPUT GEOMETRY:</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d20-body">• Turf Lawn Mesh (32k Tris)</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d20-body">• Dubai Roof Canopies</text>
+      <text x="10" y="66" fill="#94A3B8" class="d20-mono">4 Floodlight Pylons</text>
+    </g>
+
+    <!-- Vertex Transform -->
+    <g transform="translate(15, 145)">
+      <rect x="0" y="0" width="190" height="90" rx="8" fill="#102540" stroke="#38BDF8" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#7DD3FC" class="d20-mono">GLSL VERTEX CODE:</text>
+      <text x="10" y="36" fill="#67E8F9" class="d20-mono">vec4 worldPos =</text>
+      <text x="10" y="52" fill="#67E8F9" class="d20-mono">  modelMatrix * position;</text>
+      <text x="10" y="68" fill="#93C5FD" class="d20-mono">vNormal = normalMatrix</text>
+      <text x="10" y="84" fill="#93C5FD" class="d20-mono">  * normal;</text>
+    </g>
+
+    <!-- Shadow Depth Calculation -->
+    <g transform="translate(15, 250)">
+      <rect x="0" y="0" width="190" height="75" rx="8" fill="#082b20" stroke="#10B981" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#34D399" class="d20-mono">SHADOW MAP PASS:</text>
+      <text x="10" y="36" fill="#A7F3D0" class="d20-body">DirectionalLight Depth</text>
+      <text x="10" y="52" fill="#A7F3D0" class="d20-mono">2048x2048 Shadow Map</text>
+      <text x="10" y="68" fill="#6EE7B7" class="d20-mono">PCF Soft Filtering</text>
+    </g>
+  </g>
+
+  <!-- COLUMN 2: PBR Fragment Shading Stage (Center-Left) -->
+  <g transform="translate(285, 105)">
+    <rect x="0" y="0" width="220" height="345" rx="12" fill="#190e29" stroke="#8B5CF6" stroke-width="1.5"/>
+    <rect x="15" y="15" width="190" height="28" rx="6" fill="#2d174d"/>
+    <text x="110" y="33" text-anchor="middle" fill="#DDD6FE" class="d20-mono">2. PBR FRAGMENT SHADER</text>
+
+    <!-- Albedo Map -->
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="190" height="70" rx="8" fill="#1b1233" stroke="#8B5CF6" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#C084FC" class="d20-mono">ALBEDO / DIFFUSE:</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d20-body">Procedural Turf Stripes</text>
+      <text x="10" y="52" fill="#DDD6FE" class="d20-mono">Alternating Lawn 3.2m</text>
+      <text x="10" y="66" fill="#A78BFA" class="d20-mono">Clay Wear Center Scuff</text>
+    </g>
+
+    <!-- Roughness & Metalness -->
+    <g transform="translate(15, 145)">
+      <rect x="0" y="0" width="190" height="90" rx="8" fill="#2d142e" stroke="#EC4899" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#F472B6" class="d20-mono">ROUGHNESS / PBR:</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d20-body">Turf Grass: Roughness 0.88</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d20-body">Pitch Clay: Roughness 0.72</text>
+      <text x="10" y="68" fill="#FBCFE8" class="d20-mono">White Stumps: Roughness 0.20</text>
+      <text x="10" y="84" fill="#F472B6" class="d20-mono">Metal Canopies: Metalness 0.8</text>
+    </g>
+
+    <!-- ACES Tone Mapping -->
+    <g transform="translate(15, 250)">
+      <rect x="0" y="0" width="190" height="75" rx="8" fill="#2d1c08" stroke="#F59E0B" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#FBBF24" class="d20-mono">ACES FILMIC TONE MAP:</text>
+      <text x="10" y="36" fill="#FDE68A" class="d20-body">Exposure: 1.15</text>
+      <text x="10" y="52" fill="#FDE68A" class="d20-mono">High Dynamic Range (HDR)</text>
+      <text x="10" y="68" fill="#FBBF24" class="d20-mono">sRGB Color Space Output</text>
+    </g>
+  </g>
+
+  <!-- COLUMN 3: Stadium Multi-Tier Lighting Engine (Center-Right) -->
+  <g transform="translate(530, 105)">
+    <rect x="0" y="0" width="220" height="345" rx="12" fill="#241407" stroke="#F59E0B" stroke-width="1.5"/>
+    <rect x="15" y="15" width="190" height="28" rx="6" fill="#4d2c08"/>
+    <text x="110" y="33" text-anchor="middle" fill="#FBBF24" class="d20-mono">3. LIGHTING SUITE</text>
+
+    <!-- Day Mode -->
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="190" height="60" rx="8" fill="#2d1b06" stroke="#F59E0B" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#FDE68A" class="d20-mono">☀️ DAY SUN (0xfffbeb)</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d20-body">Directional Sun: 2.8 Int</text>
+      <text x="10" y="50" fill="#94A3B8" class="d20-mono">Sky Blue Ambient: 0.6 Int</text>
+    </g>
+
+    <!-- Sunset Dusk Mode -->
+    <g transform="translate(15, 130)">
+      <rect x="0" y="0" width="190" height="60" rx="8" fill="#2d131f" stroke="#EC4899" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#F472B6" class="d20-mono">🌅 DUSK GLOSS (0xf97316)</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d20-body">Amber Low-Sun: 1.9 Int</text>
+      <text x="10" y="50" fill="#FBCFE8" class="d20-mono">Deep Violet Shadow Tint</text>
+    </g>
+
+    <!-- Night Floodlights Mode -->
+    <g transform="translate(15, 200)">
+      <rect x="0" y="0" width="190" height="125" rx="8" fill="#0b2438" stroke="#38BDF8" stroke-width="1.2"/>
+      <text x="10" y="18" fill="#67E8F9" class="d20-mono">🏟️ NIGHT QUAD FLOODLIGHTS</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d20-body">4 Towers (0x38bdf8, 2.2 Int)</text>
+      <text x="10" y="50" fill="#7DD3FC" class="d20-mono">Volumetric Light Cones</text>
+      
+      <!-- Visual Light Cone in Mini Box -->
+      <g transform="translate(95, 60)">
+        <polygon points="0,0 -40,55 40,55" fill="url(#d20-lightCone)" style="animation: d20BeamPulse 2s ease-in-out infinite;"/>
+        <circle cx="0" cy="0" r="3" fill="#FFFFFF"/>
+      </g>
+      <text x="10" y="118" fill="#38BDF8" class="d20-mono">Crowd Flash PointLights (4.0)</text>
+    </g>
+  </g>
+
+  <!-- COLUMN 4: 60 FPS WebGL Framebuffer Output (Right) -->
+  <g transform="translate(775, 105)">
+    <rect x="0" y="0" width="185" height="345" rx="12" fill="#08221b" stroke="#10B981" stroke-width="1.8" filter="url(#d20-glow)"/>
+    <rect x="15" y="15" width="155" height="28" rx="6" fill="#0c3d2e"/>
+    <text x="92" y="33" text-anchor="middle" fill="#6EE7B7" class="d20-mono">4. FRAMEBUFFER</text>
+
+    <!-- WebGL Canvas Output Simulation -->
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="155" height="180" rx="8" fill="#051410" stroke="#10B981" stroke-width="1"/>
+      <!-- Rendered pitch oval miniature -->
+      <ellipse cx="77" cy="90" rx="60" ry="38" fill="#0d3b2c" stroke="#34D399" stroke-width="1.5"/>
+      <polygon points="73,75 81,75 83,105 71,105" fill="#78350f"/>
+      <!-- Floodlight highlights -->
+      <circle cx="25" cy="55" r="4" fill="#38BDF8"/>
+      <circle cx="130" cy="55" r="4" fill="#38BDF8"/>
+      <circle cx="25" cy="125" r="4" fill="#38BDF8"/>
+      <circle cx="130" cy="125" r="4" fill="#38BDF8"/>
+      <circle cx="77" cy="90" r="3" fill="#EF4444"/>
+    </g>
+
+    <!-- Telemetry Readout -->
+    <g transform="translate(15, 255)">
+      <rect x="0" y="0" width="155" height="75" rx="6" fill="#062e24" stroke="#059669" stroke-width="0.8"/>
+      <text x="8" y="18" fill="#34D399" class="d20-mono">FRAME STATS:</text>
+      <text x="8" y="36" fill="#A7F3D0" class="d20-mono">FPS: 60.0 Solid</text>
+      <text x="8" y="52" fill="#A7F3D0" class="d20-mono">Draw Calls: 48</text>
+      <text x="8" y="68" fill="#6EE7B7" class="d20-mono">VRAM: 142 MB</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrows connecting stages -->
+  <line x1="260" y1="275" x2="285" y2="275" stroke="#38BDF8" stroke-width="2"/>
+  <circle r="3" fill="#38BDF8">
+    <animateMotion path="M 260 275 L 285 275" dur="0.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <line x1="505" y1="275" x2="530" y2="275" stroke="#8B5CF6" stroke-width="2"/>
+  <circle r="3" fill="#8B5CF6">
+    <animateMotion path="M 505 275 L 530 275" dur="0.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <line x1="750" y1="275" x2="775" y2="275" stroke="#10B981" stroke-width="2.5"/>
+  <circle r="4" fill="#10B981" filter="url(#d20-glow)">
+    <animateMotion path="M 750 275 L 775 275" dur="0.8s" repeatCount="indefinite"/>
+  </circle>
+</svg>

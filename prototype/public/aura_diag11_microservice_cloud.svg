@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d11-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060c18"/>
+      <stop offset="50%" stop-color="#0d1829"/>
+      <stop offset="100%" stop-color="#04060d"/>
+    </linearGradient>
+
+    <linearGradient id="d11-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <filter id="d11-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .d11-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d11-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d11-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d11-bg)" stroke="url(#d11-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#0d253f" stroke="#38BDF8" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">☁️</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d11-title" font-size="16">Diagram 11: Microservice Container &amp; Cloud Infrastructure Architecture</text>
+    <text x="46" y="33" fill="#94A3B8" class="d11-body" font-size="11">Cloudflare Edge Ingress • Kubernetes Autoscaling Cluster • PyTorch GPU Acceleration • Redis In-Memory State</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#38BDF8" fill-opacity="0.12" stroke="#38BDF8" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#7DD3FC" class="d11-mono">K8S PODS: 18 HEALTHY (100%)</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- TIER 1: Edge CDN & Ingress (Left) -->
+  <g transform="translate(40, 105)">
+    <rect x="0" y="0" width="230" height="345" rx="12" fill="#0b1728" stroke="#38BDF8" stroke-width="1.5"/>
+    <rect x="15" y="15" width="200" height="28" rx="6" fill="#0c2e47"/>
+    <text x="115" y="33" text-anchor="middle" fill="#7DD3FC" class="d11-mono">🌐 EDGE INGRESS TIER</text>
+
+    <!-- Cloudflare Edge Worker -->
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="200" height="75" rx="8" fill="#0c2338" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#38BDF8" class="d11-mono">CLOUDFLARE EDGE</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d11-body">• Anycast DDoS Shield (300 Tbps)</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d11-body">• TLS 1.3 Termination</text>
+      <text x="10" y="68" fill="#67E8F9" class="d11-mono">Sub-5ms Edge Ingestion</text>
+    </g>
+
+    <!-- Video CDN Node -->
+    <g transform="translate(15, 150)">
+      <rect x="0" y="0" width="200" height="75" rx="8" fill="#0c2338" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#38BDF8" class="d11-mono">GLOBAL VIDEO CDN</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d11-body">• HLS / DASH 9:16 Segments</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d11-body">• Multi-bitrate Adaptive 1080p</text>
+      <text x="10" y="68" fill="#67E8F9" class="d11-mono">Cache Hit Ratio: 97.4%</text>
+    </g>
+
+    <!-- Global Fan Traffic Indicator -->
+    <g transform="translate(15, 240)">
+      <rect x="0" y="0" width="200" height="90" rx="8" fill="#082b20" stroke="#10B981" stroke-width="1"/>
+      <text x="10" y="20" fill="#34D399" class="d11-mono">GLOBAL CONCURRENCY:</text>
+      <text x="10" y="40" fill="#A7F3D0" class="d11-body">34,000+ Concurrent Fans</text>
+      <text x="10" y="58" fill="#A7F3D0" class="d11-body">Middle East, India, UK, USA</text>
+      <text x="10" y="78" fill="#6EE7B7" class="d11-mono">Avg Latency: 18ms</text>
+    </g>
+  </g>
+
+  <!-- TIER 2: Kubernetes Container Cluster (Center) -->
+  <g transform="translate(300, 105)">
+    <rect x="0" y="0" width="380" height="345" rx="14" fill="#111226" stroke="#8B5CF6" stroke-width="1.8"/>
+    <rect x="20" y="15" width="340" height="28" rx="6" fill="#241947"/>
+    <text x="190" y="33" text-anchor="middle" fill="#DDD6FE" class="d11-mono">☸️ KUBERNETES CONTAINER CLUSTER</text>
+
+    <!-- FastAPI Pods 1 & 2 -->
+    <g transform="translate(20, 55)">
+      <rect x="0" y="0" width="165" height="70" rx="8" fill="#181335" stroke="#8B5CF6" stroke-width="1"/>
+      <text x="10" y="18" fill="#C084FC" class="d11-mono">FASTAPI POD 01</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d11-body">Uvicorn Workers (4x)</text>
+      <text x="10" y="52" fill="#94A3B8" class="d11-mono">CPU: 24% | RAM: 1.2GB</text>
+      <circle cx="150" cy="15" r="4" fill="#10B981">
+        <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <g transform="translate(195, 55)">
+      <rect x="0" y="0" width="165" height="70" rx="8" fill="#181335" stroke="#8B5CF6" stroke-width="1"/>
+      <text x="10" y="18" fill="#C084FC" class="d11-mono">FASTAPI POD 02</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d11-body">Uvicorn Workers (4x)</text>
+      <text x="10" y="52" fill="#94A3B8" class="d11-mono">CPU: 28% | RAM: 1.4GB</text>
+      <circle cx="150" cy="15" r="4" fill="#10B981">
+        <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- PyTorch GPU Worker Pod -->
+    <g transform="translate(20, 135)">
+      <rect x="0" y="0" width="340" height="60" rx="8" fill="#2d1326" stroke="#EC4899" stroke-width="1.2"/>
+      <text x="12" y="18" fill="#F472B6" class="d11-mono">🧠 PYTORCH GPU WORKER (NVIDIA A10G)</text>
+      <text x="12" y="36" fill="#E2E8F0" class="d11-body">YOLO-Pose Video Pipeline &amp; PINN Physics Integration</text>
+      <text x="12" y="52" fill="#FBCFE8" class="d11-mono">CUDA Inference: 14.8ms per batch</text>
+      <circle cx="320" cy="18" r="4" fill="#EC4899">
+        <animate attributeName="opacity" values="1;0.2;1" dur="0.8s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- RL Q-Learning Worker Pod -->
+    <g transform="translate(20, 205)">
+      <rect x="0" y="0" width="340" height="55" rx="8" fill="#2d1d07" stroke="#F59E0B" stroke-width="1.2"/>
+      <text x="12" y="18" fill="#FBBF24" class="d11-mono">🤖 Q-LEARNING TACTICAL INFERENCE POD</text>
+      <text x="12" y="36" fill="#E2E8F0" class="d11-body">Monte Carlo 11-Fielder Coordinate Optimization</text>
+      <text x="12" y="49" fill="#FDE68A" class="d11-mono">Policy Iterations: 50,000 / sec</text>
+    </g>
+
+    <!-- Redis In-Memory State & PubSub -->
+    <g transform="translate(20, 270)">
+      <rect x="0" y="0" width="340" height="60" rx="8" fill="#300d14" stroke="#EF4444" stroke-width="1.5"/>
+      <text x="12" y="18" fill="#F87171" class="d11-mono">⚡ REDIS IN-MEMORY PUBSUB CLUSTER</text>
+      <text x="12" y="36" fill="#E2E8F0" class="d11-body">Real-Time Telemetry Roll &amp; Session Store</text>
+      <text x="12" y="52" fill="#FCA5A5" class="d11-mono">Read/Write Latency: &lt; 0.8ms (Cluster Mode)</text>
+      <circle cx="320" cy="18" r="4" fill="#EF4444" filter="url(#d11-glow)">
+        <animate attributeName="opacity" values="1;0.2;1" dur="0.6s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+  <!-- TIER 3: Data & Persistence Layer (Right) -->
+  <g transform="translate(710, 105)">
+    <rect x="0" y="0" width="250" height="345" rx="12" fill="#0b1e18" stroke="#10B981" stroke-width="1.5"/>
+    <rect x="15" y="15" width="220" height="28" rx="6" fill="#0c4234"/>
+    <text x="125" y="33" text-anchor="middle" fill="#6EE7B7" class="d11-mono">💾 DATA &amp; STORAGE TIER</text>
+
+    <!-- PostgreSQL -->
+    <g transform="translate(15, 60)">
+      <rect x="0" y="0" width="220" height="75" rx="8" fill="#082b21" stroke="#059669" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#34D399" class="d11-mono">POSTGRESQL RELATIONAL</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d11-body">• Athlete Passports &amp; Match Stats</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d11-body">• Micro-Sponsorship Token Ledger</text>
+      <text x="10" y="68" fill="#A7F3D0" class="d11-mono">ACID Compliant • Auto-Replicas</text>
+    </g>
+
+    <!-- Qdrant Vector DB -->
+    <g transform="translate(15, 150)">
+      <rect x="0" y="0" width="220" height="75" rx="8" fill="#082b21" stroke="#059669" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#34D399" class="d11-mono">QDRANT VECTOR DB</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d11-body">• Tactical Matchup Embeddings</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d11-body">• Cosine Similarity Query &lt; 4ms</text>
+      <text x="10" y="68" fill="#A7F3D0" class="d11-mono">1536-dim OpenAI Embeddings</text>
+    </g>
+
+    <!-- S3 / GCS Object Store -->
+    <g transform="translate(15, 240)">
+      <rect x="0" y="0" width="220" height="85" rx="8" fill="#082b21" stroke="#059669" stroke-width="0.8"/>
+      <text x="10" y="18" fill="#34D399" class="d11-mono">S3 / GCS OBJECT STORE</text>
+      <text x="10" y="36" fill="#E2E8F0" class="d11-body">• Rendered 9:16 Vertical MP4s</text>
+      <text x="10" y="52" fill="#E2E8F0" class="d11-body">• Web Audio Commentary Tracks</text>
+      <text x="10" y="70" fill="#6EE7B7" class="d11-mono">Global Edge Sync to CDN</text>
+    </g>
+  </g>
+
+  <!-- CONNECTORS -->
+  <line x1="270" y1="275" x2="300" y2="275" stroke="#38BDF8" stroke-width="2.5"/>
+  <circle r="4" fill="#38BDF8" filter="url(#d11-glow)">
+    <animateMotion path="M 270 275 L 300 275" dur="1s" repeatCount="indefinite"/>
+  </circle>
+
+  <line x1="680" y1="275" x2="710" y2="275" stroke="#10B981" stroke-width="2.5"/>
+  <circle r="4" fill="#10B981" filter="url(#d11-glow)">
+    <animateMotion path="M 680 275 L 710 275" dur="1s" repeatCount="indefinite"/>
+  </circle>
+</svg>

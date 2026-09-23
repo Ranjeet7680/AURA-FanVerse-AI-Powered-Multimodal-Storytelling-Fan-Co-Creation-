@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d2-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b061c"/>
+      <stop offset="50%" stop-color="#120a2e"/>
+      <stop offset="100%" stop-color="#080415"/>
+    </linearGradient>
+
+    <linearGradient id="d2-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="35%" stop-color="#8B5CF6"/>
+      <stop offset="70%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <filter id="d2-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .d2-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d2-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d2-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    .d2-label { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 500; fill: #E2E8F0; }
+    
+    @keyframes d2Pulse {
+      0%, 100% { opacity: 0.2; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+    @keyframes d2Dash {
+      to { stroke-dashoffset: -40; }
+    }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d2-bg)" stroke="url(#d2-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#1e103f" stroke="#06B6D4" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">⚡</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d2-title" font-size="16">Diagram 2: Multimodal Real-Time Play-by-Play Sequence</text>
+    <text x="46" y="33" fill="#94A3B8" class="d2-body" font-size="11">Sub-15ms Edge Verification • PINN Trajectory &amp; CV Action Rec • Q-Policy Query • 6-Language TTS Stream</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(745, 28)">
+    <rect x="0" y="0" width="220" height="26" rx="13" fill="#06B6D4" fill-opacity="0.12" stroke="#06B6D4" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#67E8F9" class="d2-mono">SYNCHRONOUS FLOW: &lt; 45ms</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#251647" stroke-width="1"/>
+
+  <!-- Actor Lifeline Headers -->
+  <!-- 1. Fan / Viewer -->
+  <g transform="translate(60, 95)">
+    <rect x="0" y="0" width="120" height="38" rx="8" fill="#161c36" stroke="#06B6D4" stroke-width="1.2"/>
+    <text x="60" y="24" text-anchor="middle" fill="#67E8F9" class="d2-mono">👤 FAN / VIEW</text>
+    <line x1="60" y1="38" x2="60" y2="380" stroke="#06B6D4" stroke-width="1.5" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+  </g>
+
+  <!-- 2. AURA UI -->
+  <g transform="translate(220, 95)">
+    <rect x="0" y="0" width="120" height="38" rx="8" fill="#24143a" stroke="#8B5CF6" stroke-width="1.2"/>
+    <text x="60" y="24" text-anchor="middle" fill="#C084FC" class="d2-mono">📱 AURA UI (v5.2)</text>
+    <line x1="60" y1="38" x2="60" y2="380" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+  </g>
+
+  <!-- 3. Security Gateway -->
+  <g transform="translate(380, 95)">
+    <rect x="0" y="0" width="120" height="38" rx="8" fill="#30142b" stroke="#EC4899" stroke-width="1.2"/>
+    <text x="60" y="24" text-anchor="middle" fill="#F472B6" class="d2-mono">🛡️ CYBER GATEWAY</text>
+    <line x1="60" y1="38" x2="60" y2="380" stroke="#EC4899" stroke-width="1.5" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+  </g>
+
+  <!-- 4. DL Vision Engine -->
+  <g transform="translate(540, 95)">
+    <rect x="0" y="0" width="120" height="38" rx="8" fill="#142c26" stroke="#10B981" stroke-width="1.2"/>
+    <text x="60" y="24" text-anchor="middle" fill="#34D399" class="d2-mono">🧠 DL VISION (PINN)</text>
+    <line x1="60" y1="38" x2="60" y2="380" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+  </g>
+
+  <!-- 5. RL Tactical Agent -->
+  <g transform="translate(700, 95)">
+    <rect x="0" y="0" width="120" height="38" rx="8" fill="#352010" stroke="#F59E0B" stroke-width="1.2"/>
+    <text x="60" y="24" text-anchor="middle" fill="#FBBF24" class="d2-mono">🤖 Q-LEARN AGENT</text>
+    <line x1="60" y1="38" x2="60" y2="380" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+  </g>
+
+  <!-- 6. Neural TTS -->
+  <g transform="translate(850, 95)">
+    <rect x="0" y="0" width="110" height="38" rx="8" fill="#171e3d" stroke="#38BDF8" stroke-width="1.2"/>
+    <text x="55" y="24" text-anchor="middle" fill="#7DD3FC" class="d2-mono">🗣️ NEURAL TTS</text>
+    <line x1="55" y1="38" x2="55" y2="380" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+  </g>
+
+  <!-- SEQUENCE STEPS WITH ANIMATED PHOTON PACKETS -->
+
+  <!-- STEP 1: Ball Bowled & Ingested into Cyber Gateway -->
+  <g transform="translate(0, 160)">
+    <line x1="440" y1="0" x2="600" y2="0" stroke="#10B981" stroke-width="2" stroke-dasharray="5,3"/>
+    <polygon points="598,-4 606,0 598,4" fill="#10B981"/>
+    <rect x="448" y="-18" width="144" height="15" rx="3" fill="#08231c" stroke="#10B981" stroke-width="0.8"/>
+    <text x="520" y="-7" text-anchor="middle" fill="#A7F3D0" class="d2-label">1. Ingest 4K 60FPS Video</text>
+    
+    <!-- Animated Particle -->
+    <circle r="4" fill="#10B981" filter="url(#d2-glow)">
+      <animateMotion path="M 440 0 L 600 0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- STEP 2: DL Vision computes Seam Drift, Launch Angle, Action Rec -->
+  <g transform="translate(0, 205)">
+    <path d="M 600 0 C 640 0, 640 25, 600 25" fill="none" stroke="#10B981" stroke-width="2"/>
+    <polygon points="602,21 596,25 602,29" fill="#10B981"/>
+    <rect x="615" y="4" width="170" height="15" rx="3" fill="#08231c" stroke="#10B981" stroke-width="0.8"/>
+    <text x="700" y="15" text-anchor="middle" fill="#A7F3D0" class="d2-label">2. PINN Trajectory + Classify Four</text>
+  </g>
+
+  <!-- STEP 3: DL generates script -> Neural TTS -->
+  <g transform="translate(0, 255)">
+    <line x1="600" y1="0" x2="905" y2="0" stroke="#38BDF8" stroke-width="2"/>
+    <polygon points="900,-4 908,0 900,4" fill="#38BDF8"/>
+    <rect x="680" y="-18" width="165" height="15" rx="3" fill="#0e2338" stroke="#38BDF8" stroke-width="0.8"/>
+    <text x="762" y="-7" text-anchor="middle" fill="#BAE6FD" class="d2-label">3. Generate 20s Dramatic Script</text>
+
+    <!-- Animated Particle -->
+    <circle r="4" fill="#38BDF8" filter="url(#d2-glow)">
+      <animateMotion path="M 600 0 L 905 0" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- STEP 4: Neural TTS streams 9:16 Reel to UI -->
+  <g transform="translate(0, 300)">
+    <line x1="905" y1="0" x2="280" y2="0" stroke="#EC4899" stroke-width="2" stroke-dasharray="6,4"/>
+    <polygon points="285,-4 277,0 285,4" fill="#EC4899"/>
+    <rect x="480" y="-18" width="220" height="15" rx="3" fill="#2d0b23" stroke="#EC4899" stroke-width="0.8"/>
+    <text x="590" y="-7" text-anchor="middle" fill="#FBCFE8" class="d2-label">4. Stream 9:16 Reel + 6-Lang Audio (te/ta/hi/es/ar)</text>
+
+    <!-- Animated Particle -->
+    <circle r="4" fill="#EC4899" filter="url(#d2-glow)">
+      <animateMotion path="M 905 0 L 280 0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- STEP 5: Fan Submits Tactical Question -->
+  <g transform="translate(0, 350)">
+    <line x1="120" y1="0" x2="280" y2="0" stroke="#06B6D4" stroke-width="2"/>
+    <polygon points="275,-4 283,0 275,4" fill="#06B6D4"/>
+    <rect x="135" y="-18" width="130" height="15" rx="3" fill="#082231" stroke="#06B6D4" stroke-width="0.8"/>
+    <text x="200" y="-7" text-anchor="middle" fill="#A5F3FC" class="d2-label">5. Ask Co-Pilot: "Why Deep Square?"</text>
+
+    <!-- Animated Particle -->
+    <circle r="4" fill="#06B6D4" filter="url(#d2-glow)">
+      <animateMotion path="M 120 0 L 280 0" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- STEP 6: UI -> Cyber Shield -> Q-Learning Agent -->
+  <g transform="translate(0, 395)">
+    <line x1="280" y1="0" x2="440" y2="0" stroke="#8B5CF6" stroke-width="1.8"/>
+    <polygon points="435,-4 443,0 435,4" fill="#8B5CF6"/>
+    <line x1="440" y1="0" x2="760" y2="0" stroke="#F59E0B" stroke-width="1.8"/>
+    <polygon points="755,-4 763,0 755,4" fill="#F59E0B"/>
+    <rect x="475" y="-18" width="200" height="15" rx="3" fill="#2d1c08" stroke="#F59E0B" stroke-width="0.8"/>
+    <text x="575" y="-7" text-anchor="middle" fill="#FDE68A" class="d2-label">6. WAF Scan + Query Optimal Policy</text>
+
+    <!-- Animated Particle -->
+    <circle r="4" fill="#F59E0B" filter="url(#d2-glow)">
+      <animateMotion path="M 280 0 L 760 0" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- STEP 7: Q-Learning returns 2D Coordinates & Win Swing to Fan -->
+  <g transform="translate(0, 440)">
+    <line x1="760" y1="0" x2="120" y2="0" stroke="#10B981" stroke-width="2"/>
+    <polygon points="126,-4 118,0 126,4" fill="#10B981"/>
+    <rect x="290" y="-18" width="310" height="15" rx="3" fill="#08291f" stroke="#10B981" stroke-width="0.8"/>
+    <text x="445" y="-7" text-anchor="middle" fill="#6EE7B7" class="d2-label">7. Render 2D Dynamic Pitch Oval + Win Swing (+4.2% IND)</text>
+
+    <!-- Animated Particle -->
+    <circle r="4" fill="#10B981" filter="url(#d2-glow)">
+      <animateMotion path="M 760 0 L 120 0" dur="2.6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

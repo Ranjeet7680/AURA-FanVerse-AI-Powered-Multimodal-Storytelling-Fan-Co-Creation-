@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d19-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0818"/>
+      <stop offset="50%" stop-color="#140f2e"/>
+      <stop offset="100%" stop-color="#05030e"/>
+    </linearGradient>
+
+    <linearGradient id="d19-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="40%" stop-color="#06B6D4"/>
+      <stop offset="75%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+
+    <filter id="d19-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .d19-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d19-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d19-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    
+    @keyframes d19ArmSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+    @keyframes d19PlantPulse {
+      0%, 100% { r: 6px; fill-opacity: 0.5; }
+      50% { r: 12px; fill-opacity: 1; }
+    }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d19-bg)" stroke="url(#d19-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#1b1d3d" stroke="#10B981" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">🏃</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d19-title" font-size="16">Diagram 19: 3D Biomechanical Skeletal Animation &amp; Bowler Run-Up Rig</text>
+    <text x="46" y="33" fill="#94A3B8" class="d19-body" font-size="11">Inverse Kinematics (IK) • 360° Windmill Delivery Arc • ICC 15° Extension Rule • Ground Reaction Force (F_GRF = 4.8x BW)</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#6EE7B7" class="d19-mono">ELBOW ANGLE: 8.4° (ICC LEGAL &lt;15°)</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#251644" stroke-width="1"/>
+
+  <!-- LEFT: Articulated 3D Skeletal Rig Silhouette Visualizer -->
+  <g transform="translate(45, 105)">
+    <rect x="0" y="0" width="360" height="345" rx="14" fill="#081022" stroke="#06B6D4" stroke-width="1.5"/>
+    <text x="180" y="28" text-anchor="middle" fill="#67E8F9" class="d19-mono">BIOMECHANICAL BONE RIG</text>
+
+    <!-- Ground Plane Pitch -->
+    <line x1="30" y1="310" x2="330" y2="310" stroke="#10B981" stroke-width="2"/>
+    <text x="180" y="330" text-anchor="middle" fill="#A7F3D0" class="d19-mono" font-size="9">CREASE / POPPING PLANE (Y = 0.0m)</text>
+
+    <!-- Skeletal Silhouette in Bowling Action -->
+    <g transform="translate(180, 160)">
+      <!-- Head -->
+      <circle cx="0" cy="-60" r="14" fill="#FFFFFF"/>
+      <circle cx="0" cy="-60" r="17" fill="none" stroke="#38BDF8" stroke-width="1.5"/>
+
+      <!-- Neck & Spine Column -->
+      <line x1="0" y1="-46" x2="0" y2="10" stroke="#38BDF8" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="0" cy="-25" r="4" fill="#06B6D4"/>
+      <circle cx="0" cy="10" r="6" fill="#8B5CF6"/> <!-- Pelvis Root (y=1.05m) -->
+
+      <!-- Clavicle / Shoulders -->
+      <line x1="-25" y1="-30" x2="25" y2="-30" stroke="#38BDF8" stroke-width="4"/>
+
+      <!-- Non-Bowling Left Arm (Balance) -->
+      <line x1="-25" y1="-30" x2="-55" y2="-10" stroke="#94A3B8" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="-55" y1="-10" x2="-75" y2="15" stroke="#94A3B8" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Front Leg Plant (Right Leg Stride Forward) -->
+      <line x1="0" y1="10" x2="45" y2="70" stroke="#10B981" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="45" y1="70" x2="60" y2="148" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="45" cy="70" r="4" fill="#34D399"/> <!-- Knee joint -->
+      
+      <!-- Ground Reaction Force Plant Ripple -->
+      <circle cx="60" cy="150" r="8" fill="#10B981" style="animation: d19PlantPulse 1.2s infinite;"/>
+      <!-- F_GRF Vector Arrow pointing Up-Right -->
+      <line x1="60" y1="150" x2="85" y2="90" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/>
+      <polygon points="85,85 88,95 80,92" fill="#EF4444"/>
+      <text x="95" y="105" fill="#FCA5A5" class="d19-mono" font-size="9">F_GRF = 4.8x BW</text>
+
+      <!-- Back Leg (Trailing Left Leg) -->
+      <line x1="0" y1="10" x2="-40" y2="60" stroke="#64748B" stroke-width="4" stroke-linecap="round"/>
+      <line x1="-40" y1="60" x2="-65" y2="120" stroke="#64748B" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- 360° WINDMILL BOWLING ARM ARC WITH ANIMATION -->
+      <g transform="translate(25, -30)">
+        <!-- 360° Dotted Sweep Guide -->
+        <circle cx="0" cy="0" r="65" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,4" stroke-opacity="0.4"/>
+        
+        <!-- Rotating Arm Group -->
+        <g style="animation: d19ArmSpin 2.5s linear infinite; transform-origin: 0px 0px;">
+          <!-- Upper Arm (Humerus) -->
+          <line x1="0" y1="0" x2="0" y2="-40" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="0" cy="-40" r="4" fill="#FDE68A"/> <!-- Elbow (15° ICC Rule) -->
+          <!-- Forearm & Wrist -->
+          <line x1="0" y1="-40" x2="5" y2="-75" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Cricket Ball at Hand -->
+          <circle cx="5" cy="-80" r="6" fill="#EF4444" filter="url(#d19-glow)"/>
+        </g>
+      </g>
+    </g>
+
+    <text x="180" y="55" text-anchor="middle" fill="#FDE68A" class="d19-mono">HIGH-ARM RELEASE: 2.24m APEX</text>
+  </g>
+
+  <!-- RIGHT: Kinematic Chain & Three.js Hierarchy -->
+  <g transform="translate(430, 105)">
+    <!-- Kinematic Run-Up Velocity Curve Box -->
+    <rect x="0" y="0" width="530" height="160" rx="14" fill="#130e26" stroke="#8B5CF6" stroke-width="1.5"/>
+    <rect x="20" y="15" width="490" height="26" rx="6" fill="#2d174d"/>
+    <text x="265" y="32" text-anchor="middle" fill="#DDD6FE" class="d19-mono">🏃 7-STEP RUN-UP VELOCITY ACCUMULATION (v = 0 → 6.2 m/s)</text>
+
+    <!-- Velocity Steps Chart -->
+    <g transform="translate(30, 55)">
+      <!-- Axis lines -->
+      <line x1="0" y1="80" x2="470" y2="80" stroke="#475569" stroke-width="1"/>
+      <line x1="0" y1="0" x2="0" y2="80" stroke="#475569" stroke-width="1"/>
+      
+      <!-- Velocity Curve -->
+      <path d="M 0 80 Q 200 70 340 30 T 450 10" fill="none" stroke="#10B981" stroke-width="3"/>
+      
+      <!-- 7 Step Points -->
+      <circle cx="0" cy="80" r="3" fill="#6EE7B7"/>
+      <circle cx="70" cy="76" r="3" fill="#6EE7B7"/>
+      <circle cx="140" cy="70" r="3" fill="#6EE7B7"/>
+      <circle cx="210" cy="60" r="3" fill="#6EE7B7"/>
+      <circle cx="280" cy="45" r="3" fill="#6EE7B7"/>
+      <circle cx="350" cy="28" r="4" fill="#F59E0B"/>
+      <circle cx="420" cy="15" r="5" fill="#EF4444" filter="url(#d19-glow)"/>
+
+      <!-- Labels -->
+      <text x="70" y="96" text-anchor="middle" fill="#94A3B8" class="d19-mono" font-size="9">Stride 1</text>
+      <text x="210" y="96" text-anchor="middle" fill="#94A3B8" class="d19-mono" font-size="9">Stride 4 (Accel)</text>
+      <text x="350" y="96" text-anchor="middle" fill="#FDE68A" class="d19-mono" font-size="9">Bound</text>
+      <text x="430" y="96" text-anchor="middle" fill="#FCA5A5" class="d19-mono" font-size="9">Release (142 km/h)</text>
+    </g>
+  </g>
+
+  <!-- Bottom Right: Three.js WebGL Bone Matrix Real-Time Updates -->
+  <g transform="translate(430, 280)">
+    <rect x="0" y="0" width="530" height="170" rx="14" fill="#0c1b26" stroke="#06B6D4" stroke-width="1.5"/>
+    <rect x="20" y="15" width="490" height="26" rx="6" fill="#0f344d"/>
+    <text x="265" y="32" text-anchor="middle" fill="#67E8F9" class="d19-mono">🎮 THREE.JS WEBGL BONE MATRIX PIPELINE</text>
+
+    <g transform="translate(20, 52)">
+      <rect x="0" y="0" width="490" height="34" rx="6" fill="#092333" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="15" y="21" fill="#7DD3FC" class="d19-mono">Bone.quaternion.slerp(targetQuat, delta * speed); // Sub-0.5ms bone update</text>
+    </g>
+    <g transform="translate(20, 92)">
+      <rect x="0" y="0" width="490" height="34" rx="6" fill="#092333" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="15" y="21" fill="#7DD3FC" class="d19-mono">Group.position.z += runUpSpeed * delta; // Forward kinematic translation</text>
+    </g>
+
+    <text x="265" y="150" text-anchor="middle" fill="#A7F3D0" class="d19-mono">PCFSoftShadowMap: 60 FPS Real-Time Cast onto Pitch Turf Mesh</text>
+  </g>
+</svg>

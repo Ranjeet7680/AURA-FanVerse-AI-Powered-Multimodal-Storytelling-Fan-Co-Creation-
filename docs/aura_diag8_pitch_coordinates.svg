@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d8-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#051410"/>
+      <stop offset="50%" stop-color="#09221b"/>
+      <stop offset="100%" stop-color="#030c09"/>
+    </linearGradient>
+
+    <linearGradient id="d8-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="50%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+
+    <filter id="d8-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Radar Sweep Gradient -->
+    <radialGradient id="d8-radarGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <style>
+    .d8-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d8-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d8-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    
+    @keyframes d8Radar {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d8-bg)" stroke="url(#d8-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#0c3426" stroke="#10B981" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">🏏</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d8-title" font-size="16">Diagram 8: 2D Dynamic Cricket Pitch &amp; Fielder Positioning Coordinate Engine</text>
+    <text x="46" y="33" fill="#94A3B8" class="d8-body" font-size="11">Polar (r, θ) to Cartesian (x, y) Transformation • 30-Yard Powerplay Circle Enforcement • 360° Tactical Radar Sweep</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#10B981">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#6EE7B7" class="d8-mono">RADAR ACTIVE: 11 PLAYERS ON FIELD</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#143c30" stroke-width="1"/>
+
+  <!-- LEFT: Interactive 2D Pitch Oval Radar Visualizer -->
+  <g transform="translate(50, 100)">
+    <!-- 2D Ground Boundary Oval (72m Boundary) -->
+    <ellipse cx="230" cy="180" rx="210" ry="165" fill="#09291e" stroke="#10B981" stroke-width="2"/>
+    <text x="230" y="30" text-anchor="middle" fill="#6EE7B7" class="d8-mono">72m BOUNDARY ROPE</text>
+
+    <!-- 30-Yard Inner Circle -->
+    <ellipse cx="230" cy="180" rx="120" ry="95" fill="#0e3729" stroke="#34D399" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <text x="230" y="98" text-anchor="middle" fill="#A7F3D0" class="d8-mono">30-YARD INNER CIRCLE (MAX 5 OUTSIDE)</text>
+
+    <!-- Pitch Strip in Center -->
+    <rect x="218" y="130" width="24" height="100" rx="4" fill="#78350f" stroke="#b45309" stroke-width="1"/>
+    <!-- Crease lines -->
+    <line x1="214" y1="145" x2="246" y2="145" stroke="#FFFFFF" stroke-width="1.5"/>
+    <line x1="214" y1="215" x2="246" y2="215" stroke="#FFFFFF" stroke-width="1.5"/>
+    <text x="230" y="185" text-anchor="middle" fill="#FDE68A" class="d8-mono" font-size="9">22 YDS</text>
+
+    <!-- 360° Radar Sweep Sector Group -->
+    <g transform="translate(230, 180)">
+      <g style="animation: d8Radar 6s linear infinite; transform-origin: 0px 0px;">
+        <path d="M 0 0 L 195 -75 A 210 165 0 0 1 205 35 Z" fill="url(#d8-radarGrad)"/>
+        <line x1="0" y1="0" x2="205" y2="35" stroke="#10B981" stroke-width="2"/>
+      </g>
+    </g>
+
+    <!-- 11 Fielders Positioned on Coordinates -->
+    <!-- Bowler (P0) -->
+    <circle cx="230" cy="140" r="5" fill="#38BDF8"/>
+    <!-- Wicket Keeper (P1) -->
+    <circle cx="230" cy="235" r="5" fill="#F59E0B"/>
+    <!-- Slip 1 (P2) -->
+    <circle cx="250" cy="240" r="5" fill="#F59E0B"/>
+    <!-- Point (P3) -->
+    <circle cx="310" cy="205" r="5" fill="#34D399"/>
+    <!-- Cover (P4) -->
+    <circle cx="320" cy="160" r="5" fill="#34D399"/>
+    <!-- Mid-Off (P5) -->
+    <circle cx="265" cy="130" r="5" fill="#34D399"/>
+    <!-- Mid-On (P6) -->
+    <circle cx="195" cy="130" r="5" fill="#34D399"/>
+    <!-- Mid-Wicket (P7) -->
+    <circle cx="145" cy="165" r="5" fill="#34D399"/>
+    <!-- Square Leg (P8) -->
+    <circle cx="140" cy="210" r="5" fill="#34D399"/>
+    <!-- Long-On (P9 - Deep) -->
+    <circle cx="160" cy="50" r="6" fill="#F43F5E"/>
+    
+    <!-- HIGHLIGHTED TRAP FIELDER: Deep Backward Square Leg (P10) -->
+    <g transform="translate(75, 275)">
+      <circle cx="0" cy="0" r="14" fill="#EF4444" fill-opacity="0.2">
+        <animate attributeName="r" values="8;18;8" dur="1.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="0" r="6" fill="#EF4444" filter="url(#d8-glow)"/>
+      <rect x="-65" y="10" width="130" height="20" rx="4" fill="#450a0a" stroke="#EF4444" stroke-width="0.8"/>
+      <text x="0" y="24" text-anchor="middle" fill="#FCA5A5" class="d8-mono" font-size="9">DEEP BACKWARD SQ (TRAP)</text>
+    </g>
+  </g>
+
+  <!-- RIGHT: Math Coordinate Engine & Live Parameters -->
+  <g transform="translate(530, 100)">
+    <!-- Mathematical Coordinate Engine Box -->
+    <rect x="0" y="0" width="430" height="150" rx="12" fill="#0d241c" stroke="#10B981" stroke-width="1.5"/>
+    <rect x="15" y="12" width="400" height="26" rx="6" fill="#083827"/>
+    <text x="215" y="29" text-anchor="middle" fill="#34D399" class="d8-mono">📐 POLAR-TO-CARTESIAN COORDINATE ENGINE</text>
+
+    <text x="20" y="62" fill="#E2E8F0" class="d8-body">Pitch Origin: (x_0, y_0) = (0.00, 0.00)</text>
+    <text x="20" y="82" fill="#A7F3D0" class="d8-mono">x_i = x_0 + r_i · sin(θ_i)  |  y_i = y_0 + r_i · cos(θ_i)</text>
+    <text x="20" y="104" fill="#94A3B8" class="d8-mono">Boundary Constraint: r_i ≤ 72.0m</text>
+    <text x="20" y="124" fill="#FDE68A" class="d8-mono">Circle Constraint: Count(r_i &gt; 27.43m) ≤ 5 [Non-PP Phase]</text>
+  </g>
+
+  <!-- Real-Time Placement Matrix (Bottom Right) -->
+  <g transform="translate(530, 265)">
+    <rect x="0" y="0" width="430" height="185" rx="12" fill="#132338" stroke="#06B6D4" stroke-width="1.5"/>
+    <rect x="15" y="12" width="400" height="26" rx="6" fill="#0b334d"/>
+    <text x="215" y="29" text-anchor="middle" fill="#67E8F9" class="d8-mono">📊 LIVE OPTIMAL COORDINATE ROSTER</text>
+
+    <!-- Coordinate Rows -->
+    <g transform="translate(15, 48)">
+      <text x="5" y="16" fill="#6EE7B7" class="d8-mono">• P10 Deep Backward Sq:</text>
+      <text x="210" y="16" fill="#A7F3D0" class="d8-mono">r = 68.2m, θ = 138.5° → (-45.2, -51.1)</text>
+    </g>
+    <g transform="translate(15, 74)">
+      <text x="5" y="16" fill="#6EE7B7" class="d8-mono">• P09 Long-On Boundary:</text>
+      <text x="210" y="16" fill="#A7F3D0" class="d8-mono">r = 71.0m, θ = 012.0° → (+14.8, +69.4)</text>
+    </g>
+    <g transform="translate(15, 100)">
+      <text x="5" y="16" fill="#6EE7B7" class="d8-mono">• P02 First Slip Cordon:</text>
+      <text x="210" y="16" fill="#A7F3D0" class="d8-mono">r = 18.5m, θ = 168.0° → (+03.8, -18.1)</text>
+    </g>
+    <g transform="translate(15, 126)">
+      <text x="5" y="16" fill="#6EE7B7" class="d8-mono">• P04 Extra Cover Ring:</text>
+      <text x="210" y="16" fill="#A7F3D0" class="d8-mono">r = 26.2m, θ = 295.0° → (+23.7, +11.1)</text>
+    </g>
+
+    <line x1="15" y1="145" x2="415" y2="145" stroke="#1e40af" stroke-width="0.8"/>
+    <text x="215" y="165" text-anchor="middle" fill="#FBBF24" class="d8-mono">TACTICAL IMPACT: +14.2% WICKET LIKELIHOOD</text>
+  </g>
+</svg>

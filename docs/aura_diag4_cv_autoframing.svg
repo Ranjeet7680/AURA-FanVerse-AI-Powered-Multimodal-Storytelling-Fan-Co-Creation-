@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="d4-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070c1a"/>
+      <stop offset="50%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#030712"/>
+    </linearGradient>
+
+    <linearGradient id="d4-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+
+    <filter id="d4-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .d4-title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+    .d4-mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; font-weight: 700; }
+    .d4-body { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    
+    @keyframes d4CropSlide {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(70px); }
+    }
+  </style>
+
+  <!-- Container Box -->
+  <rect x="10" y="10" width="980" height="480" rx="20" fill="url(#d4-bg)" stroke="url(#d4-neon)" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <g transform="translate(35, 30)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="#2d0b23" stroke="#EC4899" stroke-width="1.5"/>
+    <text x="8" y="23" font-size="18">🎥</text>
+    <text x="46" y="19" fill="#FFFFFF" class="d4-title" font-size="16">Diagram 4: Computer Vision Dynamic 9:16 Auto-Framing Pipeline</text>
+    <text x="46" y="33" fill="#94A3B8" class="d4-body" font-size="11">YOLO-Pose Athlete Tracking • Saliency Center Calculation • Sub-45s Autonomous Reel Publishing</text>
+  </g>
+
+  <!-- Status Chip Top Right -->
+  <g transform="translate(735, 28)">
+    <rect x="0" y="0" width="230" height="26" rx="13" fill="#EC4899" fill-opacity="0.12" stroke="#EC4899" stroke-width="1.2" />
+    <circle cx="14" cy="13" r="4" fill="#EC4899">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="26" y="17" fill="#F472B6" class="d4-mono">AUTO-CROP LATENCY: &lt; 42s</text>
+  </g>
+
+  <line x1="35" y1="75" x2="965" y2="75" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- Left: Visual 16:9 Frame Simulation with Sliding 9:16 Window -->
+  <g transform="translate(40, 105)">
+    <rect x="0" y="0" width="320" height="190" rx="10" fill="#090d16" stroke="#475569" stroke-width="1.5"/>
+    <text x="12" y="20" fill="#94A3B8" class="d4-mono">16:9 4K BROADCAST (3840×2160)</text>
+
+    <!-- Pitch Turf Background -->
+    <rect x="10" y="30" width="300" height="150" rx="6" fill="#0f261c" stroke="#166534" stroke-width="0.8"/>
+    
+    <!-- Pitch Strip in Middle -->
+    <polygon points="120,180 200,180 180,60 140,60" fill="#422006" fill-opacity="0.6"/>
+
+    <!-- Cricket Batter Silhouette Mock -->
+    <circle cx="150" cy="90" r="10" fill="#E2E8F0"/>
+    <rect x="144" y="100" width="12" height="35" rx="3" fill="#38BDF8"/>
+    <!-- Bat -->
+    <line x1="156" y1="110" x2="175" y2="135" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Cricket Ball with Velocity Vector -->
+    <circle cx="210" cy="115" r="5" fill="#EF4444" filter="url(#d4-glow)">
+      <animate attributeName="cx" values="160;270;160" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="120;75;120" dur="3s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Animated Sliding 9:16 Vertical Crop Window -->
+    <g style="animation: d4CropSlide 4s ease-in-out infinite;">
+      <rect x="100" y="30" width="90" height="150" rx="6" fill="#06B6D4" fill-opacity="0.1" stroke="#06B6D4" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="145" y="45" text-anchor="middle" fill="#67E8F9" class="d4-mono">9:16 FOCUS</text>
+      <!-- Center Saliency Crosshair -->
+      <line x1="140" y1="105" x2="150" y2="105" stroke="#EC4899" stroke-width="2"/>
+      <line x1="145" y1="100" x2="145" y2="110" stroke="#EC4899" stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- Dynamic Saliency Math Box Below Left Frame -->
+  <g transform="translate(40, 310)">
+    <rect x="0" y="0" width="320" height="150" rx="10" fill="#0e1726" stroke="#06B6D4" stroke-width="1.2"/>
+    <text x="15" y="24" fill="#38BDF8" class="d4-mono">DYNAMIC SALIENCY CENTER (X_c):</text>
+    <text x="15" y="52" fill="#E2E8F0" class="d4-body">X_c = w_p · X_pose + w_b · X_ball + w_m · X_flow</text>
+    <text x="15" y="78" fill="#94A3B8" class="d4-mono">Weights: w_p = 0.45, w_b = 0.40, w_m = 0.15</text>
+    <rect x="15" y="95" width="290" height="38" rx="6" fill="#03212b" stroke="#0891b2" stroke-width="0.8"/>
+    <text x="25" y="118" fill="#67E8F9" class="d4-mono">Smooth Horizon Kalman Filter: Q=1e-4</text>
+  </g>
+
+  <!-- Right: 5 Pipeline Processing Nodes -->
+  <!-- Node 1: Saliency Grid -->
+  <g transform="translate(400, 105)">
+    <rect x="0" y="0" width="260" height="60" rx="10" fill="#1e1338" stroke="#8B5CF6" stroke-width="1.2"/>
+    <text x="15" y="24" fill="#C084FC" class="d4-mono">1. MOTION SALIENCY GRID</text>
+    <text x="15" y="44" fill="#E2E8F0" class="d4-body">Optical Flow Vector Field (Farnebäck)</text>
+  </g>
+
+  <!-- Node 2: Pose & Ball Tracking -->
+  <g transform="translate(400, 185)">
+    <rect x="0" y="0" width="260" height="60" rx="10" fill="#2d1033" stroke="#EC4899" stroke-width="1.2"/>
+    <text x="15" y="24" fill="#F472B6" class="d4-mono">2. YOLO-POSE + BALL TRACKER</text>
+    <text x="15" y="44" fill="#E2E8F0" class="d4-body">17 Skeletal Keypoints + 3D Ball Centroid</text>
+  </g>
+
+  <!-- Node 3: Spatial Bounding Box -->
+  <g transform="translate(400, 265)">
+    <rect x="0" y="0" width="260" height="60" rx="10" fill="#132438" stroke="#38BDF8" stroke-width="1.2"/>
+    <text x="15" y="24" fill="#7DD3FC" class="d4-mono">3. BOUNDING BOX INTERPOLATOR</text>
+    <text x="15" y="44" fill="#E2E8F0" class="d4-body">Aspect Ratio Locking (1080×1920)</text>
+  </g>
+
+  <!-- Node 4: HUD Overlay Graphics -->
+  <g transform="translate(400, 345)">
+    <rect x="0" y="0" width="260" height="60" rx="10" fill="#2d2208" stroke="#F59E0B" stroke-width="1.2"/>
+    <text x="15" y="24" fill="#FBBF24" class="d4-mono">4. HUD TELEMETRY OVERLAY</text>
+    <text x="15" y="44" fill="#E2E8F0" class="d4-body">Exit Speed (142 km/h) • Apex (18.4m)</text>
+  </g>
+
+  <!-- Rightmost: Published 9:16 Vertical Reel Simulation -->
+  <g transform="translate(710, 105)">
+    <rect x="0" y="0" width="240" height="355" rx="16" fill="#090514" stroke="#10B981" stroke-width="2"/>
+    <text x="120" y="28" text-anchor="middle" fill="#34D399" class="d4-mono">📱 9:16 PUBLISHED REEL</text>
+
+    <!-- Smartphone Screen Bezel -->
+    <rect x="25" y="42" width="190" height="295" rx="12" fill="#0d1b2a" stroke="#1e293b" stroke-width="1.5"/>
+
+    <!-- Simulated Reel Visual -->
+    <rect x="35" y="52" width="170" height="190" rx="8" fill="#142820"/>
+    <polygon points="80,180 150,180 135,100 100,100" fill="#3b200b" fill-opacity="0.8"/>
+    <!-- Batter in frame -->
+    <circle cx="118" cy="120" r="10" fill="#FFFFFF"/>
+    <rect x="112" y="130" width="12" height="30" fill="#38BDF8"/>
+    <!-- Ball trail -->
+    <path d="M 125 135 Q 150 90 180 75" fill="none" stroke="#EF4444" stroke-width="2" stroke-dasharray="3,2"/>
+
+    <!-- Telemetry HUD Badges on Reel -->
+    <g transform="translate(35, 250)">
+      <rect x="0" y="0" width="170" height="24" rx="4" fill="#064e3b" fill-opacity="0.8"/>
+      <text x="10" y="16" fill="#6EE7B7" class="d4-mono">EXIT SPEED: 142.4 KM/H</text>
+    </g>
+    <g transform="translate(35, 280)">
+      <rect x="0" y="0" width="170" height="24" rx="4" fill="#1e1b4b" fill-opacity="0.8"/>
+      <text x="10" y="16" fill="#C084FC" class="d4-mono">DISTANCE: 88.6M (SIX!)</text>
+    </g>
+    <g transform="translate(35, 310)">
+      <rect x="0" y="0" width="170" height="20" rx="4" fill="#172554"/>
+      <text x="10" y="14" fill="#93C5FD" class="d4-mono">VOICE: తెలుగు / HINDI / EN</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrows connecting stages -->
+  <line x1="360" y1="135" x2="400" y2="135" stroke="#8B5CF6" stroke-width="2"/>
+  <line x1="660" y1="215" x2="710" y2="215" stroke="#10B981" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <circle r="4" fill="#10B981" filter="url(#d4-glow)">
+    <animateMotion path="M 660 215 L 710 215" dur="1.2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

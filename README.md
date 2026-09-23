@@ -105,6 +105,11 @@ graph TD
 ---
 
 ### Diagram 2: Multimodal Real-Time Play-by-Play Sequence
+
+<p align="center">
+  <img src="docs/aura_diag2_multimodal_sequence.svg" alt="Diagram 2: Multimodal Real-Time Play-by-Play Sequence Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -134,6 +139,11 @@ sequenceDiagram
 ---
 
 ### Diagram 3: Reinforcement Learning Bellman Optimization Loop
+
+<p align="center">
+  <img src="docs/aura_diag3_rl_bellman.svg" alt="Diagram 3: Reinforcement Learning Bellman Optimization Loop Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart LR
     subgraph Environment["🏏 Cricket Field MDP Environment"]
@@ -163,6 +173,11 @@ flowchart LR
 ---
 
 ### Diagram 4: Computer Vision Dynamic 9:16 Auto-Framing Pipeline
+
+<p align="center">
+  <img src="docs/aura_diag4_cv_autoframing.svg" alt="Diagram 4: Computer Vision Dynamic 9:16 Auto-Framing Pipeline Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart TD
     Video169["🎥 Raw 16:9 4K Broadcast Stream"] --> FrameSplit["Frame Splitter & Motion Saliency Grid"]
@@ -181,6 +196,11 @@ flowchart TD
 ---
 
 ### Diagram 5: Zero-Trust Telemetry Anti-Tamper & Cryptographic Shield
+
+<p align="center">
+  <img src="docs/aura_diag5_zerotrust_shield.svg" alt="Diagram 5: Zero-Trust Telemetry Anti-Tamper & Cryptographic Shield Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart LR
     subgraph StadiumNode["🏟️ Stadium Sensor Node"]
@@ -204,6 +224,11 @@ flowchart LR
 ---
 
 ### Diagram 6: Adversarial Prompt Injection & LLM Guardrail State Machine
+
+<p align="center">
+  <img src="docs/aura_diag6_prompt_guardrails.svg" alt="Diagram 6: Adversarial Prompt Injection & LLM Guardrail State Machine Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 stateDiagram-v2
     [*] --> FanPromptReceived: User types question in Tactical Chat
@@ -228,6 +253,11 @@ stateDiagram-v2
 ---
 
 ### Diagram 7: Micro-Sponsorship Token Economy & Grassroots Distribution
+
+<p align="center">
+  <img src="docs/aura_diag7_token_economy.svg" alt="Diagram 7: Micro-Sponsorship Token Economy & Grassroots Distribution Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart TD
     Fan["👤 Global Fan / Community Member"] --> BuyTokens["Acquires Fan Tokens ($USD / Local Currency)"]
@@ -247,6 +277,11 @@ flowchart TD
 ---
 
 ### Diagram 8: 2D Dynamic Cricket Pitch & Fielder Positioning Coordinate Engine
+
+<p align="center">
+  <img src="docs/aura_diag8_pitch_coordinates.svg" alt="Diagram 8: 2D Dynamic Cricket Pitch & Fielder Positioning Coordinate Engine Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart TD
     subgraph InputParameters["Live Match State"]
@@ -270,6 +305,11 @@ flowchart TD
 ---
 
 ### Diagram 9: Multilingual Neural Speech & Dialect Synthesis Pipeline
+
+<p align="center">
+  <img src="docs/aura_diag9_multilingual_speech.svg" alt="Diagram 9: Multilingual Neural Speech & Dialect Synthesis Pipeline Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 sequenceDiagram
     participant Telemetry as 📊 Match Telemetry
@@ -302,6 +342,11 @@ sequenceDiagram
 ---
 
 ### Diagram 10: Win-Probability & Momentum Neural Network Architecture
+
+<p align="center">
+  <img src="docs/aura_diag10_win_probability_nn.svg" alt="Diagram 10: Win-Probability & Momentum Neural Network Architecture Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 graph LR
     subgraph FeatureInputs["Input Feature Vector (X)"]
@@ -333,6 +378,11 @@ graph LR
 ---
 
 ### Diagram 11: Microservice Container & Cloud Infrastructure Architecture
+
+<p align="center">
+  <img src="docs/aura_diag11_microservice_cloud.svg" alt="Diagram 11: Microservice Container & Cloud Infrastructure Architecture Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart TD
     subgraph EdgeIngest["Edge CDN & Ingestion Nodes"]
@@ -364,6 +414,11 @@ flowchart TD
 ---
 
 ### Diagram 12: End-to-End Fan Journey State Progression
+
+<p align="center">
+  <img src="docs/aura_diag12_fan_journey.svg" alt="Diagram 12: End-to-End Fan Journey State Progression Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 stateDiagram-v2
     [*] --> Discover: Fan opens mobile web or ICC App
@@ -383,6 +438,11 @@ stateDiagram-v2
 ---
 
 ### Diagram 13: End-to-End UI & Motion Animation Pipeline (Framer Motion + Three.js 60 FPS)
+
+<p align="center">
+  <img src="docs/aura_diag13_motion_pipeline.svg" alt="Diagram 13: End-to-End UI & Motion Animation Pipeline Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart TD
     UserTrigger["👤 User Interaction / Tab Change / Match Ingest Event"] --> ReactState["⚡ React 19 State & Context Layer (LanguageContext, ActiveTab)"]
@@ -419,6 +479,11 @@ flowchart TD
 ---
 
 ### Diagram 14: Real-Time 3D Cricket Stadium WebGL Scene Graph & Camera Animation
+
+<p align="center">
+  <img src="docs/aura_diag14_stadium_scenegraph.svg" alt="Diagram 14: Real-Time 3D Cricket Stadium WebGL Scene Graph Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart LR
     subgraph ThreeScene["🌐 Three.js WebGL Scene Graph"]
@@ -450,6 +515,11 @@ flowchart LR
 ---
 
 ### Diagram 15: Live Tournament Marquee & Continuous Telemetry Roll Flow
+
+<p align="center">
+  <img src="docs/aura_diag15_marquee_telemetry.svg" alt="Diagram 15: Live Tournament Marquee & Continuous Telemetry Roll Flow Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -475,6 +545,11 @@ sequenceDiagram
 ---
 
 ### Diagram 16: Multilingual Audio Commentary & Dancing Equalizer Wavebar State Machine
+
+<p align="center">
+  <img src="docs/aura_diag16_equalizer_commentary.svg" alt="Diagram 16: Multilingual Audio Commentary & Dancing Equalizer Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 stateDiagram-v2
     [*] --> Idle: Audio Commentary Standing By
@@ -543,6 +618,11 @@ flowchart TD
 ---
 
 ### Diagram 18: 3D Camera Projection & Frustum Transform Animation Pipeline
+
+<p align="center">
+  <img src="docs/aura_diag18_camera_frustum.svg" alt="Diagram 18: 3D Camera Projection & Frustum Transform Pipeline Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart LR
     subgraph WorldTransforms["🌍 3D WORLD COORDINATE SPACE"]
@@ -580,6 +660,11 @@ flowchart LR
 ---
 
 ### Diagram 19: 3D Biomechanical Skeletal Animation & Bowler Run-Up Rig
+
+<p align="center">
+  <img src="docs/aura_diag19_skeletal_biomechanics.svg" alt="Diagram 19: 3D Biomechanical Skeletal Animation & Bowler Run-Up Rig Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart TD
     subgraph SkeletonRig["🦴 3D BIOMECHANICAL SKELETAL HIERARCHY"]
@@ -611,6 +696,11 @@ flowchart TD
 ---
 
 ### Diagram 20: 3D WebGL Shader Pipeline & Multi-Tier Stadium Lighting Architecture
+
+<p align="center">
+  <img src="docs/aura_diag20_shader_lighting.svg" alt="Diagram 20: 3D WebGL Shader Pipeline & Stadium Lighting Animated Diagram" width="100%" />
+</p>
+
 ```mermaid
 flowchart LR
     subgraph GeometryStage["📐 GEOMETRY & VERTEX STAGE"]
